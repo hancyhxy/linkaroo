@@ -8,34 +8,54 @@ iOS prototype, built as a SwiftUI design system + 8 self-contained Pages. Curren
 
 ## Repository layout
 
+Top-level:
+
+| Path              | What's inside                                                              |
+| ----------------- | -------------------------------------------------------------------------- |
+| `ABDesignSystem/` | Swift Package — the iOS prototype itself (tokens · components · models · pages) |
+| `docs/`           | Written specs + Stitch HTML mockups (the project's readable spec set)      |
+| `archive/`        | Superseded versions kept for iteration history                             |
+
+`ABDesignSystem/Sources/` (4-layer architecture):
+
 ```
-aussiebridge/
-├── ABDesignSystem/         Swift Package — the iOS prototype itself
-│   ├── Package.swift
-│   └── Sources/
-│       ├── ABColors.swift, ABTypography.swift,
-│       │   ABSpacing.swift, ABElevation.swift     ← Design tokens (4-layer architecture, layer 1)
-│       ├── Components/                            ← 30 reusable SwiftUI components (layer 2)
-│       ├── Models/                                ← Construct definitions: ABModels, ABMockData (layer 3)
-│       ├── Pages/                                 ← 8 self-contained pages (layer 4)
-│       │   ├── OnboardingView      — identity capture (language / status / location / arrival)
-│       │   ├── HomeView            — search + service grid + featured guide + recommendations
-│       │   ├── CommunityView       — discussions vs. people-to-help
-│       │   ├── QAListView          — Reddit-style Q&A list with category filter
-│       │   ├── QADetailView        — single thread + Top Answer + match-volunteer CTA
-│       │   ├── VolunteerMatchView  — best-fit hero + "why she's a match" + more matches
-│       │   ├── MessageListView     — All / Unread segmented inbox
-│       │   └── ChatView            — shared-context handoff + action pills + bubbles
-│       └── Screens/                               ← Layout scaffold helpers
-├── html_pages/             Stitch-generated HTML mockups (one per Page; visual prior to the SwiftUI implementation)
-├── docs/
-│   ├── design.md           Authoritative design spec (Stitch baseline; "Anchored Horizon")
-│   ├── struct.md           Data model — 22 entities organised into 5 Context-First layers
-│   ├── struct.html         Rendered HTML version of struct.md (open in browser)
-│   └── product-context.md  Context-First mechanism summary (5 contextual moments)
-└── archive/                Superseded versions kept for iteration history
-    ├── design.v1-craft.md  v1 design — Craft-aligned visual exploration (replaced by current docs/design.md)
-    └── struct.v1.md        v1 data model — flat list (replaced by current docs/struct.md with 5-layer grouping)
+Sources/
+├── ABColors.swift · ABTypography.swift · ABSpacing.swift · ABElevation.swift   ← layer 1: design tokens
+├── Components/                                                                  ← layer 2: 30 reusable SwiftUI components
+├── Models/                                                                      ← layer 3: ABModels + ABMockData
+├── Pages/                                                                       ← layer 4: 8 self-contained pages
+│   ├── OnboardingView      — identity capture (language / status / location / arrival)
+│   ├── HomeView            — search + service grid + featured guide + recommendations
+│   ├── CommunityView       — discussions vs. people-to-help
+│   ├── QAListView          — Reddit-style Q&A list with category filter
+│   ├── QADetailView        — single thread + Top Answer + match-volunteer CTA
+│   ├── VolunteerMatchView  — best-fit hero + "why she's a match" + more matches
+│   ├── MessageListView     — All / Unread segmented inbox
+│   └── ChatView            — shared-context handoff + action pills + bubbles
+└── Screens/                                                                     ← layout scaffold helpers
+```
+
+`docs/`:
+
+```
+docs/
+├── design.md           Authoritative design spec (Stitch baseline; "Anchored Horizon")
+├── struct.md           Data model — 22 entities organised into 5 Context-First layers
+├── struct.html         Rendered HTML version of struct.md (open in browser)
+├── spec.md             Page-level functional spec (skeleton; per-page bodies WIP)
+├── product-context.md  Context-First mechanism summary (5 contextual moments)
+└── mockups/            Stitch-generated HTML mockups — visual prior to the SwiftUI implementation
+    ├── personalization.html · homepage.html · community.html · volunteer.html
+    ├── qa.html · qa_scroll.html      (two variants — SwiftUI's QAListView consolidates both)
+    ├── message.html · chat.html
+```
+
+`archive/`:
+
+```
+archive/
+├── design.v1-craft.md  v1 design — Craft-aligned visual exploration (replaced by current docs/design.md)
+└── struct.v1.md        v1 data model — flat list (replaced by current docs/struct.md with 5-layer grouping)
 ```
 
 ## Quick start
