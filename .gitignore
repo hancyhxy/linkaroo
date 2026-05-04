@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+
+# Swift Package Manager
+.build/
+.swiftpm/
+Packages/
+Package.resolved
+*.xcodeproj
+xcuserdata/
+
+# Xcode user-specific
+*.xcuserstate
+*.xcuserdatad/
+DerivedData/
+
+# Editor cruft
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node (if any web tooling sneaks in)
+node_modules/
+
+# Large binary files (GitHub single-file limit is 100MB)
+*.mov
+*.mp4
+*.zip
+
+# Local secrets (defensive — no secrets expected in this repo)
+*.local
+.env
+.env.*

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AussieBridge - Personalization</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Public+Sans:ital,wght@0,400;0,700;0,800;0,900;1,900&family=Liberation+Serif:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Public Sans', sans-serif; }
+    .font-inter { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-200 flex justify-center">
+  <div class="w-[390px] min-h-screen relative" style="background-color: #f7f9ff;">
+
+    <!-- Header -->
+    <div class="sticky top-0 z-50 px-4 py-3 flex items-center gap-3" style="background: rgba(247,249,255,0.85); backdrop-filter: blur(12px);">
+      <img src="https://www.figma.com/api/mcp/asset/f87bbe46-7a9d-4831-a95d-bb3553534437" class="w-6 h-6" alt="Back">
+      <span class="text-lg font-bold" style="color: #171c21;">Profile Setup</span>
+    </div>
+
+    <!-- Content -->
+    <div class="px-5 pb-32">
+      <!-- Hero -->
+      <div class="mt-4 mb-6">
+        <h1 class="text-2xl font-bold mb-1" style="color: #171c21;">Let's personalize your journey</h1>
+        <p class="text-sm" style="color: #3f4851;">Help us tailor the best experience for you</p>
+      </div>
+
+      <!-- Section 1: Language -->
+      <div class="mb-6">
+        <h2 class="text-sm font-semibold mb-3" style="color: #171c21;">Preferred Language</h2>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl border-2 text-sm font-medium" style="border-color: #39acff; background: #e8f4ff; color: #00639b;">
+            <img src="https://www.figma.com/api/mcp/asset/8771fd9d-e65c-41f1-bae3-a26f2f597d84" class="w-4 h-4" alt="Check">
+            English
+          </div>
+          <div class="flex items-center justify-center py-2.5 px-3 rounded-xl border border-gray-200 bg-white text-sm" style="color: #3f4851;">Mandarin</div>
+          <div class="flex items-center justify-center py-2.5 px-3 rounded-xl border border-gray-200 bg-white text-sm" style="color: #3f4851;">Spanish</div>
+          <div class="flex items-center justify-center py-2.5 px-3 rounded-xl border border-gray-200 bg-white text-sm" style="color: #3f4851;">Arabic</div>
+          <div class="flex items-center justify-center py-2.5 px-3 rounded-xl border border-gray-200 bg-white text-sm" style="color: #3f4851;">Hindi</div>
+          <div class="flex items-center justify-center py-2.5 px-3 rounded-xl border border-gray-200 bg-white text-sm" style="color: #3f4851;">More...</div>
+        </div>
+      </div>
+
+      <!-- Section 2: Current Status -->
+      <div class="mb-6">
+        <h2 class="text-sm font-semibold mb-3" style="color: #171c21;">Current Status</h2>
+        <div class="grid grid-cols-2 gap-3">
+          <!-- Selected: Immigrant Student -->
+          <div class="flex flex-col items-center justify-center py-4 px-3 rounded-2xl border-2 bg-white" style="border-color: #39acff;">
+            <img src="https://www.figma.com/api/mcp/asset/e6cc0ec1-d260-44fd-8653-c2e7a67e3a9c" class="w-10 h-10 mb-2" alt="Student">
+            <span class="text-xs font-semibold text-center" style="color: #00639b;">Immigrant Student</span>
+          </div>
+          <div class="flex flex-col items-center justify-center py-4 px-3 rounded-2xl border border-gray-200 bg-white">
+            <img src="https://www.figma.com/api/mcp/asset/98d01001-8359-43b5-b187-c7d5a08a5547" class="w-10 h-10 mb-2" alt="Working">
+            <span class="text-xs font-medium text-center" style="color: #3f4851;">Working</span>
+          </div>
+          <div class="flex flex-col items-center justify-center py-4 px-3 rounded-2xl border border-gray-200 bg-white">
+            <img src="https://www.figma.com/api/mcp/asset/16350380-d82a-423e-a4a8-b72e08301908" class="w-10 h-10 mb-2" alt="Looking for Work">
+            <span class="text-xs font-medium text-center" style="color: #3f4851;">Looking for Work</span>
+          </div>
+          <div class="flex flex-col items-center justify-center py-4 px-3 rounded-2xl border border-gray-200 bg-white">
+            <img src="https://www.figma.com/api/mcp/asset/10f22880-cf5b-4972-b80c-da5e7124deef" class="w-10 h-10 mb-2" alt="Business Owner">
+            <span class="text-xs font-medium text-center" style="color: #3f4851;">Business Owner</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section 3: Location -->
+      <div class="mb-6">
+        <h2 class="text-sm font-semibold mb-3" style="color: #171c21;">Location</h2>
+        <div class="flex items-center bg-white rounded-xl border border-gray-200 px-3 py-3 mb-3">
+          <img src="https://www.figma.com/api/mcp/asset/9a32e658-2859-4750-b02c-3e753abbe58f" class="w-5 h-5 mr-2" alt="Pin">
+          <span class="text-sm font-medium" style="color: #171c21;">Sydney, NSW</span>
+        </div>
+        <div class="rounded-2xl overflow-hidden mb-3">
+          <img src="https://www.figma.com/api/mcp/asset/1e88b5ce-ba77-468b-9762-ed6725c72933" class="w-full h-36 object-cover" alt="Map">
+        </div>
+        <div class="flex items-center justify-center gap-2 py-2 px-4 rounded-full border border-gray-200 bg-white w-fit mx-auto">
+          <img src="https://www.figma.com/api/mcp/asset/2e5d994a-c775-41c6-9492-d7f037c231f5" class="w-4 h-4" alt="Detect">
+          <span class="text-xs font-medium" style="color: #00639b;">Detect my location</span>
+        </div>
+      </div>
+
+      <!-- Section 4: Duration -->
+      <div class="mb-6">
+        <h2 class="text-sm font-semibold mb-3" style="color: #171c21;">Duration in Australia</h2>
+        <div class="flex flex-wrap gap-2">
+          <span class="py-2 px-4 rounded-full border border-gray-200 bg-white text-xs font-medium" style="color: #3f4851;">Not yet arrived</span>
+          <span class="py-2 px-4 rounded-full border border-gray-200 bg-white text-xs font-medium" style="color: #3f4851;">Just landed</span>
+          <span class="py-2 px-4 rounded-full border-2 text-xs font-medium" style="border-color: #39acff; background: #e8f4ff; color: #00639b;">1-6 months</span>
+          <span class="py-2 px-4 rounded-full border border-gray-200 bg-white text-xs font-medium" style="color: #3f4851;">6-12 months</span>
+          <span class="py-2 px-4 rounded-full border border-gray-200 bg-white text-xs font-medium" style="color: #3f4851;">1 year+</span>
+        </div>
+      </div>
+
+      <!-- Orange Card -->
+      <div class="rounded-2xl p-4 mb-6 relative overflow-hidden" style="background-color: #ffddb7;">
+        <img src="https://www.figma.com/api/mcp/asset/e059da53-e467-498c-921b-a4432aaf11d3" class="absolute right-0 top-0 h-full opacity-30" alt="">
+        <div class="flex items-start gap-3 relative z-10">
+          <img src="https://www.figma.com/api/mcp/asset/54121597-1dff-470f-9ab5-a667a865ff32" class="w-8 h-8 mt-0.5" alt="Lightbulb">
+          <div>
+            <h3 class="text-sm font-bold mb-1" style="color: #171c21;">Tailored for New Arrivals</h3>
+            <p class="text-xs leading-relaxed" style="color: #3f4851;">Based on your profile, we'll prioritize essential settlement guides, student visa resources, and local community connections in Sydney.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sticky Footer -->
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-[390px] px-5 py-4 flex items-center justify-between gap-4" style="background: rgba(247,249,255,0.95); backdrop-filter: blur(12px); border-top: 1px solid #e5e7eb;">
+      <button class="text-sm font-medium" style="color: #3f4851;">Skip for now</button>
+      <button class="flex-1 py-3 rounded-full text-white text-sm font-bold" style="background: linear-gradient(135deg, #39acff, #00639b);">Finish Setup</button>
+    </div>
+
+  </div>
+</body>
+</html>

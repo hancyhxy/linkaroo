@@ -1,0 +1,89 @@
+import SwiftUI
+
+// MARK: - Volunteer Match Data
+
+struct ABVolunteerMatchData {
+    let name: String
+    let imageURL: URL?
+    var matchPercent: Int = 0
+    var skills: [(text: String, style: ABTagStyle)] = []
+    var bio: String = ""
+}
+
+// MARK: - ABVolunteerMatchCard
+
+/// Compact volunteer card for "More Matches" section.
+struct ABVolunteerMatchCard: View {
+    let data: ABVolunteerMatchData
+    var ctaTitle: String = "View Profile"
+    var onCTA: (() -> Void)? = nil
+
+    var body: some View {
+        HStack(alignment: .top, spacing: ABSpacing.s3) {
+            // Thumbnail
+            ABAvatar(content: .image(data.imageURL), size: 56)
+                .clipShape(RoundedRectangle(cornerRadius: ABRadius.lg))
+
+            // Content
+            VStack(alignment: .leading, spacing: ABSpacing.s2) {
+                // Name + Match %
+                HStack {
+                    Text(data.name)
+                        .font(.abTitleSm)
+                        .foregroundStyle(Color.abOnSurface)
+                    Spacer()
+                    ABTag(text: "\(data.matchPercent)% Match", style: .matchPercent, size: .badge)
+                }
+
+                // Skill tags
+                if !data.skills.isEmpty {
+                    HStack(spacing: 6) {
+                        ForEach(Array(data.skills.enumerated()), id: \.offset) { _, skill in
+                            ABTag(text: skill.text, style: skill.style)
+                        }
+                    }
+                }
+
+                // Bio
+                if !data.bio.isEmpty {
+                    Text(data.bio)
+                        .font(.abBodySm)
+                        .foregroundStyle(Color.abOnSurfaceVariant)
+                        .lineLimit(3)
+                }
+
+                // CTA
+                ABButton(title: ctaTitle, variant: .secondary, size: .small) {
+                    onCTA?()
+                }
+            }
+        }
+        .padding(ABSpacing.s4)
+        .background(Color.abSurfaceCard)
+        .clipShape(RoundedRectangle(cornerRadius: ABRadius.xl))
+    }
+}
+
+// MARK: - Preview
+
+#Preview("Volunteer Match Cards") {
+    VStack(spacing: 12) {
+        ABVolunteerMatchCard(data: ABVolunteerMatchData(
+            name: "David K.",
+            imageURL: nil,
+            matchPercent: 82,
+            skills: [("Legal Background", .skillBlue), ("Visa Expert", .skillBlue)],
+            bio: "Immigration lawyer with 5+ years experience helping skilled workers and students."
+        ))
+
+        ABVolunteerMatchCard(data: ABVolunteerMatchData(
+            name: "Chen W.",
+            imageURL: nil,
+            matchPercent: 75,
+            skills: [("Former Student", .skillBlue), ("Career Mentor", .skillBlue)],
+            bio: "Former international student turned tech professional."
+        ))
+    }
+    .padding()
+    .background(Color.abSurface)
+}

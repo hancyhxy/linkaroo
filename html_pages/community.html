@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AussieBridge - Community</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Public+Sans:ital,wght@0,400;0,700;0,800;0,900;1,900&family=Liberation+Serif:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Public Sans', sans-serif; }
+    .font-inter { font-family: 'Inter', sans-serif; }
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-gray-200 flex justify-center">
+  <div class="w-[390px] min-h-screen relative" style="background-color: #f7f9ff;">
+
+    <!-- Header -->
+    <div class="sticky top-0 z-50 px-5 py-3 bg-white border-b border-gray-100">
+      <span class="text-lg font-bold" style="color: #171c21;">Community</span>
+    </div>
+
+    <!-- Segmented Tabs -->
+    <div class="px-5 pt-4 pb-2">
+      <div class="flex bg-gray-100 rounded-full p-1">
+        <div class="flex-1 py-2 text-center rounded-full text-xs font-semibold bg-white shadow-sm" style="color: #171c21;">Discussions</div>
+        <div class="flex-1 py-2 text-center rounded-full text-xs font-medium" style="color: #9ca3af;">Messages</div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="pb-24">
+
+      <!-- People You Can Help -->
+      <div class="px-5 pt-4 pb-2">
+        <div class="flex items-center justify-between mb-3">
+          <div class="flex items-center gap-2">
+            <img src="https://www.figma.com/api/mcp/asset/6c8a2200-fcc9-4333-8c9d-d9a5dbeff35d" class="w-5 h-5" alt="Lightbulb">
+            <h2 class="text-base font-bold" style="color: #171c21;">People You Can Help</h2>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="text-xs font-semibold" style="color: #39acff;">View All</span>
+            <img src="https://www.figma.com/api/mcp/asset/1d2f35ef-f037-4e1f-bb79-3de515fe6437" class="w-3 h-3" alt="">
+          </div>
+        </div>
+      </div>
+
+      <!-- Horizontal Scroll Cards -->
+      <div class="flex gap-3 px-5 overflow-x-auto hide-scrollbar pb-4">
+        <!-- Mei Lin Card -->
+        <div class="w-[280px] flex-shrink-0 bg-white rounded-2xl p-4">
+          <div class="flex items-center gap-3 mb-3">
+            <img src="https://www.figma.com/api/mcp/asset/7bb1f7b9-a93c-423f-a141-870d340dd64c" class="w-10 h-10 rounded-full object-cover" alt="Mei Lin">
+            <div>
+              <h3 class="text-sm font-bold" style="color: #171c21;">Mei Lin</h3>
+              <p class="text-[11px]" style="color: #9ca3af;">Just arrived in Sydney</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">STUDENT MATCH</span>
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #dcfce7; color: #16a34a;">NEWCOMER</span>
+          </div>
+          <p class="text-xs mb-3 leading-relaxed" style="color: #3f4851;">"Can someone explain the Student Visa work hour limits? I'm confused about the 48-hour fortnight rule."</p>
+          <div class="flex items-center gap-1.5 mb-3 px-3 py-2 rounded-lg" style="background: #fff8e1;">
+            <img src="https://www.figma.com/api/mcp/asset/a2e4a569-e186-4219-985c-8f9b39d474db" class="w-4 h-4" alt="Medal">
+            <span class="text-[10px]" style="color: #b45309;">You helped 3 others with Student Visas this month</span>
+          </div>
+          <button class="w-full py-2.5 rounded-full text-xs font-semibold text-white" style="background: linear-gradient(135deg, #39acff, #00639b);">Answer Mei Lin</button>
+        </div>
+
+        <!-- David O. Card -->
+        <div class="w-[280px] flex-shrink-0 bg-white rounded-2xl p-4">
+          <div class="flex items-center gap-3 mb-3">
+            <img src="https://www.figma.com/api/mcp/asset/0a8cddd1-cc3f-45b1-bba9-63bc4b5a80a8" class="w-10 h-10 rounded-full object-cover" alt="David O.">
+            <div>
+              <h3 class="text-sm font-bold" style="color: #171c21;">David O.</h3>
+              <p class="text-[11px]" style="color: #9ca3af;">First year Engineering</p>
+            </div>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mb-3">
+            <span class="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">
+              <img src="https://www.figma.com/api/mcp/asset/de2c6524-4523-4d82-9abb-232da455707d" class="w-3 h-3" alt="">
+              UNIVERSITY LIFE
+            </span>
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">UNSW</span>
+          </div>
+          <p class="text-xs mb-3 leading-relaxed" style="color: #3f4851;">"Looking for affordable student housing near UNSW. Any recommendations for shared apartments?"</p>
+          <div class="flex items-center gap-1.5 mb-3 px-3 py-2 rounded-lg" style="background: #f0f8ff;">
+            <img src="https://www.figma.com/api/mcp/asset/de2c6524-4523-4d82-9abb-232da455707d" class="w-4 h-4" alt="">
+            <span class="text-[10px]" style="color: #00639b;">You both attend UNSW Sydney</span>
+          </div>
+          <button class="w-full py-2.5 rounded-full text-xs font-semibold text-white" style="background: linear-gradient(135deg, #39acff, #00639b);">Help David</button>
+        </div>
+      </div>
+
+      <!-- Questions You Can Answer -->
+      <div class="px-5 pt-2 pb-2">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base font-bold" style="color: #171c21;">Questions You Can Answer</h2>
+          <img src="https://www.figma.com/api/mcp/asset/aadf1696-5e4a-4488-b1a1-a0bd6abf3611" class="w-5 h-5" alt="Filter">
+        </div>
+      </div>
+
+      <div class="px-5 space-y-3">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-2xl p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <img src="https://www.figma.com/api/mcp/asset/3217b78f-a060-4b53-a9f8-fa82d60699e1" class="w-6 h-6 rounded-full" alt="">
+            <span class="text-xs font-semibold" style="color: #171c21;">u/sarah_m</span>
+            <span class="text-[10px]" style="color: #9ca3af;">&bull; 6h ago</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mb-2">
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">STUDENT MATCH</span>
+            <span class="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">
+              <img src="https://www.figma.com/api/mcp/asset/de2c6524-4523-4d82-9abb-232da455707d" class="w-3 h-3" alt="">
+              UNIVERSITY LIFE
+            </span>
+          </div>
+          <h3 class="text-sm font-bold mb-2" style="color: #171c21;">How did everyone manage their first Australian winter as a student from a tropical climate?</h3>
+          <p class="text-xs mb-3" style="color: #3f4851;">I'm from Indonesia and this will be my first winter. What clothes do I need? Is it really that cold in Sydney?</p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1">
+                <img src="https://www.figma.com/api/mcp/asset/aeefe9f3-7ad3-4cb4-8792-b4cb712e04d7" class="w-4 h-4" alt="">
+                <span class="text-xs font-bold" style="color: #39acff;">1.2k</span>
+                <img src="https://www.figma.com/api/mcp/asset/d53d089e-6c43-4a39-8cd1-303cf63244aa" class="w-4 h-4" alt="">
+              </div>
+              <div class="flex items-center gap-1">
+                <img src="https://www.figma.com/api/mcp/asset/bbec1975-fa47-41d5-864a-c149f7775c30" class="w-4 h-4" alt="">
+                <span class="text-[11px]" style="color: #9ca3af;">Share</span>
+              </div>
+              <div class="flex items-center gap-1">
+                <img src="https://www.figma.com/api/mcp/asset/1b826c37-34ab-4c93-8061-886a80eb5e3a" class="w-4 h-4" alt="">
+                <span class="text-[11px]" style="color: #9ca3af;">Save</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-1">
+              <img src="https://www.figma.com/api/mcp/asset/f0c09f61-1008-427b-af11-577050005734" class="w-4 h-4" alt="">
+              <span class="text-[11px]" style="color: #9ca3af;">142 Comments</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-2xl p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-bold text-white" style="background: #c4983f;">A</div>
+            <span class="text-xs font-semibold" style="color: #171c21;">u/Aarav_Melb</span>
+            <span class="text-[10px]" style="color: #9ca3af;">&bull; 12h ago</span>
+          </div>
+          <h3 class="text-sm font-bold mb-2" style="color: #171c21;">Internship season is starting - any tips for international students applying to Big 4 accounting firms?</h3>
+          <p class="text-xs mb-3" style="color: #3f4851;">I'm in my second year of commerce at UniMelb. Would love advice from anyone who's been through the process.</p>
+          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full mb-3" style="background: #fef3c7;">
+            <img src="https://www.figma.com/api/mcp/asset/a2e4a569-e186-4219-985c-8f9b39d474db" class="w-3.5 h-3.5" alt="">
+            <span class="text-[10px] font-bold" style="color: #d97706;">Top Advice</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1">
+                <img src="https://www.figma.com/api/mcp/asset/aeefe9f3-7ad3-4cb4-8792-b4cb712e04d7" class="w-4 h-4" alt="">
+                <span class="text-xs font-bold" style="color: #39acff;">856</span>
+                <img src="https://www.figma.com/api/mcp/asset/d53d089e-6c43-4a39-8cd1-303cf63244aa" class="w-4 h-4" alt="">
+              </div>
+            </div>
+            <div class="flex items-center gap-1">
+              <img src="https://www.figma.com/api/mcp/asset/f0c09f61-1008-427b-af11-577050005734" class="w-4 h-4" alt="">
+              <span class="text-[11px]" style="color: #9ca3af;">56 Comments</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white rounded-2xl p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <img src="https://www.figma.com/api/mcp/asset/28ab7066-9782-4aa1-84e3-8df98a2d9484" class="w-6 h-6 rounded-full" alt="">
+            <span class="text-xs font-semibold" style="color: #171c21;">u/elena_v</span>
+            <span class="text-[10px]" style="color: #9ca3af;">&bull; 1d ago</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5 mb-2">
+            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">STUDENT MATCH</span>
+            <span class="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">
+              <img src="https://www.figma.com/api/mcp/asset/54361e4f-50e4-46a4-9356-e0c888d4d2cd" class="w-3 h-3" alt="">
+              VISA Q&A
+            </span>
+          </div>
+          <h3 class="text-sm font-bold mb-2" style="color: #171c21;">485 Visa extension updates - has anyone applied under the new rules?</h3>
+          <p class="text-xs mb-3" style="color: #3f4851;">I heard the 485 Visa extension policy changed this year. Has anyone successfully applied?</p>
+          <div class="rounded-xl p-3 mb-3 border-l-[3px]" style="background: #f0f8ff; border-left-color: #39acff;">
+            <p class="text-xs" style="color: #3f4851;">"I applied last month under the new rules. Processing time was about 4 weeks. Make sure you have updated IELTS scores..."</p>
+          </div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1">
+                <img src="https://www.figma.com/api/mcp/asset/aeefe9f3-7ad3-4cb4-8792-b4cb712e04d7" class="w-4 h-4" alt="">
+                <span class="text-xs font-bold" style="color: #39acff;">42</span>
+                <img src="https://www.figma.com/api/mcp/asset/d53d089e-6c43-4a39-8cd1-303cf63244aa" class="w-4 h-4" alt="">
+              </div>
+              <div class="flex items-center gap-1">
+                <img src="https://www.figma.com/api/mcp/asset/bbec1975-fa47-41d5-864a-c149f7775c30" class="w-4 h-4" alt="">
+                <span class="text-[11px]" style="color: #9ca3af;">Share</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-1">
+              <img src="https://www.figma.com/api/mcp/asset/f0c09f61-1008-427b-af11-577050005734" class="w-4 h-4" alt="">
+              <span class="text-[11px]" style="color: #9ca3af;">320 Comments</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Tab Bar -->
+    <div class="fixed bottom-0 left-1/2 -translate-x-1/2 w-[390px] flex items-center justify-around py-2.5 bg-white border-t border-gray-100">
+      <div class="flex flex-col items-center gap-1">
+        <img src="https://www.figma.com/api/mcp/asset/1c180f86-ce44-44f2-a214-ab5ecc96b785" class="w-6 h-6 opacity-40" alt="Home">
+        <span class="text-[10px] font-medium" style="color: #9ca3af;">Home</span>
+      </div>
+      <div class="flex flex-col items-center gap-1">
+        <img src="https://www.figma.com/api/mcp/asset/34e241be-f8b3-4c77-bfdd-382e289f7505" class="w-6 h-6" alt="Community">
+        <span class="text-[10px] font-semibold" style="color: #00639b;">Community</span>
+      </div>
+      <div class="flex flex-col items-center gap-1">
+        <img src="https://www.figma.com/api/mcp/asset/b7f3c880-918b-450f-b01d-374a0426a2ff" class="w-6 h-6 opacity-40" alt="Profile">
+        <span class="text-[10px] font-medium" style="color: #9ca3af;">Profile</span>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

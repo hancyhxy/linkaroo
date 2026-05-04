@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AussieBridge - Housing Q&A</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Public+Sans:ital,wght@0,400;0,700;0,800;0,900;1,900&family=Liberation+Serif:wght@700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Public Sans', sans-serif; }
+    .font-inter { font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-200 flex justify-center">
+  <div class="w-[390px] min-h-screen relative" style="background-color: #f7f9ff;">
+
+    <!-- Header -->
+    <div class="sticky top-0 z-50 px-4 py-3 flex items-center gap-3 bg-white border-b border-gray-100">
+      <img src="https://www.figma.com/api/mcp/asset/dc461136-0400-40ed-b807-cf53ca8344c4" class="w-6 h-6" alt="Back">
+      <span class="text-lg font-bold" style="color: #171c21;">Housing</span>
+    </div>
+
+    <!-- Tab Bar -->
+    <div class="px-4 py-3 flex gap-2 overflow-x-auto">
+      <div class="flex items-center gap-1.5 px-4 py-2 rounded-full flex-shrink-0" style="background: #00639b;">
+        <img src="https://www.figma.com/api/mcp/asset/e5250b74-2466-45ab-a55a-8b4e519e4ad4" class="w-4 h-4 brightness-0 invert" alt="">
+        <span class="text-xs font-semibold text-white">Renting</span>
+      </div>
+      <div class="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 bg-white flex-shrink-0">
+        <img src="https://www.figma.com/api/mcp/asset/f36d04aa-8365-4531-849f-73c5f1231c0d" class="w-4 h-4" alt="">
+        <span class="text-xs font-medium" style="color: #3f4851;">Subletting</span>
+      </div>
+      <div class="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 bg-white flex-shrink-0">
+        <img src="https://www.figma.com/api/mcp/asset/bf734f6e-6c9a-4b5d-a065-74e0d8036d4e" class="w-4 h-4" alt="">
+        <span class="text-xs font-medium" style="color: #3f4851;">Utilities</span>
+      </div>
+      <div class="flex items-center gap-1.5 px-4 py-2 rounded-full border border-gray-200 bg-white flex-shrink-0">
+        <img src="https://www.figma.com/api/mcp/asset/34fd1087-1e3e-4519-9c00-fc57afcc9452" class="w-4 h-4" alt="">
+        <span class="text-xs font-medium" style="color: #3f4851;">Flatmates</span>
+      </div>
+    </div>
+
+    <!-- Q&A Items -->
+    <div class="px-4 pb-6 space-y-4">
+
+      <!-- Item 1 -->
+      <div class="bg-white rounded-2xl p-4">
+        <div class="flex gap-3">
+          <!-- Vote -->
+          <div class="flex flex-col items-center gap-1 flex-shrink-0">
+            <img src="https://www.figma.com/api/mcp/asset/8a3337ba-76e3-4176-a7bb-299a49cfde98" class="w-5 h-5" alt="Up">
+            <span class="text-sm font-bold" style="color: #39acff;">142</span>
+            <img src="https://www.figma.com/api/mcp/asset/01e3cecd-8509-448b-9b0d-10c5b74b4040" class="w-5 h-5" alt="Down">
+          </div>
+          <!-- Content -->
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">SENIOR MATCH</span>
+              <span class="flex items-center gap-1 text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #dcfce7; color: #16a34a;">
+                <img src="https://www.figma.com/api/mcp/asset/ff6baf79-5adb-4446-b13f-3daa85080243" class="w-3 h-3" alt="">
+                GOVERNMENT VERIFIED
+              </span>
+            </div>
+            <p class="text-[11px] mb-1" style="color: #9ca3af;">u/SydneySilver &bull; 4h ago</p>
+            <h3 class="text-sm font-bold mb-2" style="color: #171c21;">What are the best suburbs for seniors in Sydney with good public transport?</h3>
+            <p class="text-xs mb-3" style="color: #3f4851;">I'm looking for a suburb that has easy access to trains and buses, ideally with some parks nearby...</p>
+
+            <!-- Top Answer -->
+            <div class="rounded-xl p-3 mb-3 border-l-[3px]" style="background: #f0f8ff; border-left-color: #39acff;">
+              <div class="flex items-center gap-1.5 mb-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/44438831-b245-48fb-a1cc-d0fbb31ee40f" class="w-4 h-4" alt="">
+                <span class="text-[10px] font-bold" style="color: #39acff;">Top Answer</span>
+              </div>
+              <p class="text-xs" style="color: #3f4851;">"Chatswood and Hurstville are great options - both have train stations, shopping centres, and parks within walking distance. Many seniors in our community..."</p>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/150575f3-d2ec-4f2e-b36b-bc362f7afab7" class="w-4 h-4" alt="">
+                <span class="text-[11px] font-medium" style="color: #9ca3af;">32 Comments</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/0c12af19-05d8-4555-9fb5-9d46d2c61726" class="w-4 h-4" alt="">
+                <span class="text-[11px] font-medium" style="color: #9ca3af;">Share</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 2 -->
+      <div class="bg-white rounded-2xl p-4">
+        <div class="flex gap-3">
+          <div class="flex flex-col items-center gap-1 flex-shrink-0">
+            <img src="https://www.figma.com/api/mcp/asset/8a3337ba-76e3-4176-a7bb-299a49cfde98" class="w-5 h-5" alt="Up">
+            <span class="text-sm font-bold" style="color: #39acff;">89</span>
+            <img src="https://www.figma.com/api/mcp/asset/01e3cecd-8509-448b-9b0d-10c5b74b4040" class="w-5 h-5" alt="Down">
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full line-through" style="background: #fee2e2; color: #dc2626;">OLD LAW</span>
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #fef3c7; color: #d97706;">UNVERIFIED</span>
+            </div>
+            <p class="text-[11px] mb-1" style="color: #9ca3af;">u/LegalEagle_AU &bull; 8h ago</p>
+            <h3 class="text-sm font-bold mb-2" style="color: #171c21;">Rights when a landlord wants to sell the senior-living unit?</h3>
+            <p class="text-xs mb-3" style="color: #3f4851;">My landlord just told me they plan to sell the property. I'm on a fixed-term lease with 6 months remaining...</p>
+
+            <div class="rounded-xl p-3 mb-3 border-l-[3px]" style="background: #f0f8ff; border-left-color: #39acff;">
+              <p class="text-xs" style="color: #3f4851;">"Under NSW law, your lease remains valid even if the property is sold. The new owner must honour your existing lease terms..."</p>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/150575f3-d2ec-4f2e-b36b-bc362f7afab7" class="w-4 h-4" alt="">
+                <span class="text-[11px] font-medium" style="color: #9ca3af;">15 Comments</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/0c12af19-05d8-4555-9fb5-9d46d2c61726" class="w-4 h-4" alt="">
+                <span class="text-[11px] font-medium" style="color: #9ca3af;">Share</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Item 3 -->
+      <div class="bg-white rounded-2xl p-4">
+        <div class="flex gap-3">
+          <div class="flex flex-col items-center gap-1 flex-shrink-0">
+            <img src="https://www.figma.com/api/mcp/asset/8a3337ba-76e3-4176-a7bb-299a49cfde98" class="w-5 h-5" alt="Up">
+            <span class="text-sm font-bold" style="color: #39acff;">256</span>
+            <img src="https://www.figma.com/api/mcp/asset/01e3cecd-8509-448b-9b0d-10c5b74b4040" class="w-5 h-5" alt="Down">
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #fef3c7; color: #d97706;">SOURCE: TIKTOK</span>
+            </div>
+            <p class="text-[11px] mb-1" style="color: #9ca3af;">u/MelbExplorer &bull; 1d ago</p>
+            <h3 class="text-sm font-bold mb-2" style="color: #171c21;">Comparison: Independent Living vs. Rental Village?</h3>
+            <p class="text-xs mb-3" style="color: #3f4851;">Has anyone compared the costs and benefits of independent living communities versus traditional rental villages in Melbourne?</p>
+
+            <div class="rounded-xl p-3 mb-3 border-l-[3px]" style="background: #f0f8ff; border-left-color: #39acff;">
+              <p class="text-xs" style="color: #3f4851;">"I've lived in both. Independent living gives you more freedom but rental villages often include maintenance and community activities..."</p>
+            </div>
+
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/150575f3-d2ec-4f2e-b36b-bc362f7afab7" class="w-4 h-4" alt="">
+                <span class="text-[11px] font-medium" style="color: #9ca3af;">54 Comments</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/0c12af19-05d8-4555-9fb5-9d46d2c61726" class="w-4 h-4" alt="">
+                <span class="text-[11px] font-medium" style="color: #9ca3af;">Share</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CTA Card -->
+      <div class="rounded-2xl p-5 text-center relative overflow-hidden" style="background: linear-gradient(135deg, #39acff, #00639b);">
+        <img src="https://www.figma.com/api/mcp/asset/111b7da4-34b9-49df-928f-b15de5b9daee" class="absolute right-0 top-0 h-full opacity-20" alt="">
+        <div class="relative z-10">
+          <h3 class="text-white text-base font-bold mb-2">Can't find what you're looking for?</h3>
+          <p class="text-white/80 text-xs mb-4">Ask our community of experienced immigrants and verified experts</p>
+          <button class="flex items-center gap-2 mx-auto py-2.5 px-6 rounded-full bg-white text-sm font-semibold" style="color: #00639b;">
+            <img src="https://www.figma.com/api/mcp/asset/fdd0e6be-623a-4e0f-8c57-f4b086179f70" class="w-4 h-4" alt="">
+            Ask a Question
+          </button>
+        </div>
+      </div>
+
+      <!-- Item 4 -->
+      <div class="bg-white rounded-2xl p-4">
+        <div class="flex gap-3">
+          <div class="flex flex-col items-center gap-1 flex-shrink-0">
+            <img src="https://www.figma.com/api/mcp/asset/8a3337ba-76e3-4176-a7bb-299a49cfde98" class="w-5 h-5" alt="Up">
+            <span class="text-sm font-bold" style="color: #39acff;">12</span>
+            <img src="https://www.figma.com/api/mcp/asset/01e3cecd-8509-448b-9b0d-10c5b74b4040" class="w-5 h-5" alt="Down">
+          </div>
+          <div class="flex-1 min-w-0">
+            <div class="flex flex-wrap gap-1.5 mb-2">
+              <span class="text-[9px] font-bold px-2 py-0.5 rounded-full" style="background: #e8f4ff; color: #00639b;">SENIOR MATCH</span>
+            </div>
+            <p class="text-[11px] mb-1" style="color: #9ca3af;">u/PetLoverSyd &bull; 3h ago</p>
+            <h3 class="text-sm font-bold mb-2" style="color: #171c21;">Renting with a pet in a senior complex?</h3>
+            <p class="text-xs mb-3" style="color: #3f4851;">Are there any senior living complexes in Sydney that allow small pets like cats or small dogs?</p>
+            <div class="flex items-center gap-4">
+              <div class="flex items-center gap-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/150575f3-d2ec-4f2e-b36b-bc362f7afab7" class="w-4 h-4" alt="">
+                <span class="text-[11px] font-medium" style="color: #9ca3af;">8 Comments</span>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <img src="https://www.figma.com/api/mcp/asset/0c12af19-05d8-4555-9fb5-9d46d2c61726" class="w-4 h-4" alt="">
+                <span class="text-[11px] font-medium" style="color: #9ca3af;">Share</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</body>
+</html>
