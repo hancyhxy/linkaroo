@@ -27,11 +27,15 @@ aussiebridge/
 │       │   ├── MessageListView     — All / Unread segmented inbox
 │       │   └── ChatView            — shared-context handoff + action pills + bubbles
 │       └── Screens/                               ← Layout scaffold helpers
-├── design.md               Authoritative design spec (Stitch baseline; "Anchored Horizon")
-├── design.archive.md       v1 design notes — Craft-aligned visual exploration (preserved for iteration history)
 ├── html_pages/             Stitch-generated HTML mockups (one per Page; visual prior to the SwiftUI implementation)
-└── docs/
-    └── product-context.md  Context-First mechanism summary (5 contextual moments)
+├── docs/
+│   ├── design.md           Authoritative design spec (Stitch baseline; "Anchored Horizon")
+│   ├── struct.md           Data model — 22 entities organised into 5 Context-First layers
+│   ├── struct.html         Rendered HTML version of struct.md (open in browser)
+│   └── product-context.md  Context-First mechanism summary (5 contextual moments)
+└── archive/                Superseded versions kept for iteration history
+    ├── design.v1-craft.md  v1 design — Craft-aligned visual exploration (replaced by current docs/design.md)
+    └── struct.v1.md        v1 data model — flat list (replaced by current docs/struct.md with 5-layer grouping)
 ```
 
 ## Quick start
@@ -80,8 +84,8 @@ If you need:
 
 | Round | Status | Focus |
 |-------|--------|-------|
-| **v1** (Anchored Horizon) | shipped | AI-generated `design.md` from Google Stitch; faithfully translated into SwiftUI. Current visual = Stitch baseline ≈ 75% of intended quality. |
-| **v2** (Open Harbour exploration) | archived in `design.archive.md` | Hand-tuned Craft aesthetic (warm paper + near-black + pastel accents); reverted to v1 baseline to keep narrative aligned with `design.md`. Worth revisiting for warmth. |
+| **v1** (Anchored Horizon) | shipped | AI-generated `docs/design.md` from Google Stitch; faithfully translated into SwiftUI. Current visual = Stitch baseline ≈ 75% of intended quality. |
+| **v2** (Open Harbour exploration) | archived in `archive/design.v1-craft.md` | Hand-tuned Craft aesthetic (warm paper + near-black + pastel accents); reverted to v1 baseline to keep narrative aligned with `docs/design.md`. Worth revisiting for warmth. |
 | **v3** (target) | next | Either (a) graft published design system (Radix Colors / Apple HIG semantic tokens) onto current spec, or (b) selectively re-introduce v2's editorial warmth on top of v1's Pacific palette. Decision pending user-test results. |
 
 User-testing hypotheses for v3 priority-setting: see the presentation script in `uts-coursework/.../checkpoint3/`.
