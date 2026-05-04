@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AussieBridge · Data Model</title>
+<style>
+/* === Design tokens (mirrors aussiebridge/design.md §2 Anchored Horizon) === */
+:root {
+  --primary: #003955;
+  --primary-bright: #005177;
+  --surface: #f7fafb;
+  --surface-card: #ffffff;
+  --surface-container: #f1f4f5;
+  --surface-dark: #181c1d;
+  --on-surface: #181c1d;
+  --on-surface-variant: #41484e;
+  --on-surface-disabled: #9ca3af;
+  --border-hairline: rgba(65, 72, 78, 0.15);
+
+  /* Layer accent colors — each mechanism gets a hue */
+  --layer-identity:     #2563eb;   /* M1 — blue */
+  --layer-curation:     #7c3aed;   /* M2+M3 — violet */
+  --layer-matching:     #d97706;   /* M4 — amber */
+  --layer-conversation: #059669;   /* M5 — emerald */
+  --layer-crosscutting: #64748b;   /* general — slate */
+
+  --origin-team: #0369a1;
+  --origin-context: #6d28d9;
+  --origin-engineering: #475569;
+
+  --font-display: "Public Sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body:    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono:    "SF Mono", "JetBrains Mono", "Menlo", monospace;
+}
+
+/* === Reset & base === */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--surface);
+  color: var(--on-surface);
+  line-height: 1.6;
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Layout: sidebar TOC + main content === */
+.app {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: 100vh;
+}
+
+.sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  padding: 32px 20px 32px 24px;
+  border-right: 1px solid var(--border-hairline);
+  background: var(--surface);
+}
+.sidebar h2 {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--on-surface-variant);
+  margin: 0 0 12px 0;
+}
+.sidebar nav { font-size: 13px; }
+.sidebar nav details { margin-bottom: 14px; }
+.sidebar nav summary {
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px 0;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--on-surface);
+}
+.sidebar nav summary::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  background: var(--layer-color, var(--on-surface-variant));
+  flex-shrink: 0;
+}
+.sidebar nav summary::-webkit-details-marker { display: none; }
+.sidebar nav ul {
+  list-style: none;
+  padding-left: 16px;
+  margin: 6px 0 0 0;
+}
+.sidebar nav li { padding: 3px 0; }
+.sidebar nav a {
+  color: var(--on-surface-variant);
+  text-decoration: none;
+  font-weight: 400;
+  display: block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: all 0.15s;
+}
+.sidebar nav a:hover {
+  background: var(--surface-container);
+  color: var(--primary);
+}
+
+main {
+  padding: 48px 56px 96px 56px;
+  max-width: 920px;
+}
+
+/* === Header === */
+.doc-header {
+  margin-bottom: 56px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--border-hairline);
+}
+.doc-header h1 {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px 0;
+  color: var(--primary);
+}
+.doc-header .lede {
+  font-size: 17px;
+  color: var(--on-surface-variant);
+  line-height: 1.7;
+  max-width: 70ch;
+}
+.doc-header .meta {
+  margin-top: 20px;
+  font-size: 13px;
+  color: var(--on-surface-disabled);
+  font-family: var(--font-mono);
+}
+
+/* === Reading guide table === */
+.reading-guide {
+  background: var(--surface-card);
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 56px;
+  box-shadow: 0px 1px 2px rgba(0, 30, 47, 0.04);
+}
+.reading-guide h2 {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  color: var(--on-surface);
+}
+.reading-guide p {
+  font-size: 14px;
+  color: var(--on-surface-variant);
+  margin: 0 0 16px 0;
+}
+.legend-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+.legend-item {
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--surface-container);
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.legend-item .swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.legend-item strong {
+  display: block;
+  color: var(--on-surface);
+  font-weight: 700;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+.legend-item span {
+  color: var(--on-surface-variant);
+  font-size: 12px;
+}
+
+/* === Layer section === */
+.layer {
+  margin-bottom: 80px;
+  scroll-margin-top: 24px;
+}
+.layer-header {
+  position: relative;
+  padding: 24px 28px;
+  border-radius: 16px;
+  background: var(--layer-color, var(--surface-container));
+  color: white;
+  margin-bottom: 32px;
+  overflow: hidden;
+}
+.layer-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, transparent 0%, rgba(0, 0, 0, 0.15) 100%);
+  pointer-events: none;
+}
+.layer-header h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px 0;
+  position: relative;
+}
+.layer-header .layer-mechanism {
+  font-size: 13px;
+  opacity: 0.9;
+  margin: 0 0 12px 0;
+  font-family: var(--font-mono);
+  position: relative;
+}
+.layer-header .layer-thesis {
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+  opacity: 0.95;
+  position: relative;
+  max-width: 70ch;
+}
+
+/* === Entity card === */
+.entity {
+  background: var(--surface-card);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0px 1px 2px rgba(0, 30, 47, 0.04);
+  scroll-margin-top: 24px;
+}
+.entity-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.entity-header h3 {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--on-surface);
+}
+.entity-header .entity-num {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--on-surface-disabled);
+  font-weight: 600;
+}
+.entity-header .entity-tag {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(124, 58, 237, 0.12);
+  color: #6d28d9;
+}
+.entity-header .entity-tag.core {
+  background: rgba(217, 119, 6, 0.14);
+  color: #b45309;
+}
+.entity-description {
+  font-size: 14px;
+  color: var(--on-surface-variant);
+  margin: 0 0 20px 0;
+  line-height: 1.7;
+  max-width: 75ch;
+}
+
+/* === Field table === */
+.field-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+.field-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--surface-container);
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 10px 12px;
+  color: var(--on-surface-variant);
+  border-bottom: 2px solid var(--border-hairline);
+}
+.field-table tbody td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-hairline);
+  vertical-align: top;
+  line-height: 1.55;
+}
+.field-table tbody tr:last-child td { border-bottom: none; }
+.field-table tbody tr:hover { background: rgba(0, 57, 85, 0.02); }
+
+.field-table .field-name {
+  font-family: var(--font-mono);
+  font-size: 12.5px;
+  color: var(--primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.field-table .field-type {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--on-surface-variant);
+  white-space: nowrap;
+}
+.field-table .field-mut {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  display: inline-block;
+}
+.field-table .field-mut.var { background: rgba(217, 119, 6, 0.12); color: #b45309; }
+.field-table .field-mut.let { background: rgba(5, 150, 105, 0.12); color: #047857; }
+.field-table .field-mut.computed { background: rgba(37, 99, 235, 0.12); color: #1e40af; }
+.field-table .field-why {
+  color: var(--on-surface);
+  font-size: 13px;
+  max-width: 32em;
+}
+.origin-chip {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.origin-chip.team        { background: rgba(3, 105, 161, 0.12); color: var(--origin-team); }
+.origin-chip.context     { background: rgba(109, 40, 217, 0.12); color: var(--origin-context); }
+.origin-chip.engineering { background: rgba(71, 85, 105, 0.12); color: var(--origin-engineering); }
+
+/* === Notes & relationship === */
+.entity-note {
+  margin: 16px 0;
+  padding: 14px 18px;
+  background: var(--surface-container);
+  border-left: 3px solid var(--primary-bright);
+  border-radius: 0 8px 8px 0;
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  line-height: 1.65;
+}
+.entity-note strong { color: var(--on-surface); }
+.entity-relationship {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-hairline);
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  font-style: italic;
+  line-height: 1.65;
+}
+.entity-relationship::before {
+  content: "→ ";
+  font-weight: 700;
+  color: var(--primary);
+  font-style: normal;
+}
+
+/* === Comparison & enumeration tables === */
+.comparison-table,
+.coverage-table,
+.enum-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  background: var(--surface-card);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 1px 2px rgba(0, 30, 47, 0.04);
+  margin-bottom: 24px;
+}
+.comparison-table thead th,
+.coverage-table thead th,
+.enum-table thead th {
+  background: var(--surface-container);
+  padding: 12px 14px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--on-surface-variant);
+}
+.comparison-table tbody td,
+.coverage-table tbody td,
+.enum-table tbody td {
+  padding: 12px 14px;
+  border-top: 1px solid var(--border-hairline);
+  vertical-align: top;
+  line-height: 1.55;
+}
+.comparison-table tbody tr:hover,
+.coverage-table tbody tr:hover,
+.enum-table tbody tr:hover { background: rgba(0, 57, 85, 0.02); }
+
+.section-block {
+  margin-top: 80px;
+  scroll-margin-top: 24px;
+}
+.section-block h2 {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin: 0 0 16px 0;
+  color: var(--primary);
+}
+.section-block p {
+  font-size: 14px;
+  color: var(--on-surface-variant);
+  max-width: 75ch;
+  line-height: 1.75;
+}
+.section-block .insight {
+  margin-top: 24px;
+  padding: 20px 24px;
+  background: var(--surface-card);
+  border-left: 4px solid var(--layer-curation);
+  border-radius: 0 12px 12px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--on-surface);
+}
+.section-block .insight strong { color: var(--primary); }
+
+/* Mobile fallback */
+@media (max-width: 900px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar {
+    position: relative;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border-hairline);
+  }
+  main { padding: 32px 24px 64px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sidebar">
+    <h2>AussieBridge · Data Model</h2>
+    <nav>
+      <details open style="--layer-color: var(--layer-identity);">
+        <summary>§1 Identity</summary>
+        <ul>
+          <li><a href="#user">1. User</a></li>
+          <li><a href="#language">2. Language</a></li>
+          <li><a href="#user-status">3. UserStatus</a></li>
+          <li><a href="#duration">4. Duration</a></li>
+          <li><a href="#location">5. Location</a></li>
+        </ul>
+      </details>
+      <details open style="--layer-color: var(--layer-curation);">
+        <summary>§2 Curation</summary>
+        <ul>
+          <li><a href="#service-category">6. ServiceCategory</a></li>
+          <li><a href="#guide">7. Guide</a></li>
+          <li><a href="#qa-post">8. QAPost</a></li>
+          <li><a href="#top-answer">9. TopAnswer</a></li>
+          <li><a href="#content-tag">10. ContentTag</a></li>
+        </ul>
+      </details>
+      <details open style="--layer-color: var(--layer-matching);">
+        <summary>§3 Matching</summary>
+        <ul>
+          <li><a href="#volunteer">11. Volunteer</a></li>
+          <li><a href="#skill-tag">12. SkillTag</a></li>
+          <li><a href="#match-result">13. MatchResult</a></li>
+          <li><a href="#help-request">14. HelpRequest</a></li>
+          <li><a href="#achievement-badge">15. AchievementBadge</a></li>
+        </ul>
+      </details>
+      <details open style="--layer-color: var(--layer-conversation);">
+        <summary>§4 Conversation</summary>
+        <ul>
+          <li><a href="#conversation">16. Conversation</a></li>
+          <li><a href="#chat-message">17. ChatMessage</a></li>
+          <li><a href="#shared-context">18. SharedContext</a></li>
+          <li><a href="#context-action">19. ContextAction</a></li>
+        </ul>
+      </details>
+      <details open style="--layer-color: var(--layer-crosscutting);">
+        <summary>§5 Cross-cutting</summary>
+        <ul>
+          <li><a href="#translation">20. Translation</a></li>
+          <li><a href="#task">21. Task</a></li>
+          <li><a href="#step">22. Step</a></li>
+        </ul>
+      </details>
+      <details>
+        <summary style="--layer-color: var(--on-surface-disabled);">Appendix</summary>
+        <ul>
+          <li><a href="#enumerations">Enumerations</a></li>
+          <li><a href="#variation">Variation Comparison</a></li>
+          <li><a href="#coverage">Coverage summary</a></li>
+        </ul>
+      </details>
+    </nav>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <main>
+    <header class="doc-header">
+      <h1>Data Model</h1>
+      <p class="lede">
+        AussieBridge follows the team's shared baseline of 8 core entities, plus individual extensions for the <strong>Context-First</strong> variation.
+        The 22 entities below are organised into <strong>five layers</strong> — each layer corresponding to one of the Context-First mechanisms — so the data
+        model becomes the visible argument that the schema was designed <em>around</em> the variation thesis, not retro-fitted to it.
+      </p>
+      <p class="meta">
+        Authoritative source: <code>ABDesignSystem/Sources/Models/ABModels.swift</code> &nbsp;·&nbsp;
+        Last revised: 2026-05-04
+      </p>
+    </header>
+
+    <!-- === Reading guide === -->
+    <section class="reading-guide">
+      <h2>Reading guide</h2>
+      <p>Each field table has columns for <strong>Field</strong>, <strong>Type</strong>, <strong>Mutability</strong>, <strong>Origin</strong>, and <strong>Why</strong>. The Origin column shows whether a field comes from the team baseline or my Context-First extensions:</p>
+      <div class="legend-grid">
+        <div class="legend-item"><span class="swatch" style="background:var(--origin-team);"></span><div><strong>team</strong><span>Defined in the 8-entity team baseline</span></div></div>
+        <div class="legend-item"><span class="swatch" style="background:var(--origin-context);"></span><div><strong>+ context</strong><span>Added for the Context-First variation</span></div></div>
+        <div class="legend-item"><span class="swatch" style="background:var(--origin-engineering);"></span><div><strong>+ engineering</strong><span>Added for SwiftUI implementation needs</span></div></div>
+      </div>
+      <p style="margin-top: 20px;"><strong>Type column convention</strong>: <code>String</code>/<code>Int</code>/<code>Double</code>/<code>Bool</code>/<code>Date</code>/<code>URL</code>/<code>UUID</code> are Swift built-ins. <code>[X]</code> = array of X. <code>X?</code> = optional. <code>→ Y</code> = references entity Y.</p>
+      <p style="margin: 8px 0 0 0;"><strong>Mutability</strong>: <code>let</code> = immutable once set; <code>var</code> = mutable; <code>computed</code> = derived from other fields.</p>
+    </section>
+
+    <!-- ===================== §1 IDENTITY ===================== -->
+    <section class="layer" id="layer-identity" style="--layer-color: var(--layer-identity);">
+      <header class="layer-header">
+        <h2>§1 — Identity Layer</h2>
+        <p class="layer-mechanism">M1 — onboarding captures identity, used as filter input downstream</p>
+        <p class="layer-thesis">Onboarding captures the "first context" (language, status, location, time-in-country) and stores it on the User. Every downstream surface — home recommendations, Q&amp;A relevance, volunteer matching — reads from this profile. The identity is the <em>filter</em>, not a <em>feature page</em>.</p>
+      </header>
+
+      <article class="entity" id="user">
+        <div class="entity-header">
+          <span class="entity-num">1</span>
+          <h3>User</h3>
+        </div>
+        <p class="entity-description">The core user entity, populated during onboarding and used as the filter input by every Context-First mechanism.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Stable identifier; Swift <code>Identifiable</code> conformance and chat sender resolution depend on this</td></tr>
+            <tr><td class="field-name">displayName</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>name</code>. Editable so users can correct typos or change to a preferred form</td></tr>
+            <tr><td class="field-name">username</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Reddit-style handle (e.g. <code>u/sarah_m</code>) shown as Q&amp;A attribution. Decouples display label from community identity</td></tr>
+            <tr><td class="field-name">avatarURL</td><td class="field-type">URL?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Optional photo; nil triggers initial-letter fallback. Migrants often arrive without a profile photo, so the fallback is part of the design</td></tr>
+            <tr><td class="field-name">preferredLanguage</td><td class="field-type">→ Language</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>selectedLanguage</code>. Drives translation availability and language-tagged content</td></tr>
+            <tr><td class="field-name">currentStatus</td><td class="field-type">→ UserStatus</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Identity captured during onboarding (student / working / etc.). The single most predictive filter signal</td></tr>
+            <tr><td class="field-name">location</td><td class="field-type">→ Location?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Structured (city + state) — content filtering needs <strong>state-level</strong> legal/policy granularity (NSW renting law ≠ VIC)</td></tr>
+            <tr><td class="field-name">durationInAustralia</td><td class="field-type">→ Duration</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Bucketed (<code>justLanded</code>, <code>1–6mo</code>, etc.) rather than continuous days — UI surfaces change at thresholds, not on continuous numbers</td></tr>
+            <tr><td class="field-name">isOnline</td><td class="field-type">Bool</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Drives the green-dot indicator in chat / message list. Live state, not a computed timestamp</td></tr>
+            <tr><td class="field-name">onboardingProgress</td><td class="field-type">Double</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">0.0–1.0; surfaces a progress chip so partial onboarding feels resumable</td></tr>
+            <tr><td class="field-name">completedTasks</td><td class="field-type">[→ Task]</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Personal checklist of "First 7 Days" items. Migrants need a sense of progress through bureaucratic steps</td></tr>
+            <tr><td class="field-name">createdAt</td><td class="field-type">Date</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Account creation timestamp; powers cohort analytics</td></tr>
+            <tr><td class="field-name">initials</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Derived from <code>displayName</code> for avatar fallback</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>User</strong> posts <strong>HelpRequests</strong>, sends <strong>ChatMessages</strong>, owns one <strong>Location</strong>, has one <strong>UserStatus</strong> and one <strong>Duration</strong>, and tracks completion of <strong>Tasks</strong>.</p>
+      </article>
+
+      <article class="entity" id="language">
+        <div class="entity-header">
+          <span class="entity-num">2</span>
+          <h3>Language</h3>
+        </div>
+        <p class="entity-description">User's language preference, exposed both as a User profile field and as a selectable option during onboarding.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">name</td><td class="field-type">String</td><td><span class="field-mut">rawValue</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Display label — baseline <code>name</code></td></tr>
+            <tr><td class="field-name">code</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">ISO 639-1 (<code>en</code>, <code>zh</code>) — used for translation API contracts</td></tr>
+            <tr><td class="field-name">flagIcon</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Country flag emoji — provides a non-textual recognition cue for L2 readers</td></tr>
+          </tbody>
+        </table>
+        <div class="entity-note"><strong>Implementation note:</strong> realised as <code>enum ABLanguage: String, CaseIterable</code> (6 cases) rather than a struct. The team baseline's <code>isSelected: Bool</code> is lifted onto <code>User.preferredLanguage</code> — selection state is owned by the user, not the language.</div>
+        <p class="entity-relationship">A <strong>Language</strong> is referenced by <strong>User</strong> (preference), <strong>HelpRequest</strong> (request language), and <strong>Translation</strong> (source / target).</p>
+      </article>
+
+      <article class="entity" id="user-status">
+        <div class="entity-header">
+          <span class="entity-num">3</span>
+          <h3>UserStatus</h3>
+          <span class="entity-tag">Context-First addition</span>
+        </div>
+        <p class="entity-description">Onboarding identity, used as the primary filter signal for the home hub and for Q&amp;A relevance ranking.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">name</td><td class="field-type">String</td><td><span class="field-mut">rawValue</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Display label shown in onboarding selection card</td></tr>
+            <tr><td class="field-name">icon</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">SF Symbol — onboarding cards use icons because L2 readers parse icons faster than English status words</td></tr>
+          </tbody>
+        </table>
+        <div class="entity-note">Cases: <code>immigrantStudent</code>, <code>working</code>, <code>lookingForWork</code>, <code>businessOwner</code>.</div>
+        <p class="entity-relationship">A <strong>UserStatus</strong> is held by exactly one <strong>User</strong>.</p>
+      </article>
+
+      <article class="entity" id="duration">
+        <div class="entity-header">
+          <span class="entity-num">4</span>
+          <h3>Duration</h3>
+          <span class="entity-tag">Context-First addition</span>
+        </div>
+        <p class="entity-description">Time-in-Australia bucket. Drives the "First 7 Days Checklist" surfacing logic on Home and the urgency tone of recommendations.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">name</td><td class="field-type">String</td><td><span class="field-mut">rawValue</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Bucket label (e.g. <code>Just landed</code>, <code>1–6 months</code>)</td></tr>
+          </tbody>
+        </table>
+        <div class="entity-note"><strong>Bucketed not numeric</strong> because UI changes at thresholds — a "just landed" user sees the First 7 Days guide; a "1-year+" user does not. Continuous days-since-arrival would force every screen to declare its own thresholds. Cases: <code>notYetArrived</code>, <code>justLanded</code>, <code>oneToSix</code>, <code>sixToTwelve</code>, <code>oneYearPlus</code>.</div>
+        <p class="entity-relationship">A <strong>Duration</strong> is held by exactly one <strong>User</strong>.</p>
+      </article>
+
+      <article class="entity" id="location">
+        <div class="entity-header">
+          <span class="entity-num">5</span>
+          <h3>Location</h3>
+          <span class="entity-tag">Context-First addition</span>
+        </div>
+        <p class="entity-description">Structured geographic context. Used to filter content (housing rules per state, transport availability per city).</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">city</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">E.g. <code>Sydney</code>. Drives nearest-volunteer matching and city-specific guides</td></tr>
+            <tr><td class="field-name">state</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why"><strong>Critical</strong> for law/policy filtering — renting law differs between NSW and VIC, and a migrant getting the wrong state's rule is worse than no rule</td></tr>
+            <tr><td class="field-name">latitude</td><td class="field-type">Double?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">For future map rendering (volunteer map, near-me services)</td></tr>
+            <tr><td class="field-name">longitude</td><td class="field-type">Double?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">(See latitude)</td></tr>
+            <tr><td class="field-name">displayString</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">E.g. "Sydney, NSW" — keeps display in sync with city/state edits</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>Location</strong> belongs to one <strong>User</strong> (and may be revised when the user moves).</p>
+      </article>
+    </section>
+
+    <!-- ===================== §2 CURATION ===================== -->
+    <section class="layer" id="layer-curation" style="--layer-color: var(--layer-curation);">
+      <header class="layer-header">
+        <h2>§2 — Curation Layer</h2>
+        <p class="layer-mechanism">M2 + M3 — context-aware home hub + visible credibility</p>
+        <p class="layer-thesis">The home hub <em>pushes</em> relevant guides (rather than waiting for the user to search), and every piece of community content is tagged with credibility / freshness signals so a non-native English reader can parse trust <em>visually</em> without reading every paragraph.</p>
+      </header>
+
+      <article class="entity" id="service-category">
+        <div class="entity-header"><span class="entity-num">6</span><h3>ServiceCategory</h3></div>
+        <p class="entity-description">One of the 10 service categories shown on the home grid.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Stable identifier for ForEach</td></tr>
+            <tr><td class="field-name">type</td><td class="field-type">→ ServiceCategoryType</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">10-case enum (Job / Housing / etc.). Enum-driven so spelling and ordering are guaranteed</td></tr>
+            <tr><td class="field-name">displayOrder</td><td class="field-type">Int</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Stored separately from enum so we can A/B-test ordering without changing the enum</td></tr>
+            <tr><td class="field-name">name</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Human-readable label derived from <code>type</code></td></tr>
+            <tr><td class="field-name">icon</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">SF Symbol name derived from <code>type</code></td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>ServiceCategory</strong> is referenced by <strong>Task</strong>, <strong>QAPost</strong>, <strong>HelpRequest</strong>, and <strong>Guide</strong>.</p>
+      </article>
+
+      <article class="entity" id="guide">
+        <div class="entity-header"><span class="entity-num">7</span><h3>Guide</h3></div>
+        <p class="entity-description">Recommended article or guide surfaced on the home page (Featured Guide card or "Recommended for you" list).</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Headline shown on the card</td></tr>
+            <tr><td class="field-name">description</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">One-sentence summary; provides preview without forcing a tap</td></tr>
+            <tr><td class="field-name">category</td><td class="field-type">→ ServiceCategoryType</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Powers per-category filtering and home-hub relevance</td></tr>
+            <tr><td class="field-name">tags</td><td class="field-type">[→ ContentTag]</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why"><code>FEATURED GUIDE</code>, <code>STUDENT MATCH</code>, <code>NEW</code>. Tags surface the "why this guide is here" reason at a glance</td></tr>
+            <tr><td class="field-name">readTimeMinutes</td><td class="field-type">Int</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Surfaces effort cost up-front. Migrants have fragmented time and need to know "3-min vs 15-min"</td></tr>
+            <tr><td class="field-name">isFeatured</td><td class="field-type">Bool</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Promotes to the dark Featured Guide card; drives different visual treatment, not just sort order</td></tr>
+            <tr><td class="field-name">imageURL</td><td class="field-type">URL?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Cover image for Featured Guide; absent on lightweight recommendation cards</td></tr>
+            <tr><td class="field-name">createdAt</td><td class="field-type">Date</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Sort signal and freshness check for the <code>NEW</code> tag</td></tr>
+            <tr><td class="field-name">readTimeString</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Formatted as "12 min read"</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>Guide</strong> belongs to a <strong>ServiceCategoryType</strong> and carries multiple <strong>ContentTags</strong>.</p>
+      </article>
+
+      <article class="entity" id="qa-post">
+        <div class="entity-header"><span class="entity-num">8</span><h3>QAPost</h3></div>
+        <p class="entity-description">Reddit-style community Q&amp;A thread — the central content unit for community knowledge.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">author</td><td class="field-type">→ User</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Original poster; reference (not embedded copy) so name edits propagate</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Question headline shown in lists</td></tr>
+            <tr><td class="field-name">preview</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">First ~150 chars; stored separately so list views don't truncate at runtime</td></tr>
+            <tr><td class="field-name">fullContent</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Body text for the detail view</td></tr>
+            <tr><td class="field-name">tags</td><td class="field-type">[→ ContentTag]</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">The credibility / freshness layer (UNVERIFIED / OLD LAW / TOP ANSWER). <strong>Core of M3</strong></td></tr>
+            <tr><td class="field-name">category</td><td class="field-type">→ ServiceCategoryType</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Drives QA list filter pills</td></tr>
+            <tr><td class="field-name">voteCount</td><td class="field-type">Int</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Reddit-style upvotes; community signal of usefulness</td></tr>
+            <tr><td class="field-name">commentCount</td><td class="field-type">Int</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Engagement signal; drives "needs answer" surfacing when 0</td></tr>
+            <tr><td class="field-name">topAnswer</td><td class="field-type">→ TopAnswer?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Embedded (not referenced) — TopAnswer has no identity outside its parent post</td></tr>
+            <tr><td class="field-name">verificationStatus</td><td class="field-type">→ VerificationStatus</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Coarse credibility flag (the fine grain is in <code>tags</code>)</td></tr>
+            <tr><td class="field-name">source</td><td class="field-type">→ ContentSource?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Provenance (TikTok / government / official). Optional because community-authored content has no external source</td></tr>
+            <tr><td class="field-name">createdAt</td><td class="field-type">Date</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Sort key and recency check</td></tr>
+            <tr><td class="field-name">timeAgoString</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">"4h ago", "2d ago" — absolute timestamps don't help an L2 reader judge freshness</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>QAPost</strong> is authored by a <strong>User</strong>, categorised under <strong>ServiceCategoryType</strong>, tagged with multiple <strong>ContentTags</strong>, may have a <strong>TopAnswer</strong>, and may be referenced from a <strong>SharedContext</strong> when the conversation moves to chat.</p>
+      </article>
+
+      <article class="entity" id="top-answer">
+        <div class="entity-header"><span class="entity-num">9</span><h3>TopAnswer</h3></div>
+        <p class="entity-description">Excerpted top answer pinned to a Q&amp;A post. Embedded inside QAPost rather than its own table — it has no identity outside its parent.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">authorUsername</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Attribution; denormalised because the answer's author may have different display rules</td></tr>
+            <tr><td class="field-name">excerpt</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Quoted text (1–3 sentences); pre-cut to length so list views don't wrap arbitrary HTML</td></tr>
+            <tr><td class="field-name">isVerified</td><td class="field-type">Bool</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Adds the green checkmark — independent from <code>QAPost.verificationStatus</code> (verified answer can sit on outdated question)</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>TopAnswer</strong> belongs to exactly one <strong>QAPost</strong> (1:0..1).</p>
+      </article>
+
+      <article class="entity" id="content-tag">
+        <div class="entity-header">
+          <span class="entity-num">10</span>
+          <h3>ContentTag</h3>
+          <span class="entity-tag core">Context-First — core entity</span>
+        </div>
+        <p class="entity-description">Semantic tag attached to Q&amp;A posts, help requests, and recommended guides. <strong>The most-used Context-First entity</strong> — credibility-made-visible relies on this.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">text</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why"><code>STUDENT MATCH</code>, <code>OLD LAW</code>. Editorial control matters — tag text is the <strong>first English</strong> an L2 reader parses</td></tr>
+            <tr><td class="field-name">type</td><td class="field-type">→ ContentTagType</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">8-case enum determines colour + decoration. One enum drives all visual treatment</td></tr>
+            <tr><td class="field-name">hasIcon</td><td class="field-type">Bool</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Some tags (GOVERNMENT VERIFIED) need an icon for fast recognition; others (NEW) work as text alone</td></tr>
+          </tbody>
+        </table>
+        <div class="entity-note"><strong>Why one tag system instead of three trust fields?</strong> Group-mate B's Credibility-First variation uses three separate fields on Answer (<code>authorityTag</code>, <code>reliabilityTag</code>, <code>timelinessTag</code>). I chose a unified ContentTag system because Context-First's filter thesis requires <em>one</em> uniform visual layer where tags can mix freely (e.g. a single post can be <code>STUDENT MATCH</code> + <code>OLD LAW</code> + <code>SOURCE: TIKTOK</code> simultaneously). Three separate fields force a pre-decided trust hierarchy I don't want to commit to.</div>
+        <p class="entity-relationship">A <strong>ContentTag</strong> can attach to a <strong>QAPost</strong>, <strong>Guide</strong>, or <strong>HelpRequest</strong> (many-to-many; modelled as direct array reference).</p>
+      </article>
+    </section>
+
+    <!-- ===================== §3 MATCHING ===================== -->
+    <section class="layer" id="layer-matching" style="--layer-color: var(--layer-matching);">
+      <header class="layer-header">
+        <h2>§3 — Matching Layer</h2>
+        <p class="layer-mechanism">M4 — reason-based volunteer matching</p>
+        <p class="layer-thesis">Algorithm output is exposed as an explicit list of <em>reasons</em> (<code>matchReasons: [String]</code>), not a single percentage. The user can see <em>why</em> this volunteer was suggested and override the match if a reason doesn't apply. Algorithms become legible.</p>
+      </header>
+
+      <article class="entity" id="volunteer">
+        <div class="entity-header"><span class="entity-num">11</span><h3>Volunteer</h3></div>
+        <p class="entity-description">Experienced community member matched to incoming users.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">user</td><td class="field-type">→ User</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Volunteers <em>are</em> Users with extra fields. Embedded reference so display name / online state stays in sync</td></tr>
+            <tr><td class="field-name">role</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">"Senior Community Advisor". Free-text because role taxonomy is still evolving</td></tr>
+            <tr><td class="field-name">rating</td><td class="field-type">Double</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Out of 5.0; recalculated server-side from reviews</td></tr>
+            <tr><td class="field-name">peopleHelped</td><td class="field-type">Int</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">"142 people helped" is more trust-building for migrants than a star rating alone</td></tr>
+            <tr><td class="field-name">skills</td><td class="field-type">[→ SkillTag]</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Baseline <code>expertise: [String]</code> flattened into typed tags — colouring carries info</td></tr>
+            <tr><td class="field-name">bio</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Personal story builds the "asking a friend" feeling</td></tr>
+            <tr><td class="field-name">specializations</td><td class="field-type">[String]</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Coarse domains for filtering. Distinct from <code>skills</code> — domains are buckets, skills are credentials</td></tr>
+          </tbody>
+        </table>
+        <div class="entity-note"><strong>Baseline <code>name</code>, <code>languages</code>, <code>isOnline</code></strong>: inherited via the embedded <code>user: User</code> reference rather than duplicated. Avoids drift.</div>
+        <p class="entity-relationship">A <strong>Volunteer</strong> wraps a <strong>User</strong>, holds many <strong>SkillTags</strong>, and appears in zero or more <strong>MatchResults</strong>.</p>
+      </article>
+
+      <article class="entity" id="skill-tag">
+        <div class="entity-header"><span class="entity-num">12</span><h3>SkillTag</h3><span class="entity-tag">Context-First addition</span></div>
+        <p class="entity-description">Typed expertise marker used on volunteer profiles.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">text</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">"UNSW Alumna", "NSW Renting Specialist". Free-text so volunteers describe credentials in their own words</td></tr>
+            <tr><td class="field-name">category</td><td class="field-type">→ SkillCategory</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why"><code>blue</code> (academic / background) vs <code>warm</code> (specialty / region). Two-tier visual styling</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>SkillTag</strong> belongs to one <strong>Volunteer</strong>.</p>
+      </article>
+
+      <article class="entity" id="match-result">
+        <div class="entity-header"><span class="entity-num">13</span><h3>MatchResult</h3><span class="entity-tag core">Context-First — core entity</span></div>
+        <p class="entity-description">Outcome of the volunteer-matching algorithm. <strong>The "reason-based matching" mechanism's sole purpose is to surface this entity legibly.</strong></p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">volunteer</td><td class="field-type">→ Volunteer</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">The matched volunteer</td></tr>
+            <tr><td class="field-name">matchPercentage</td><td class="field-type">Int</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">0–100; single-number summary surfaced as a badge</td></tr>
+            <tr><td class="field-name">isTopChoice</td><td class="field-type">Bool</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Promotes one match to the hero "THE BEST FIT" treatment. Boolean rather than ordering so promotion is intentional</td></tr>
+            <tr><td class="field-name">matchReasons</td><td class="field-type">[String]</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why"><strong>The whole point.</strong> Without this field the variation collapses into algorithmic ranking — which is what the design is trying <em>not</em> to be</td></tr>
+          </tbody>
+        </table>
+        <div class="entity-note"><strong>Why match reasons are <code>[String]</code> not structured?</strong> I considered a typed <code>MatchReason</code> enum, but reasons are inherently editorial — a volunteer might match because of "same WeChat group" or "both visited the same hostel", which can't be enumerated in advance. Free-text reasons keep matching honest.</div>
+        <p class="entity-relationship">A <strong>MatchResult</strong> wraps a <strong>Volunteer</strong> and is rendered for one viewing <strong>User</strong>.</p>
+      </article>
+
+      <article class="entity" id="help-request">
+        <div class="entity-header"><span class="entity-num">14</span><h3>HelpRequest</h3></div>
+        <p class="entity-description">Help request posted by a user, surfaced to volunteers on the Community page.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">requester</td><td class="field-type">→ User</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Who posted the request; embedded reference for display sync</td></tr>
+            <tr><td class="field-name">subtitle</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">"Just arrived in Sydney". Hand-written context that supplements question text</td></tr>
+            <tr><td class="field-name">questionText</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>questionText</code></td></tr>
+            <tr><td class="field-name">tags</td><td class="field-type">[→ ContentTag]</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Same tag system as QAPost — reuse, don't duplicate</td></tr>
+            <tr><td class="field-name">category</td><td class="field-type">→ ServiceCategoryType</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>category</code> (typed enum)</td></tr>
+            <tr><td class="field-name">language</td><td class="field-type">→ Language</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>language</code>. Volunteer matching uses this to filter to language-compatible helpers</td></tr>
+            <tr><td class="field-name">isResolved</td><td class="field-type">Bool</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>isResolved</code></td></tr>
+            <tr><td class="field-name">assignedVolunteer</td><td class="field-type">→ Volunteer?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>assignedVolunteer</code>; nil until matched</td></tr>
+            <tr><td class="field-name">achievement</td><td class="field-type">→ AchievementBadge?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">"You both attend UNSW" — gives the viewing volunteer a <em>reason</em> to engage</td></tr>
+            <tr><td class="field-name">createdAt</td><td class="field-type">Date</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Sort key for the help feed</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>HelpRequest</strong> is posted by a <strong>User</strong>, may be assigned a <strong>Volunteer</strong>, can carry an <strong>AchievementBadge</strong>, and is tagged with multiple <strong>ContentTags</strong>.</p>
+      </article>
+
+      <article class="entity" id="achievement-badge">
+        <div class="entity-header"><span class="entity-num">15</span><h3>AchievementBadge</h3><span class="entity-tag">Context-First addition</span></div>
+        <p class="entity-description">Badge surfaced inside a HelpRequest card to give context for matching (e.g. "You both attend UNSW").</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">text</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Written from the <em>viewing volunteer's</em> perspective ("you both X") not the requester's</td></tr>
+            <tr><td class="field-name">icon</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">SF Symbol — usually a medal, school, or location pin</td></tr>
+            <tr><td class="field-name">variant</td><td class="field-type">→ AchievementVariant</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why"><code>warm</code> (personal achievement) vs <code>cool</code> (shared background). Separates "you've helped 3 students this month" from "you both attend UNSW"</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">An <strong>AchievementBadge</strong> belongs to one <strong>HelpRequest</strong> (1:0..1).</p>
+      </article>
+    </section>
+
+    <!-- ===================== §4 CONVERSATION ===================== -->
+    <section class="layer" id="layer-conversation" style="--layer-color: var(--layer-conversation);">
+      <header class="layer-header">
+        <h2>§4 — Conversation Layer</h2>
+        <p class="layer-mechanism">M5 — context-aware chat handoff</p>
+        <p class="layer-thesis">When the user escalates from a Q&amp;A thread to a 1-on-1 chat, the originating post is <em>auto-mounted</em> as a SharedContext card at the top of the conversation. Action pills offer one-tap shortcuts. The user never has to re-explain who they are or what they were asking — context is plumbing, not a feature page.</p>
+      </header>
+
+      <article class="entity" id="conversation">
+        <div class="entity-header"><span class="entity-num">16</span><h3>Conversation</h3></div>
+        <p class="entity-description">Two-user chat thread (user ↔ volunteer).</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">participant</td><td class="field-type">→ User</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">The other party (current user is implicit — the inbox is always <em>my</em> inbox)</td></tr>
+            <tr><td class="field-name">lastMessage</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Preview text; denormalised so inbox doesn't query the message store</td></tr>
+            <tr><td class="field-name">lastMessageAt</td><td class="field-type">Date</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">For sort and <code>timeAgoString</code></td></tr>
+            <tr><td class="field-name">unreadCount</td><td class="field-type">Int</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Drives the unread-badge UI and the unread segment count</td></tr>
+            <tr><td class="field-name">sharedContext</td><td class="field-type">→ SharedContext?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Q&amp;A post mounted at the top. Nullable because not every conversation starts from a Q&amp;A</td></tr>
+            <tr><td class="field-name">isUnread</td><td class="field-type">Bool</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">True when <code>unreadCount &gt; 0</code></td></tr>
+            <tr><td class="field-name">timeAgoString</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">"2 min ago", "Yesterday" — same L2-reader rationale as elsewhere</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>Conversation</strong> has one other <strong>User</strong> as participant, may anchor to a <strong>SharedContext</strong>, and contains many <strong>ChatMessages</strong>.</p>
+      </article>
+
+      <article class="entity" id="chat-message">
+        <div class="entity-header"><span class="entity-num">17</span><h3>ChatMessage</h3></div>
+        <p class="entity-description">Single message inside a conversation.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">senderID</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>sender</code>. Typed UUID rather than baseline's String</td></tr>
+            <tr><td class="field-name">text</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>text</code></td></tr>
+            <tr><td class="field-name">translatedText</td><td class="field-type">String?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Surfaced inline below the original — preserved so language learners can see both</td></tr>
+            <tr><td class="field-name">timestamp</td><td class="field-type">Date</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>timestamp</code></td></tr>
+            <tr><td class="field-name">direction</td><td class="field-type">→ MessageDirection</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">incoming / outgoing. Stored so we can render archive views without injecting current-user state</td></tr>
+            <tr><td class="field-name">isVoiceMessage</td><td class="field-type">Bool</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline; voice messages carry transcription differently</td></tr>
+            <tr><td class="field-name">timeString</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Formatted "h:mm a"</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>ChatMessage</strong> belongs to a <strong>Conversation</strong> and is sent by a <strong>User</strong> (referenced via <code>senderID</code>).</p>
+      </article>
+
+      <article class="entity" id="shared-context">
+        <div class="entity-header"><span class="entity-num">18</span><h3>SharedContext</h3><span class="entity-tag core">Context-First — core entity</span></div>
+        <p class="entity-description">Q&amp;A post reference mounted at the top of a chat thread. <strong>This entity is the entire reason mechanism 5 exists</strong> — without it, every conversation re-introduces the user.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">title</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Q&amp;A post title; denormalised so chat header renders without re-fetching the post</td></tr>
+            <tr><td class="field-name">relatedPostID</td><td class="field-type">UUID</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">FK to the originating QAPost. Tap-to-navigate-back is the entire point</td></tr>
+            <tr><td class="field-name">linkText</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">"View Q&amp;A Post". Editable so we can A/B-test call-back wording for tap rate</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>SharedContext</strong> is anchored to one <strong>Conversation</strong> (1:0..1) and points at one <strong>QAPost</strong>.</p>
+      </article>
+
+      <article class="entity" id="context-action">
+        <div class="entity-header"><span class="entity-num">19</span><h3>ContextAction</h3><span class="entity-tag">Context-First addition</span></div>
+        <p class="entity-description">Action pill shown in chat (e.g. "Share My Profile Tags", "Suggest a 5-min call").</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">text</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Pill label. Editable because micro-copy on action pills is one of the highest-leverage tap-rate optimisations</td></tr>
+            <tr><td class="field-name">icon</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">SF Symbol name</td></tr>
+            <tr><td class="field-name">variant</td><td class="field-type">→ ActionVariant</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why"><code>blue</code> (share / ask) vs <code>orange</code> (call / urgent). Colour codes urgency without forcing the user to read the label first</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>ContextAction</strong> belongs to a <strong>Conversation</strong>.</p>
+      </article>
+    </section>
+
+    <!-- ===================== §5 CROSS-CUTTING ===================== -->
+    <section class="layer" id="layer-crosscutting" style="--layer-color: var(--layer-crosscutting);">
+      <header class="layer-header">
+        <h2>§5 — Cross-cutting Layer</h2>
+        <p class="layer-mechanism">General — not bound to any single mechanism</p>
+        <p class="layer-thesis">These three entities support the whole product (translation can attach to any text; tasks can be referenced from any guide). They sit outside the five-mechanism map by design.</p>
+      </header>
+
+      <article class="entity" id="translation">
+        <div class="entity-header"><span class="entity-num">20</span><h3>Translation</h3></div>
+        <p class="entity-description">Translation record for cross-language messaging and standalone translation tooling.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">originalText</td><td class="field-type">String</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline. Immutable so the source survives translator edits</td></tr>
+            <tr><td class="field-name">translatedText</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Editable because users sometimes correct machine translation</td></tr>
+            <tr><td class="field-name">sourceLanguage</td><td class="field-type">→ Language</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>sourceLanguage</code></td></tr>
+            <tr><td class="field-name">targetLanguage</td><td class="field-type">→ Language</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Defaults to English</td></tr>
+            <tr><td class="field-name">confidence</td><td class="field-type">Double?</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">0.0–1.0 from the translation engine. Surfaces a "low-confidence" banner — matters for legal/medical text</td></tr>
+            <tr><td class="field-name">createdAt</td><td class="field-type">Date</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>Translation</strong> references two <strong>Languages</strong> (source + target) and may attach to a <strong>ChatMessage</strong>.</p>
+      </article>
+
+      <article class="entity" id="task">
+        <div class="entity-header"><span class="entity-num">21</span><h3>Task</h3></div>
+        <p class="entity-description">Checklist item that the user can complete (e.g. "Get a phone number"). Used by the "First 7 Days" guide.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>title</code></td></tr>
+            <tr><td class="field-name">category</td><td class="field-type">→ ServiceCategoryType</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Typed enum, not raw string — tasks can be filtered alongside guides and Q&amp;A</td></tr>
+            <tr><td class="field-name">isCompleted</td><td class="field-type">Bool</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>isCompleted</code></td></tr>
+            <tr><td class="field-name">steps</td><td class="field-type">[→ Step]</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Tasks have substeps so progress isn't all-or-nothing — a 7-step task can be 4/7 done</td></tr>
+            <tr><td class="field-name">progress</td><td class="field-type">Double</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Computed from <code>steps</code> so it can't drift out of sync</td></tr>
+          </tbody>
+        </table>
+        <p class="entity-relationship">A <strong>Task</strong> is categorised under <strong>ServiceCategoryType</strong>, contains many <strong>Steps</strong>, and is owned by a <strong>User</strong>.</p>
+      </article>
+
+      <article class="entity" id="step">
+        <div class="entity-header"><span class="entity-num">22</span><h3>Step</h3></div>
+        <p class="entity-description">Sub-step of a Task.</p>
+        <table class="field-table">
+          <thead><tr><th>Field</th><th>Type</th><th>Mut</th><th>Origin</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td class="field-name">id</td><td class="field-type">UUID</td><td><span class="field-mut let">let</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">&nbsp;</td></tr>
+            <tr><td class="field-name">title</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Replaces baseline <code>instructionText</code>. Renamed for parallelism with <code>Task.title</code></td></tr>
+            <tr><td class="field-name">description</td><td class="field-type">String</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip context">+ context</span></td><td class="field-why">Detailed explanation when expanded. L2 readers benefit from progressive disclosure (short title for scan, long description for execution)</td></tr>
+            <tr><td class="field-name">isCompleted</td><td class="field-type">Bool</td><td><span class="field-mut var">var</span></td><td><span class="origin-chip team">team</span></td><td class="field-why">Maps to baseline <code>isCompleted</code></td></tr>
+          </tbody>
+        </table>
+        <div class="entity-note"><strong>Simplification vs baseline:</strong> the team baseline lists <code>stepNumber: Int</code> and <code>requiredDocuments: [String]</code>. Both deferred — <code>stepNumber</code> is implicit in the array index of <code>Task.steps</code>; <code>requiredDocuments</code> is not surfaced in any current page. Both can be added back without breaking any consumer.</div>
+        <p class="entity-relationship">A <strong>Step</strong> belongs to one <strong>Task</strong>.</p>
+      </article>
+    </section>
+
+    <!-- ===================== ENUMERATIONS ===================== -->
+    <section class="section-block" id="enumerations">
+      <h2>Enumerations</h2>
+      <p>Type-safe enumerations referenced throughout the structs above. Listed in one place because they're cross-cutting.</p>
+      <table class="enum-table">
+        <thead><tr><th>Enum</th><th>Cases</th><th>Used by</th><th>Origin</th><th>Why this enum exists</th></tr></thead>
+        <tbody>
+          <tr><td class="field-name">Language</td><td>english, mandarin, spanish, arabic, hindi, other</td><td>User, HelpRequest, Translation</td><td><span class="origin-chip team">team</span></td><td>Closed set — supported languages are a deliberate product decision</td></tr>
+          <tr><td class="field-name">UserStatus</td><td>immigrantStudent, working, lookingForWork, businessOwner</td><td>User</td><td><span class="origin-chip context">+ context</span></td><td>Drives downstream filtering; closed set ensures consistent UI tabs and filter pills</td></tr>
+          <tr><td class="field-name">Duration</td><td>notYetArrived, justLanded, oneToSix, sixToTwelve, oneYearPlus</td><td>User</td><td><span class="origin-chip context">+ context</span></td><td>Bucketed because UI changes at thresholds, not on continuous time</td></tr>
+          <tr><td class="field-name">SkillCategory</td><td>blue, warm</td><td>SkillTag</td><td><span class="origin-chip context">+ context</span></td><td>Two-tier visual style; "academic" vs "regional/specialty"</td></tr>
+          <tr><td class="field-name">VerificationStatus</td><td>verified, unverified, outdated, pending</td><td>QAPost</td><td><span class="origin-chip context">+ context</span></td><td>Coarse credibility flag; the fine grain is in <code>tags</code></td></tr>
+          <tr><td class="field-name">ContentSource</td><td>tiktok, government, community, official</td><td>QAPost</td><td><span class="origin-chip context">+ context</span></td><td>Provenance taxonomy; surfaces "where did this come from" without long source URLs</td></tr>
+          <tr><td class="field-name">ContentTagType</td><td>contextMatch, verified, newContent, warning, error, gold, topAdvice, category</td><td>ContentTag</td><td><span class="origin-chip context">+ context</span></td><td>The 8-style visual taxonomy that powers all tag rendering</td></tr>
+          <tr><td class="field-name">MessageDirection</td><td>incoming, outgoing</td><td>ChatMessage</td><td><span class="origin-chip context">+ context</span></td><td>Drives bubble alignment without forcing every render to inject current-user identity</td></tr>
+          <tr><td class="field-name">ActionVariant</td><td>blue, orange</td><td>ContextAction</td><td><span class="origin-chip context">+ context</span></td><td>Two-tone urgency colour-coding for chat action pills</td></tr>
+          <tr><td class="field-name">ServiceCategoryType</td><td>job, housing, healthcare, visa, bank, education, transport, social, finance, utilities</td><td>ServiceCategory, Task, QAPost, HelpRequest, Guide</td><td><span class="origin-chip context">+ context</span></td><td>The 10 closed categories drive the home grid and cross-content filtering</td></tr>
+          <tr><td class="field-name">AchievementVariant</td><td>warm, cool</td><td>AchievementBadge</td><td><span class="origin-chip context">+ context</span></td><td>Two-tone styling: personal achievement vs shared background</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ===================== VARIATION COMPARISON ===================== -->
+    <section class="section-block" id="variation">
+      <h2>Variation Comparison</h2>
+      <p>How my Context-First model differs from the team baseline and group-mate B's Credibility-First variation.</p>
+      <table class="comparison-table">
+        <thead><tr><th>Dimension</th><th>Team baseline</th><th>B (Credibility-First)</th><th>Me (Context-First)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Entity count</strong></td><td>8</td><td>5</td><td>22 (15 struct + 11 enum, partly overlapping)</td></tr>
+          <tr><td><strong>User schema</strong></td><td>4 fields (name / lang / progress / tasks)</td><td>7 fields, including <code>visaType</code> and <code>isVerified</code></td><td>12 fields, including <code>currentStatus</code>, structured <code>Location</code>, and bucketed <code>Duration</code></td></tr>
+          <tr><td><strong>Trust metadata</strong></td><td>None</td><td>3 fields on Answer (<code>authorityTag</code>, <code>reliabilityTag</code>, <code>timelinessTag</code>) + a <code>Certification</code> entity</td><td>One unified <code>ContentTag</code> system (8 types) used across QAPost, Guide, HelpRequest</td></tr>
+          <tr><td><strong>Q&amp;A modelling</strong></td><td>Not present</td><td>Question + Answer as separate entities</td><td><code>QAPost</code> with embedded <code>TopAnswer</code> (no separate Answer entity)</td></tr>
+          <tr><td><strong>Match reasoning</strong></td><td>Not present</td><td>Implicit in <code>Volunteer.helpfulRate</code> and <code>reviews</code></td><td>Explicit <code>MatchResult.matchReasons: [String]</code> — visible per-match</td></tr>
+          <tr><td><strong>Chat handoff context</strong></td><td>Not present</td><td>Not present</td><td><code>SharedContext</code> entity anchors Q&amp;A post to conversation</td></tr>
+          <tr><td><strong>Identity granularity</strong></td><td><code>name</code> + <code>selectedLanguage</code></td><td><code>+ visaType + suburb + daysSinceArrival + isVerified</code></td><td><code>+ currentStatus + Location (city, state) + Duration (bucketed)</code></td></tr>
+        </tbody>
+      </table>
+      <div class="insight">
+        <p><strong>Why these differences are not "more is better"</strong> — each variation chose a different <em>design constraint</em> to serve:</p>
+        <ul>
+          <li><strong>B's design constraint:</strong> "Don't propagate misinformation." → schema serves credibility ranking (trust metadata, certifications, source attribution).</li>
+          <li><strong>My design constraint:</strong> "Make context legible without re-explanation." → schema serves filter consistency across surfaces (identity capture, tag-driven filtering, chat-context preservation).</li>
+        </ul>
+        <p>Same baseline, three legitimate destinations. <strong>The data model is the first place a UX variation makes itself visible</strong> — and ours diverged at exactly that level.</p>
+      </div>
+    </section>
+
+    <!-- ===================== COVERAGE SUMMARY ===================== -->
+    <section class="section-block" id="coverage">
+      <h2>Coverage summary</h2>
+      <p>Status of each team baseline group in this model.</p>
+      <table class="coverage-table">
+        <thead><tr><th>Group</th><th>Team baseline fields</th><th>Status in this model</th></tr></thead>
+        <tbody>
+          <tr><td>1. User</td><td><code>name</code>, <code>selectedLanguage</code>, <code>progress</code>, <code>completedTasks</code></td><td>✓ all 4 covered, <strong>8 fields extended</strong></td></tr>
+          <tr><td>2. Language</td><td><code>name</code>, <code>code</code>, <code>flagIcon</code>, <code>isSelected</code></td><td>✓ 3/4 covered (<code>isSelected</code> lifted onto <code>User.preferredLanguage</code>)</td></tr>
+          <tr><td>3. Task</td><td><code>title</code>, <code>category</code>, <code>isCompleted</code>, <code>steps</code>, <code>progress</code></td><td>✓ 5/5 covered</td></tr>
+          <tr><td>4. Step</td><td><code>stepNumber</code>, <code>instructionText</code>, <code>requiredDocuments</code>, <code>isCompleted</code></td><td>✓ 2/4 covered (2 deferred — see Step §)</td></tr>
+          <tr><td>5. Message</td><td><code>text</code>, <code>translatedText</code>, <code>sender</code>, <code>timestamp</code>, <code>isVoiceMessage</code></td><td>✓ 5/5 covered, 1 field extended (<code>direction</code>)</td></tr>
+          <tr><td>6. Volunteer</td><td><code>name</code>, <code>languages</code>, <code>expertise</code>, <code>isOnline</code>, <code>rating</code></td><td>✓ 4/5 directly covered, 1 lifted to embedded <code>user</code>, <strong>4 fields extended</strong></td></tr>
+          <tr><td>7. HelpRequest</td><td><code>questionText</code>, <code>category</code>, <code>language</code>, <code>isResolved</code>, <code>assignedVolunteer</code></td><td>✓ 5/5 covered, <strong>5 fields extended</strong></td></tr>
+          <tr><td>8. Translation</td><td><code>originalText</code>, <code>translatedText</code>, <code>sourceLanguage</code>, <code>targetLanguage</code></td><td>✓ 4/4 covered, 1 field extended (<code>confidence</code>)</td></tr>
+        </tbody>
+      </table>
+      <p style="margin-top: 24px;"><strong>Plus 9 entities introduced for Context-First</strong>: ContentTag · QAPost · TopAnswer · Conversation · SharedContext · ContextAction · ServiceCategory · Guide · AchievementBadge — every one is justified by a Context-First mechanism (identity awareness, contextual home hub, metadata tags, reason-based matching, context-aware chat).</p>
+    </section>
+  </main>
+</div>
+
+</body>
+</html>

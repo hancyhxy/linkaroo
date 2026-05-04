@@ -6,31 +6,67 @@ import Foundation
 //
 // 本文件定义了 AussieBridge App 的所有核心数据结构。
 // 每个 struct 均遵循 Identifiable（用于 SwiftUI ForEach）
-// 和 Codable（用于 JSON 序列化/API 通信）。
+// 和 Codable（用于 JSON 序列化 / API 通信）。
 //
-// 合并了 Context-First 变体（社区 Q&A + 志愿者匹配）
-// 和 Language-First 变体（翻译 + 任务清单）的数据需求。
+// 数据模型分 5 层，对应 Context-First 变体的 5 个机制。
+// 详见 `docs/struct.md`（每个字段的 Why 与实体关系箭头都在那里）。
 //
-// 实体关系图:
+// 实体关系图（22 实体，与 struct.md 一致）:
 //
-//   User ──< Conversation >── User (Volunteer)
-//            │
-//            └──< ChatMessage ── Translation?
-//                     │
-//                     └── SharedContext ──> QAPost
+//   §1 Identity Layer  (M1 - onboarding 捕获身份，作为下游过滤输入)
+//   ─────────────────────────────────────────────────────────────
+//   ABUser ──> ABLanguage           (preferredLanguage)
+//   ABUser ──> ABUserStatus         (currentStatus)
+//   ABUser ──> ABLocation?          (location)
+//   ABUser ──> ABDuration           (durationInAustralia)
+//   ABUser ──< ABTaskItem           (completedTasks)
 //
-//   QAPost ──< Tag
-//   QAPost ──< Comment
-//   QAPost ── TopAnswer
+//   §2 Curation Layer  (M2 + M3 - 上下文 home hub + 可见的可信度标签)
+//   ─────────────────────────────────────────────────────────────
+//   ABServiceCategory ──> ABServiceCategoryType
+//   ABGuide ──> ABServiceCategoryType
+//   ABGuide ──< ABContentTag
+//   ABQAPost ──> ABUser              (author)
+//   ABQAPost ──> ABServiceCategoryType
+//   ABQAPost ──< ABContentTag
+//   ABQAPost ── ABTopAnswer?         (1:0..1, embedded)
+//   ABQAPost ──> ABVerificationStatus
+//   ABQAPost ──> ABContentSource?
+//   ABContentTag ──> ABContentTagType
 //
-//   Volunteer ──< SkillTag
-//   Volunteer ── MatchResult ──> User
+//   §3 Matching Layer  (M4 - reason-based 志愿者匹配)
+//   ─────────────────────────────────────────────────────────────
+//   ABVolunteer ──> ABUser           (embedded user)
+//   ABVolunteer ──< ABSkillTag
+//   ABSkillTag ──> ABSkillCategory
+//   ABMatchResult ──> ABVolunteer
+//   ABHelpRequest ──> ABUser         (requester)
+//   ABHelpRequest ──> ABServiceCategoryType
+//   ABHelpRequest ──> ABLanguage
+//   ABHelpRequest ──> ABVolunteer?   (assignedVolunteer)
+//   ABHelpRequest ──< ABContentTag
+//   ABHelpRequest ── ABAchievementBadge?  (1:0..1)
+//   ABAchievementBadge ──> ABAchievementVariant
 //
-//   Guide ──< Tag ──< Task (Checklist) ──< Step
-//   ServiceCategory ──< Guide
+//   §4 Conversation Layer  (M5 - context-aware chat handoff)
+//   ─────────────────────────────────────────────────────────────
+//   ABConversation ──> ABUser        (participant)
+//   ABConversation ── ABSharedContext?  (1:0..1)
+//   ABConversation ──< ABChatMessage
+//   ABConversation ──< ABContextAction
+//   ABChatMessage ──> ABMessageDirection
+//   ABChatMessage ── ABTranslation?  (via translatedText field)
+//   ABSharedContext ──> ABQAPost     (relatedPostID)
+//   ABContextAction ──> ABActionVariant
 //
-//   HelpRequest ──> User (requester)
-//   HelpRequest ──< Tag
+//   §5 Cross-cutting Layer  (跨机制基础设施)
+//   ─────────────────────────────────────────────────────────────
+//   ABTranslation ──> ABLanguage     (sourceLanguage + targetLanguage)
+//   ABTaskItem ──> ABServiceCategoryType
+//   ABTaskItem ──< ABStep
+//
+// 命名约定: 文档使用抽象名 (User, Task, QAPost)，代码加 `AB` 前缀
+// 避免与 Swift 标准库 / SwiftUI 类型冲突 (e.g. `Task` 是 _Concurrency.Task)。
 //
 // ============================================================================
 
