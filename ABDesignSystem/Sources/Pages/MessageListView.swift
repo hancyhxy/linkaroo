@@ -1,10 +1,9 @@
 import SwiftUI
 
-// MARK: - MessageListView (message.html)
+// MARK: - MessageListView
 //
-// Construct: list of ABConversation grouped by an "All / Unread" segment.
-// Each row is rendered through ABMessageItem, with avatar online-state and
-// unread badge driven by `ABConversation.isUnread` and `participant.isOnline`.
+// §7 Message List — see docs/spec.md §7.
+// Inbox / re-entry surface; preserves ABSharedContext on re-open.
 
 enum MessageSegment: String, CaseIterable, CustomStringConvertible {
     case all = "All"
@@ -14,23 +13,30 @@ enum MessageSegment: String, CaseIterable, CustomStringConvertible {
 }
 
 struct MessageListView: View {
-    @State private var segment: MessageSegment = .all
 
-    var conversations: [ABConversation] {
+    // MARK: Parameters (spec §7)
+    @State private var segment: MessageSegment = .all
+    @State private var selectedTab: ABTab = .community
+
+    private var conversations: [ABConversation] {
         switch segment {
-        case .all: return ABMockData.conversations
+        case .all:    return ABMockData.conversations
         case .unread: return ABMockData.conversations.filter(\.isUnread)
         }
     }
 
-    var unreadCount: Int { ABMockData.conversations.filter(\.isUnread).count }
+    private var unreadCount: Int {
+        ABMockData.conversations.filter(\.isUnread).count
+    }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .bottom) {
             Color.abSurface.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                ABHeader(variant: .pageTitle(title: "Messages"))
+                ABHeader(variant: .pageTitle(title: "Messages"), onBack: {
+                    // §7.A1 — back [open §11]
+                })
 
                 ScrollView {
                     VStack(spacing: ABSpacing.s3) {
@@ -43,8 +49,23 @@ struct MessageListView: View {
 
                         VStack(spacing: 0) {
                             ForEach(conversations) { convo in
-                                ABMessageItem(data: convo.toItemData())
-                                    .padding(.horizontal, ABLayout.pagePadding)
+                                ABMessageItem(
+                                    data: ABMessageItemData(
+                                        id: convo.id.uuidString,
+                                        name: convo.participant.displayName,
+                                        preview: convo.lastMessage,
+                                        timeAgo: convo.timeAgoString,
+                                        avatarContent: convo.participant.avatarURL == nil
+                                            ? .initials(convo.participant.initials)
+                                            : .image(convo.participant.avatarURL),
+                                        isOnline: convo.participant.isOnline,
+                                        isUnread: convo.isUnread
+                                    ),
+                                    onTap: {
+                                        // §7.A3 — → §8 Chat preserving sharedContext [open §11]
+                                    }
+                                )
+                                .padding(.horizontal, ABLayout.pagePadding)
 
                                 if convo.id != conversations.last?.id {
                                     Divider()
@@ -55,32 +76,14 @@ struct MessageListView: View {
                         }
                     }
                     .padding(.top, ABSpacing.s4)
-                    .padding(.bottom, ABSpacing.s8)
+                    .padding(.bottom, ABLayout.tabBarHeight + ABSpacing.s4)
                 }
             }
+
+            ABTabBar(selectedTab: $selectedTab)
         }
     }
 }
-
-// MARK: - Adapter
-
-extension ABConversation {
-    func toItemData() -> ABMessageItemData {
-        ABMessageItemData(
-            id: id.uuidString,
-            name: participant.displayName,
-            preview: lastMessage,
-            timeAgo: timeAgoString,
-            avatarContent: participant.avatarURL == nil
-                ? .initials(participant.initials)
-                : .image(participant.avatarURL),
-            isOnline: participant.isOnline,
-            isUnread: isUnread
-        )
-    }
-}
-
-// MARK: - Preview
 
 #Preview("Message List") {
     MessageListView()

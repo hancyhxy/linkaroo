@@ -1,16 +1,19 @@
 import SwiftUI
 
-// MARK: - ChatView (chat.html)
+// MARK: - ChatView
 //
-// Construct: 1-on-1 conversation thread. The Shared Context card pinned to the top
-// references the originating ABQAPost, the Action Pills surface ABContextAction
-// shortcuts (share profile / suggest call), and the message list renders
-// ABChatMessage on either side of the bubble.
+// §8 Chat — see docs/spec.md §8.
+// Context-aware 1-on-1 chat. Originating ABQAPost mounts as ABSharedContext
+// at the top, persists across re-entries (§10.3).
 
 struct ChatView: View {
+
+    // MARK: Parameters (spec §8)
     let conversation: ABConversation
     let messages: [ABChatMessage]
     let actions: [ABContextAction]
+
+    @State private var draft: String = ""
 
     init(
         conversation: ABConversation = ABMockData.conversations[0],
@@ -22,25 +25,46 @@ struct ChatView: View {
         self.actions = actions
     }
 
-    @State private var draft: String = ""
+    private var sharedContext: ABSharedContext? {
+        conversation.sharedContext ?? ABMockData.chatContext
+    }
 
     var body: some View {
         ZStack {
             Color.abSurface.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                ABHeader(variant: .chat(
-                    name: conversation.participant.displayName,
-                    avatarURL: conversation.participant.avatarURL,
-                    isOnline: conversation.participant.isOnline
-                ))
+                ABHeader(
+                    variant: .chat(
+                        name: conversation.participant.displayName,
+                        avatarURL: conversation.participant.avatarURL,
+                        isOnline: conversation.participant.isOnline
+                    ),
+                    onBack: {
+                        // §8.A1 [open §11]
+                    },
+                    onMenu: {
+                        // chat header overflow menu [open §11]
+                    }
+                )
 
                 ScrollView {
-                    VStack(spacing: ABSpacing.s3) {
-                        sharedContextSection
-                        actionPillsSection
+                    VStack(alignment: .leading, spacing: ABSpacing.s3) {
+                        if let context = sharedContext {
+                            ABSharedContextCard(
+                                title: context.title,
+                                linkText: context.linkText,
+                                onTap: {
+                                    // §8.A2 — return to §5 by relatedPostID [open §11]
+                                }
+                            )
+                        }
+
+                        actionPillRow
+
                         ABDateSeparator(text: "Today")
-                        messagesSection
+
+                        messagesStream
                     }
                     .padding(.horizontal, ABLayout.pagePadding)
                     .padding(.top, ABSpacing.s3)
@@ -50,37 +74,36 @@ struct ChatView: View {
                 ABChatInputArea(
                     text: $draft,
                     placeholder: "Type a message…",
-                    onSend: { draft = "" }
+                    onSend: {
+                        // §8.A5 — append outgoing ABChatMessage [open §11]
+                        draft = ""
+                    },
+                    onPlus: {
+                        // attachment [open §11]
+                    }
                 )
             }
         }
     }
 
-    // MARK: - Shared context
-    @ViewBuilder
-    private var sharedContextSection: some View {
-        if let context = conversation.sharedContext ?? ABMockData.chatContext as ABSharedContext? {
-            ABSharedContextCard(title: context.title, linkText: context.linkText)
-        }
-    }
-
-    // MARK: - Action pills
-    private var actionPillsSection: some View {
+    private var actionPillRow: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: ABSpacing.s2) {
                 ForEach(actions) { action in
                     ABActionPill(
                         text: action.text,
                         icon: action.icon,
-                        variant: action.variant == .blue ? .blue : .orange
+                        variant: action.variant == .blue ? .blue : .orange,
+                        onTap: {
+                            // §8.A3 [open §11]
+                        }
                     )
                 }
             }
         }
     }
 
-    // MARK: - Messages
-    private var messagesSection: some View {
+    private var messagesStream: some View {
         VStack(spacing: ABSpacing.s3) {
             ForEach(messages) { message in
                 ABChatBubble(
@@ -95,8 +118,6 @@ struct ChatView: View {
         }
     }
 }
-
-// MARK: - Preview
 
 #Preview("Chat") {
     ChatView()

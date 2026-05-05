@@ -1,12 +1,13 @@
 import SwiftUI
 
-// MARK: - QADetailView (qa_scroll.html)
+// MARK: - QADetailView
 //
-// Construct: a single Q&A thread. Renders the original ABQAPost content, the
-// ABTopAnswer in an ABQuoteBlock, contextual tags (verified / outdated / source)
-// and an inline "Match a volunteer" CTA so the user can escalate to 1-on-1 chat.
+// §5 Q&A Detail — see docs/spec.md §5.
+// Single thread + Top Answer + match-volunteer escalation (entry to §6 → §8 flow).
 
 struct QADetailView: View {
+
+    // MARK: Parameters (spec §5)
     let post: ABQAPost
 
     init(post: ABQAPost = ABMockData.qaPosts[0]) {
@@ -14,32 +15,31 @@ struct QADetailView: View {
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ABHeader(variant: .pageTitle(title: "Q&A"))
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: ABSpacing.s5) {
-                        tagRow
-                        titleAndMeta
-                        bodyParagraph
-                        if let answer = post.topAnswer {
-                            topAnswerBlock(answer)
-                        }
-                        statsRow
-                        matchCTASection
+            ScrollView {
+                VStack(alignment: .leading, spacing: ABSpacing.s5) {
+                    tagRow
+                    titleAndMeta
+                    bodyParagraph
+                    if let answer = post.topAnswer {
+                        topAnswerBlock(answer)
                     }
-                    .padding(.horizontal, ABLayout.pagePadding)
-                    .padding(.top, ABSpacing.s4)
-                    .padding(.bottom, ABSpacing.s8)
+                    statsRow
+                    matchCTASection
                 }
+                .padding(.horizontal, ABLayout.pagePadding)
+                .padding(.top, (ABLayout.headerHeight - 8) + ABSpacing.s4)
+                .padding(.bottom, ABSpacing.s8)
             }
+
+            ABBackBar(title: "Q&A", onBack: {
+                // §5.A1 — back to §3 / §4 [open §11]
+            })
         }
     }
 
-    // MARK: - Tag row
     private var tagRow: some View {
         HStack(spacing: ABSpacing.s2) {
             ForEach(post.tags) { tag in
@@ -48,7 +48,6 @@ struct QADetailView: View {
         }
     }
 
-    // MARK: - Title + meta
     private var titleAndMeta: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s2) {
             Text(post.title)
@@ -60,7 +59,7 @@ struct QADetailView: View {
                 Text("Posted by \(post.author.username)")
                     .font(.abCaption)
                     .foregroundStyle(Color.abOnSurfaceDisabled)
-                Text("•")
+                Text("·")
                     .foregroundStyle(Color.abOnSurfaceDisabled)
                 Text(post.timeAgoString)
                     .font(.abCaption)
@@ -69,7 +68,6 @@ struct QADetailView: View {
         }
     }
 
-    // MARK: - Body
     private var bodyParagraph: some View {
         Text(post.fullContent.isEmpty ? post.preview : post.fullContent)
             .font(.abBodyMd)
@@ -77,7 +75,6 @@ struct QADetailView: View {
             .lineSpacing(5)
     }
 
-    // MARK: - Top Answer block
     private func topAnswerBlock(_ answer: ABTopAnswer) -> some View {
         ABQuoteBlock(
             text: answer.excerpt,
@@ -86,7 +83,6 @@ struct QADetailView: View {
         )
     }
 
-    // MARK: - Stats row (votes / comments)
     private var statsRow: some View {
         HStack(spacing: ABSpacing.s5) {
             HStack(spacing: 6) {
@@ -103,7 +99,6 @@ struct QADetailView: View {
         .foregroundStyle(Color.abOnSurfaceVariant)
     }
 
-    // MARK: - Match CTA
     private var matchCTASection: some View {
         ABCard(variant: .standard) {
             VStack(alignment: .leading, spacing: ABSpacing.s3) {
@@ -121,13 +116,14 @@ struct QADetailView: View {
                     size: .medium,
                     icon: "person.badge.plus",
                     fullWidth: true
-                ) {}
+                ) {
+                    // §5.A2 — capture `post` as originating ABQAPost; → §6
+                    // ABSharedContext propagation [open §11]
+                }
             }
         }
     }
 }
-
-// MARK: - Preview
 
 #Preview("Q&A Detail · Verified") {
     QADetailView(post: ABMockData.qaPosts[0])

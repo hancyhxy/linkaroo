@@ -1,10 +1,9 @@
 import SwiftUI
 
-// MARK: - CommunityView (community.html)
+// MARK: - CommunityView
 //
-// Construct: the community discussions hub. Two segments — "Discussions" (Q&A list)
-// and "People you can help" (horizontal-scrolling help requests). Uses ABHelpRequest
-// + ABQAPost from the Models layer.
+// §3 Community — see docs/spec.md §3.
+// Two segments: Discussions / People to help.
 
 enum CommunitySegment: String, CaseIterable, CustomStringConvertible {
     case discussions = "Discussions"
@@ -14,8 +13,13 @@ enum CommunitySegment: String, CaseIterable, CustomStringConvertible {
 }
 
 struct CommunityView: View {
+
+    // MARK: Parameters (spec §3)
     @State private var segment: CommunitySegment = .discussions
     @State private var selectedTab: ABTab = .community
+
+    private var qaPosts: [ABQAPost] { ABMockData.qaPosts }
+    private var helpRequests: [ABHelpRequest] { ABMockData.helpRequests }
 
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -26,14 +30,17 @@ struct CommunityView: View {
 
                 ScrollView {
                     VStack(alignment: .leading, spacing: ABSpacing.s5) {
-                        ABSegmentedControl(options: CommunitySegment.allCases, selected: $segment)
-                            .padding(.horizontal, ABLayout.pagePadding)
+                        ABSegmentedControl(
+                            options: CommunitySegment.allCases,
+                            selected: $segment
+                        )
+                        .padding(.horizontal, ABLayout.pagePadding)
 
                         switch segment {
                         case .discussions:
-                            discussionsContent
+                            discussionsBody
                         case .peopleYouCanHelp:
-                            helpRequestsContent
+                            peopleToHelpBody
                         }
                     }
                     .padding(.top, ABSpacing.s4)
@@ -45,29 +52,65 @@ struct CommunityView: View {
         }
     }
 
-    // MARK: - Discussions content
-    private var discussionsContent: some View {
-        VStack(spacing: ABSpacing.s3) {
-            ForEach(ABMockData.qaPosts) { post in
-                ABQAPostCard(post: post.toCardData())
+    // MARK: Discussions
+    private var discussionsBody: some View {
+        VStack(alignment: .leading, spacing: ABSpacing.s3) {
+            ABSectionTitle("Questions You Can Answer", level: .section)
+                .padding(.horizontal, ABLayout.pagePadding)
+
+            VStack(spacing: ABSpacing.s3) {
+                ForEach(qaPosts) { post in
+                    ABQAPostCard(
+                        post: ABQAPostData(
+                            author: post.author.username,
+                            timeAgo: post.timeAgoString,
+                            title: post.title,
+                            preview: post.preview,
+                            tags: post.tags.map { (text: $0.text, style: tagStyle(for: $0.type)) },
+                            voteCount: post.voteCount,
+                            commentCount: post.commentCount,
+                            topAnswer: post.topAnswer?.excerpt
+                        ),
+                        onTap: {
+                            // §3.A2 — → §5 Q&A Detail [open §11]
+                        }
+                    )
                     .padding(.horizontal, ABLayout.pagePadding)
+                }
             }
         }
     }
 
-    // MARK: - Help-requests content
-    private var helpRequestsContent: some View {
-        VStack(alignment: .leading, spacing: ABSpacing.s4) {
-            Text("People you can help")
-                .font(.abTitleMd)
-                .foregroundStyle(Color.abOnSurface)
+    // MARK: People to help
+    private var peopleToHelpBody: some View {
+        VStack(alignment: .leading, spacing: ABSpacing.s3) {
+            ABSectionTitle("People You Can Help", level: .section)
                 .padding(.horizontal, ABLayout.pagePadding)
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: ABSpacing.s3) {
-                    ForEach(ABMockData.helpRequests) { req in
-                        ABHelpCard(data: req.toCardData())
-                            .frame(width: ABLayout.cardHorizontal)
+                    ForEach(helpRequests) { req in
+                        ABHelpCard(
+                            data: ABHelpCardData(
+                                name: req.requester.displayName,
+                                subtitle: req.subtitle,
+                                avatarURL: req.requester.avatarURL,
+                                tags: req.tags.map { (text: $0.text, style: tagStyle(for: $0.type)) },
+                                quote: req.questionText,
+                                achievementText: req.achievement?.text,
+                                achievementIcon: req.achievement?.icon ?? "medal",
+                                achievementColor: req.achievement?.variant == .cool
+                                    ? Color.abPrimary
+                                    : Color.abAccentGoldDark,
+                                achievementBg: req.achievement?.variant == .cool
+                                    ? Color.abAccentSky
+                                    : Color.abAccentButter
+                            ),
+                            onCTA: {
+                                // §3.A3 [open §11]
+                            }
+                        )
+                        .frame(width: 280)
                     }
                 }
                 .padding(.horizontal, ABLayout.pagePadding)
@@ -75,45 +118,6 @@ struct CommunityView: View {
         }
     }
 }
-
-// MARK: - Adapters: Models → Component data
-
-extension ABQAPost {
-    func toCardData() -> ABQAPostData {
-        ABQAPostData(
-            author: author.username,
-            timeAgo: timeAgoString,
-            title: title,
-            preview: preview,
-            tags: tags.map { (text: $0.text, style: tagStyle(for: $0.type)) },
-            voteCount: voteCount,
-            commentCount: commentCount,
-            topAnswer: topAnswer?.excerpt
-        )
-    }
-}
-
-extension ABHelpRequest {
-    func toCardData() -> ABHelpCardData {
-        ABHelpCardData(
-            name: requester.displayName,
-            subtitle: subtitle,
-            avatarURL: requester.avatarURL,
-            tags: tags.map { (text: $0.text, style: tagStyle(for: $0.type)) },
-            quote: questionText,
-            achievementText: achievement?.text,
-            achievementIcon: achievement?.icon ?? "medal",
-            achievementColor: achievement?.variant == .cool
-                ? Color.abPrimary
-                : Color.abAccentGoldDark,
-            achievementBg: achievement?.variant == .cool
-                ? Color.abAccentSky
-                : Color.abAccentButter
-        )
-    }
-}
-
-// MARK: - Preview
 
 #Preview("Community") {
     CommunityView()

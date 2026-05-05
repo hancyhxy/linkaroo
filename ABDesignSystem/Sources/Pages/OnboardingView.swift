@@ -1,71 +1,71 @@
 import SwiftUI
 
-// MARK: - OnboardingView (personalization.html)
+// MARK: - OnboardingView
 //
-// Construct: this page collects the "first context" — language, current status,
-// location, and time-in-Australia — so that downstream pages can filter content
-// to the user's situation. See ABUser, ABLanguage, ABUserStatus, ABDuration.
+// §1 Onboarding — see docs/spec.md §1.
+// First-launch identity capture. Captured ABUser drives all downstream filtering.
 
 struct OnboardingView: View {
-    // Local form state
+
+    // MARK: Parameters (spec §1)
     @State private var language: ABLanguage = .english
     @State private var status: ABUserStatus = .immigrantStudent
+    @State private var location: ABLocation = ABLocation(city: "Sydney", state: "NSW")
     @State private var duration: ABDuration = .justLanded
-    @State private var location = ABLocation(city: "Sydney", state: "NSW")
 
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ABHeader(variant: .pageTitle(title: "Personalize your journey"))
+            ScrollView {
+                VStack(alignment: .leading, spacing: ABSpacing.s8) {
+                    ABPageHero(
+                        headline: "Let's personalize your journey",
+                        subtitle: "Help us tailor the best experience for you"
+                    )
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: ABSpacing.s8) {
-                        heroIntro
-                        languageSection
-                        statusSection
-                        locationSection
-                        durationSection
-                        tipSection
-                    }
-                    .padding(.horizontal, ABLayout.pagePadding)
-                    .padding(.top, ABSpacing.s5)
-                    .padding(.bottom, 120) // Reserve room for sticky footer
+                    languageSection
+                    statusSection
+                    locationSection
+                    durationSection
+                    tipCard
                 }
+                .padding(.horizontal, ABLayout.pagePadding)
+                .padding(.top, (ABLayout.headerHeight - 8) + ABSpacing.s4)
+                .padding(.bottom, ABSpacing.s24)
             }
 
-            ABStickyFooter(
-                primaryTitle: "Continue",
-                skipTitle: "Skip for now",
-                onPrimary: {},
-                onSkip: {}
-            )
+            ABBackBar(title: "Profile Setup", onBack: {
+                // §1 back navigation [open §11]
+            })
+
+            VStack {
+                Spacer()
+                ABStickyFooter(
+                    primaryTitle: "Finish Setup",
+                    skipTitle: "Skip for now",
+                    onPrimary: {
+                        // §1.A5 — write ABUser to AppState; → §2 Home [open §11]
+                    },
+                    onSkip: {
+                        // §1.A6 — write default ABUser to AppState; → §2 Home [open §11]
+                    }
+                )
+            }
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
 
-    // MARK: - Hero
-    private var heroIntro: some View {
-        VStack(alignment: .leading, spacing: ABSpacing.s2) {
-            Text("Let's set the scene")
-                .font(.abDisplayMd)
-                .foregroundStyle(Color.abOnSurface)
-
-            Text("A few quick questions help us tailor housing rules, visa info, and Q&A to your situation.")
-                .font(.abBodyMd)
-                .foregroundStyle(Color.abOnSurfaceVariant)
-                .lineSpacing(3)
-        }
-    }
-
-    // MARK: - Language
+    // MARK: §1.A1 — Language
     private var languageSection: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
-            sectionLabel("Preferred language")
+            ABSectionTitle("Preferred Language", level: .section)
 
             LazyVGrid(
-                columns: [GridItem(.flexible(), spacing: ABSpacing.s3),
-                          GridItem(.flexible(), spacing: ABSpacing.s3)],
+                columns: [
+                    GridItem(.flexible(), spacing: ABSpacing.s3),
+                    GridItem(.flexible(), spacing: ABSpacing.s3)
+                ],
                 spacing: ABSpacing.s3
             ) {
                 ForEach(ABLanguage.allCases) { lang in
@@ -81,14 +81,16 @@ struct OnboardingView: View {
         }
     }
 
-    // MARK: - Status
+    // MARK: §1.A2 — Status
     private var statusSection: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
-            sectionLabel("Current status")
+            ABSectionTitle("Current Status", level: .section)
 
             LazyVGrid(
-                columns: [GridItem(.flexible(), spacing: ABSpacing.s3),
-                          GridItem(.flexible(), spacing: ABSpacing.s3)],
+                columns: [
+                    GridItem(.flexible(), spacing: ABSpacing.s3),
+                    GridItem(.flexible(), spacing: ABSpacing.s3)
+                ],
                 spacing: ABSpacing.s3
             ) {
                 ForEach(ABUserStatus.allCases) { st in
@@ -105,42 +107,30 @@ struct OnboardingView: View {
         }
     }
 
-    // MARK: - Location
+    // MARK: §1.A3 — Location
     private var locationSection: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
-            sectionLabel("Where are you based?")
+            ABSectionTitle("Location", level: .section)
             ABLocationPicker(city: location.city, state: location.state)
+            // §1.A3 — picker is display-only in v1; edit hook [open §11]
         }
     }
 
-    // MARK: - Duration
+    // MARK: §1.A4 — Duration
     private var durationSection: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
-            sectionLabel("How long have you been here?")
+            ABSectionTitle("Duration in Australia", level: .section)
             ABChipPicker(options: ABDuration.allCases, selected: $duration)
         }
     }
 
-    // MARK: - Tip
-    private var tipSection: some View {
+    private var tipCard: some View {
         ABTipCard(
-            title: "Heads-up",
-            bodyText: "We use this only to filter content. You can edit any answer later in Profile."
+            title: "Tailored for New Arrivals",
+            bodyText: "Based on your profile, we'll prioritize essential settlement guides, student visa resources, and local community connections in Sydney."
         )
     }
-
-    // MARK: - Section Label
-    private func sectionLabel(_ text: String) -> some View {
-        Text(text)
-            .font(.abLabelLg)
-            .fontWeight(.semibold)
-            .foregroundStyle(Color.abOnSurfaceVariant)
-            .textCase(.uppercase)
-            .tracking(0.8)
-    }
 }
-
-// MARK: - Preview
 
 #Preview("Onboarding") {
     OnboardingView()

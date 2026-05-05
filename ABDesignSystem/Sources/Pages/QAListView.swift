@@ -1,16 +1,17 @@
 import SwiftUI
 
-// MARK: - QAListView (qa.html)
+// MARK: - QAListView
 //
-// Construct: Reddit-style Q&A list filtered by category. CTA banner at the top
-// invites the user to ask a new question. Each row uses ABQAPostCard with the
-// vote column, tags and Top Answer excerpt.
+// §4 Q&A List — see docs/spec.md §4.
+// Reddit-style Q&A list with category filter + CTA banner.
 
 struct QAListView: View {
+
+    // MARK: Parameters (spec §4)
     @State private var selectedCategoryId: String = "all"
     @State private var selectedTab: ABTab = .community
 
-    var categories: [ABCategoryTabItem] {
+    private var categories: [ABCategoryTabItem] {
         [
             ABCategoryTabItem(id: "all", label: "All", icon: "square.grid.2x2"),
             ABCategoryTabItem(id: "renting", label: "Renting", icon: "house"),
@@ -20,45 +21,69 @@ struct QAListView: View {
         ]
     }
 
+    // §4 filter rule [open §11] — show all until specified
+    private var filteredPosts: [ABQAPost] {
+        ABMockData.qaPosts
+    }
+
     var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ABHeader(variant: .pageTitle(title: "Q&A & Guides"))
+            ScrollView {
+                VStack(alignment: .leading, spacing: ABSpacing.s4) {
+                    ABCTABanner(
+                        title: "Got a question?",
+                        bodyText: "Our community of locals and seniors are here to help.",
+                        ctaTitle: "Ask a Question",
+                        onCTA: {
+                            // §4.A1 [open §11]
+                        }
+                    )
+                    .padding(.horizontal, ABLayout.pagePadding)
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: ABSpacing.s4) {
-                        ABCTABanner(
-                            title: "Got a question?",
-                            bodyText: "Our community of locals and seniors are here to help.",
-                            ctaTitle: "Ask a Question"
-                        )
-                        .padding(.horizontal, ABLayout.pagePadding)
+                    ABHorizontalCategoryTabs(
+                        items: categories,
+                        selectedId: $selectedCategoryId
+                    )
 
-                        ABHorizontalCategoryTabs(
-                            items: categories,
-                            selectedId: $selectedCategoryId
-                        )
-
-                        VStack(spacing: ABSpacing.s3) {
-                            ForEach(ABMockData.qaPosts) { post in
-                                ABQAPostCard(post: post.toCardData())
-                                    .padding(.horizontal, ABLayout.pagePadding)
-                            }
+                    VStack(spacing: ABSpacing.s3) {
+                        ForEach(filteredPosts) { post in
+                            ABQAPostCard(
+                                post: ABQAPostData(
+                                    author: post.author.username,
+                                    timeAgo: post.timeAgoString,
+                                    title: post.title,
+                                    preview: post.preview,
+                                    tags: post.tags.map { (text: $0.text, style: tagStyle(for: $0.type)) },
+                                    voteCount: post.voteCount,
+                                    commentCount: post.commentCount,
+                                    topAnswer: post.topAnswer?.excerpt
+                                ),
+                                onTap: {
+                                    // §4.A3 — → §5 Q&A Detail [open §11]
+                                }
+                            )
+                            .padding(.horizontal, ABLayout.pagePadding)
                         }
                     }
-                    .padding(.top, ABSpacing.s4)
-                    .padding(.bottom, ABLayout.tabBarHeight + ABSpacing.s4)
                 }
+                .padding(.top, (ABLayout.headerHeight - 8) + ABSpacing.s4)
+                .padding(.bottom, ABLayout.tabBarHeight + ABSpacing.s4)
             }
 
-            ABTabBar(selectedTab: $selectedTab)
+            ABBackBar(title: "Q&A & Guides", onBack: {
+                // §4 back navigation [open §11]
+            })
+
+            // §10.1: tab bar visibility on §4 [open §11] — showing for now
+            VStack {
+                Spacer()
+                ABTabBar(selectedTab: $selectedTab)
+            }
         }
     }
 }
-
-// MARK: - Preview
 
 #Preview("Q&A List") {
     QAListView()

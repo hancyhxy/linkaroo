@@ -1,62 +1,90 @@
 import SwiftUI
 
-// MARK: - VolunteerMatchView (volunteer.html)
+// MARK: - VolunteerMatchView
 //
-// Construct: hierarchical volunteer matching. The first ABMatchResult marked
-// `isTopChoice` is rendered as a hero card with match-percentage and the
-// "why she's a match for you" reasons. Subsequent matches use the compact
-// ABVolunteerMatchCard.
+// §6 Volunteer Match — see docs/spec.md §6.
+// M4 — algorithm legibility via visible match reasons.
 
 struct VolunteerMatchView: View {
-    var matches: [ABMatchResult] { ABMockData.matchResults }
 
-    var topChoice: ABMatchResult? { matches.first(where: { $0.isTopChoice }) ?? matches.first }
-    var moreMatches: [ABMatchResult] {
+    // MARK: Parameters (spec §6)
+    private var matches: [ABMatchResult] { ABMockData.matchResults }
+
+    private var topChoice: ABMatchResult? {
+        matches.first(where: { $0.isTopChoice }) ?? matches.first
+    }
+
+    private var moreMatches: [ABMatchResult] {
         guard let top = topChoice else { return matches }
         return matches.filter { $0.id != top.id }
     }
 
     var body: some View {
-        ZStack {
+        ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ABHeader(variant: .pageTitle(title: "Best matches for you"))
+            ScrollView {
+                VStack(alignment: .leading, spacing: ABSpacing.s6) {
+                    ABPageHero(
+                        headline: "Best Matches for You",
+                        subtitle: "Volunteers matched to your profile, needs, and language"
+                    )
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: ABSpacing.s6) {
-                        if let top = topChoice {
-                            heroSection(top)
-                        }
-                        moreMatchesSection
+                    if let top = topChoice {
+                        topChoiceSection(top)
                     }
-                    .padding(.horizontal, ABLayout.pagePadding)
-                    .padding(.top, ABSpacing.s4)
-                    .padding(.bottom, ABSpacing.s8)
+                    moreMatchesSection
                 }
+                .padding(.horizontal, ABLayout.pagePadding)
+                .padding(.top, (ABLayout.headerHeight - 8) + ABSpacing.s4)
+                .padding(.bottom, ABSpacing.s8)
             }
+
+            ABBackBar(title: "Volunteer", onBack: {
+                // §6.A1 — back to §5 [open §11]
+            })
         }
     }
 
-    // MARK: - Hero section
-    private func heroSection(_ result: ABMatchResult) -> some View {
+    private func topChoiceSection(_ result: ABMatchResult) -> some View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
             HStack(spacing: 6) {
-                ABTag(text: "TOP CHOICE", style: .gold, size: .small)
-                ABTag(text: "\(result.matchPercentage)% Match",
-                      style: .matchPercent,
-                      size: .badge)
+                Image(systemName: "crown.fill")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundStyle(Color.abAccentGoldDark)
+                Text("THE BEST FIT")
+                    .font(.abLabelSm)
+                    .fontWeight(.bold)
+                    .foregroundStyle(Color.abAccentGoldDark)
+                    .tracking(1.2)
             }
 
-            ABVolunteerHeroCard(data: result.toHeroData())
+            ABVolunteerHeroCard(
+                data: ABVolunteerHeroData(
+                    name: result.volunteer.user.displayName,
+                    role: result.volunteer.role,
+                    imageURL: result.volunteer.user.avatarURL,
+                    matchPercent: result.matchPercentage,
+                    rating: result.volunteer.rating,
+                    helpedCount: result.volunteer.peopleHelped,
+                    skills: result.volunteer.skills.map {
+                        (text: $0.text, style: skillStyle(for: $0.category))
+                    },
+                    bio: result.volunteer.bio
+                ),
+                onCTA: {
+                    // §6.A2 — → §8 Chat; mount ABSharedContext per §10.3
+                    // [open §11 — propagation mechanism]
+                }
+            )
 
             if !result.matchReasons.isEmpty {
-                whyMatchBlock(result.matchReasons)
+                matchReasonsCard(result.matchReasons)
             }
         }
     }
 
-    private func whyMatchBlock(_ reasons: [String]) -> some View {
+    private func matchReasonsCard(_ reasons: [String]) -> some View {
         ABCard(variant: .standard) {
             VStack(alignment: .leading, spacing: ABSpacing.s2) {
                 Text("Why she's a match for you")
@@ -83,7 +111,6 @@ struct VolunteerMatchView: View {
         }
     }
 
-    // MARK: - More matches section
     private var moreMatchesSection: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
             Text("More matches")
@@ -95,43 +122,27 @@ struct VolunteerMatchView: View {
 
             VStack(spacing: ABSpacing.s4) {
                 ForEach(moreMatches) { result in
-                    ABVolunteerMatchCard(data: result.toMatchData())
+                    ABVolunteerMatchCard(
+                        data: ABVolunteerMatchData(
+                            name: result.volunteer.user.displayName,
+                            imageURL: result.volunteer.user.avatarURL,
+                            matchPercent: result.matchPercentage,
+                            skills: result.volunteer.skills.map {
+                                (text: $0.text, style: skillStyle(for: $0.category))
+                            },
+                            bio: result.volunteer.bio
+                        ),
+                        onCTA: {
+                            // §6.A3 — → §8 Chat [open §11]
+                        }
+                    )
                 }
             }
         }
     }
 }
 
-// MARK: - Adapters: Models → Component data
-
-extension ABMatchResult {
-    func toHeroData() -> ABVolunteerHeroData {
-        ABVolunteerHeroData(
-            name: volunteer.user.displayName,
-            role: volunteer.role,
-            imageURL: volunteer.user.avatarURL,
-            matchPercent: matchPercentage,
-            rating: volunteer.rating,
-            helpedCount: volunteer.peopleHelped,
-            skills: volunteer.skills.map {
-                (text: $0.text, style: skillStyle(for: $0.category))
-            },
-            bio: volunteer.bio
-        )
-    }
-
-    func toMatchData() -> ABVolunteerMatchData {
-        ABVolunteerMatchData(
-            name: volunteer.user.displayName,
-            imageURL: volunteer.user.avatarURL,
-            matchPercent: matchPercentage,
-            skills: volunteer.skills.map {
-                (text: $0.text, style: skillStyle(for: $0.category))
-            },
-            bio: volunteer.bio
-        )
-    }
-}
+// MARK: - Helpers
 
 func skillStyle(for category: ABSkillCategory) -> ABTagStyle {
     switch category {
@@ -139,8 +150,6 @@ func skillStyle(for category: ABSkillCategory) -> ABTagStyle {
     case .warm: return .skillWarm
     }
 }
-
-// MARK: - Preview
 
 #Preview("Volunteer Match") {
     VolunteerMatchView()
