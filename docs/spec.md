@@ -203,14 +203,14 @@ personalization and still reach Home with a default profile.
 
 Vertical-scroll form with a fixed sticky footer overlay.
 
-1. **Header bar** — page title
-2. **Hero intro** — hero block (headline + supporting paragraph)
-3. **Language section** — section label + single-select card grid (6 options, 2 cols; each card: flag + language name) (§1.A1)
-4. **Status section** — section label + single-select icon-card grid (4 options, 2 cols; each card: icon + label) (§1.A2)
-5. **Location section** — section label + city/state picker (§1.A3)
-6. **Duration section** — section label + single-select chip row (5 options, wraps) (§1.A4)
+1. **Header bar** — page title (the page-title also serves as the hero headline; no second headline below)
+2. **Hero intro** — supporting paragraph below the header
+3. **Language section** — section title (level: section) + single-select card grid (6 options, 2 cols; each card: flag + language name) (§1.A1)
+4. **Status section** — section title (level: section) + single-select icon-card grid (4 options, 2 cols; each card: icon + label) (§1.A2)
+5. **Location section** — section title (level: section) + city/state picker (§1.A3)
+6. **Duration section** — section title (level: section) + single-select chip row (5 options, wraps) (§1.A4)
 7. **Tip card** — informational card (title + body)
-8. **Sticky footer overlay** — primary button "Continue" (§1.A5) + text link "Skip for now" (§1.A6)
+8. **Sticky footer overlay** — primary button "Finish Setup" (§1.A5) + text link "Skip for now" (§1.A6)
 
 ---
 
@@ -239,7 +239,7 @@ look for, Home surfaces what likely matches their stage.
 | --------------- | --------------------- | ----------------------------------------------------------------------------------------------- | :------: | ------------------------ |
 | searchText      | String                | free text                                                                                       |    no    | `""`                     |
 | selectedTab     | ABTab                 | home · community · profile                                                                      |   yes    | home                     |
-| services        | [ABServiceCategoryType] | job · housing · healthcare · visa · bank · education · transport · social · finance · utilities |   yes    | all 10, fixed order      |
+| services        | [ABServiceCategoryType] | job · housing · healthcare · visa · bank · education · transport · social · finance · utilities |   yes    | derived from `ABServiceCategoryType.allCases` |
 | featuredGuide   | ABGuide               | resolved from ABMockData; selection rule [open §11]                                             |   yes    | `ABMockData.guides[0]`   |
 | recommendations | [ABGuide]             | resolved from ABMockData; filter rule [open §11]                                                |   yes    | `ABMockData.guides.dropFirst()` |
 
@@ -258,10 +258,10 @@ look for, Home surfaces what likely matches their stage.
 Vertical-scroll page with a fixed bottom tab bar overlay.
 
 1. **Brand header** — header bar (brand variant)
-2. **Search hero** — hero block (greeting line + supporting paragraph + search input below)
-3. **Services grid** — section label + horizontal-flowing icon grid (10 items, label below each icon) (§2.A2)
-4. **Featured section** — section label + hero card (title + description) (§2.A3)
-5. **Recommendations section** — section label + vertical list of content cards; each card contains tag chip + title + description + read-time caption (§2.A4)
+2. **Search hero** — dark hero panel (centered brand-font greeting on `abPrimaryGradientEditorial`; frosted search input below) (§2.A1)
+3. **Services grid** — section title (level: major) + horizontal-flowing icon grid (10 items derived from `ABServiceCategoryType.allCases`; label below each icon) (§2.A2)
+4. **Featured section** — section title (level: major) + hero card (title + description) (§2.A3)
+5. **Recommendations section** — section title (level: major) + vertical list of content cards; each card contains tag chip (first tag of `ABGuide.tags`, style mapped per design.md) + title + description + read-time caption (§2.A4)
 6. **Bottom tab bar overlay** — tab bar (3 items: Home / Community / Profile) (§2.A5)
 
 ---
