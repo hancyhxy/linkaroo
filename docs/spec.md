@@ -1,365 +1,482 @@
 # AussieBridge — Feature Specification
 
-> Page-by-page feature definitions for the iOS prototype. Covers the
-> sections that compose each page, the data each section consumes /
-> writes, the interactions that fire (incl. currently empty closures),
-> and the edge cases (empty / loading / error / skip).
+> Page-by-page feature definitions for the iOS prototype. Each page
+> spells out what the page is for, what parameters it consumes, what
+> actions it supports, and how its layout is composed — at wireframe
+> precision, so a reader can rebuild the page's behaviour without
+> looking at the SwiftUI source.
 >
-> **Status:** skeleton. Sub-sections are stubbed — bodies will be filled
-> per page in subsequent passes. See §6 Open Questions for what blocks
-> `final`.
+> **Status:** §1 Onboarding is filled as the canonical sample.
+> §2–§8 carry the 4-block template with empty bodies, awaiting fill.
+> See §11 Open Questions for what blocks `final`.
 
 This spec assumes:
+
 - **Why** the product exists → `docs/product-context.md` (5 Context-First mechanisms)
-- **Visual grammar** (colors / typography / elevation / components) → `docs/design.md`
+- **Visual grammar** (colors / type / elevation / components) → `docs/design.md`
 - **Data entities + relationships** → `docs/struct.md` (22 entities, 5 layers)
 - **Repository layout / how to run** → `README.md`
 
-This spec does **not** redefine those. It only writes what each page does
-on top of them.
+This spec does **not** redefine those.
 
 ---
 
 ## 0. Conventions
 
 How to read and write this document so it stays a thin reference layer
-rather than a re-statement of the other docs.
+that drives changes precisely (`add a married field` → 1 row in
+Parameters + 1 bullet in Layout + maybe 1 row in Actions).
 
-- **Token references** — write design tokens as bare names
-  (`surface-container-low`, `spacing-4`, `display-lg`). Resolution lives
-  in `design.md` §2 / §3 / §4.
-- **Entity references** — point at `struct.md` sections rather than
-  re-listing fields. Format: `ABQAPost (struct.md §2)`.
-- **Cross-page navigation** — `→ QADetailView` for forward navigation;
-  `← QAListView` for back-stack semantics.
-- **Status badges** for individual line items:
-  - `[shipped]` — already implemented in v1 SwiftUI
-  - `[pending]` — decided but unimplemented
-  - `[open]` — still needs decision (must also appear in §6)
+### 0.1 Page template
 
----
+Every §1–§8 page section uses the same 4 blocks, in this order:
 
-## 1. Onboarding
+```
+## §X PageName
+> Mechanism N — one-line mechanism tag
 
-> Mechanism 1 — identity capture, the first context filter. Profile
-> drives every downstream feed.
+### Overview
+3–5 sentence paragraph: Why (product role) + What (user does) + Then
+(where the data flows). Include at least one product-context constraint
+the implementer must respect (e.g. "language is a meta-barrier" → form
+must be short and warm).
 
-### 1.1 Purpose & data flow
-- _to fill_ — one sentence on what this page captures and where the
-  resulting `ABUser` flows to.
+### Feature
+**Parameters** table — every field, types fully enumerated.
+**Actions**    table — one row per user-triggered effect.
 
-### 1.2 Layout (top to bottom)
-- _to fill_ — section list, each line names the `design.md` pattern.
+### Layout
+One sentence on overall topology, then a numbered bullet list of
+regions. Each bullet names the region + the control type (from §0.4),
+and references actions by ID where relevant.
+```
 
-### 1.3 Language Selection
-- Card grid · selected state · default · table of supported `ABLanguage`
-  values (struct.md §1).
+### 0.2 Enumeration source rule
 
-### 1.4 Status Selection
-- Icon grid · `ABUserStatus` enum (4 values) · required.
+Every enum value in **Parameters** must spell-match the corresponding
+enum case in `struct.md` and `ABModels.swift`. If those two diverge
+from the spec, the spec is wrong (not the code). Single source of
+truth, three checked locations.
 
-### 1.5 Location Picker
-- City + state · `ABLocation` (struct.md §1) · cities table.
+### 0.3 Action ID rule
 
-### 1.6 Duration Chips
-- `ABDuration` 5-bucket chips · required.
+Each **Action** row gets an ID `§X.AN` where X is the page number and
+N is sequential (`§1.A1`, `§1.A2`, …). Layout bullets reference
+actions by ID, e.g. `primary button "Continue" (§1.A5)`. Cross-page
+references work too: `§5.A4 → §6 VolunteerMatch`.
 
-### 1.7 Continue / Skip Actions
-- **Continue** target [open] · **Skip** target [open] — defines the two
-  empty closures that block onboarding from working in v1.
-- Validation table (Field / Rule / Error Message).
+### 0.4 Control vocabulary
 
-### 1.8 Models touched
-- Reads: _to fill_ · Writes: `ABUser` to app-level state ([open] —
-  store mechanism, see §6).
+Layout bullets describe regions with **control types**, not visual
+treatments and not in-house component names. The standard vocabulary:
 
-### 1.9 Edge cases
-- Re-entering the app after onboarding — skip on launch?
-- Skip path → how does HomeView fall back without a profile?
-- Locale switch mid-flow — does in-page copy translate live?
+| Group       | Standard terms                                                                |
+| ----------- | ----------------------------------------------------------------------------- |
+| Selection   | single-select card grid · multi-select card grid · single-select chip row · radio list · segmented control |
+| Text        | single-line text input · multi-line text area · search input                  |
+| Picker      | city/state picker · date picker · dropdown                                    |
+| List        | vertical list · horizontal carousel · category-grouped list                   |
+| Toggle      | toggle · tab bar                                                              |
+| Block       | hero block · informational card · banner · tip card · quote block             |
+| Action      | primary button · text link · floating action button · sticky footer overlay   |
+| Card        | content card · row card · compact card · hero card                            |
+| Tag         | tag chip · category chip · status badge                                       |
 
----
+Add a row when the existing vocabulary cannot describe a real region.
+Don't introduce ad-hoc terms inline.
 
-## 2. Home
+### 0.5 Layout copy rule
 
-> Mechanism 2 — contextual home hub; push, not pull. Recommendations
-> and Featured Guide pre-filtered against the captured profile.
+Prototype-stage spec — **content text is mocked** and lives outside
+this document. Layout bullets describe regions abstractly:
 
-### 2.1 Purpose & data flow
-### 2.2 Layout (top to bottom)
-### 2.3 Search Hero
-### 2.4 Service Category Grid
-- 10 categories table — `ABServiceCategoryType` enum (struct.md §2).
-### 2.5 Featured Guide Card
-- `ABGuide` selection logic [open] — currently `ABMockData.guides[0]`.
-### 2.6 Recommendations List
-- Filtering rule against `ABUser` profile [open].
-### 2.7 Tab Bar Interaction
-- See §10.1 ABTabBar global rules.
-### 2.8 Models touched
-### 2.9 Edge cases
-- Empty profile (Skip path) — what does Recommendations show?
-- No matching guide for current `(status × duration)` combination?
+- ✅ `hero block — headline + supporting paragraph`
+- ✅ `tip card — informational card (title + body)`
+- ❌ `headline "Let's set the scene"` (decorative content — do not embed)
 
----
+Exception: **action-typed copy** stays in the bullet because the words
+encode the action's semantics:
 
-## 3. Community
+- ✅ `primary button "Continue" (§1.A5)`
+- ✅ `text link "Skip for now" (§1.A6)`
 
-> Supports mechanisms 2 + 3 — segmented entry to Q&A vs people-to-help.
+If a future product decision locks specific wording (legal disclaimer,
+brand voice line), that string promotes into Layout in quotes.
 
-### 3.1 Purpose & data flow
-### 3.2 Layout (top to bottom)
-### 3.3 Segment Control (Discussions / People to help)
-### 3.4 Discussions List
-- Adapter: `ABQAPost.toCardData()` — see §10.2 Card adapter rule.
-### 3.5 People-to-Help Horizontal Cards
-- `ABHelpRequest` (struct.md §3).
-### 3.6 Cross-segment behaviour
-- State preservation when switching tabs?
-### 3.7 Models touched
-### 3.8 Edge cases
+### 0.6 Status badges
+
+Inline tags appended to a row or bullet:
+
+- `[shipped]` — implemented in v1 SwiftUI
+- `[pending]` — decided, not yet implemented
+- `[open]` — undecided; must also appear in §11
 
 ---
 
-## 4. Q&A List
+## 0.5 Page Map
 
-> Mechanism 3 — credibility tags surfaced at list level.
+Navigation topology. Read this once before any page section.
 
-### 4.1 Purpose & data flow
-### 4.2 Layout (top to bottom)
-### 4.3 CTA Banner ("Ask a Question")
-- Action target [open] — currently empty closure.
-### 4.4 Category Tabs (horizontal)
-- All 10 `ABServiceCategoryType` + "All" — table.
-### 4.5 QA Post Card
-- `ABContentTag` ordering rule — STUDENT MATCH > GOVERNMENT VERIFIED >
-  TOP ANSWER > UNVERIFIED > OLD LAW (see §10.3).
-### 4.6 Card Tap Action
-- `→ QADetailView` with selected `ABQAPost`.
-### 4.7 Models touched
-### 4.8 Edge cases
-- Empty category (no posts in selected filter)?
-- All-old-law thread surfacing rule?
+```
+First-launch:  §1 Onboarding ──► (TabBar root)
 
----
+TabBar root:
+  ├─ §2 Home
+  ├─ §3 Community ──► §4 Q&A List ──► §5 Q&A Detail ──► §6 Volunteer Match ──► §8 Chat
+  └─ §7 Message List ──► §8 Chat
+```
 
-## 5. Q&A Detail
-
-> Mechanism 3 + bridge into mechanism 4 — single thread + Top Answer +
-> match-volunteer escalation.
-
-### 5.1 Purpose & data flow
-### 5.2 Layout (top to bottom)
-### 5.3 Tag Row
-- Same ordering rule as §4.5.
-### 5.4 Title + Author Meta
-### 5.5 Content Body
-- Typography: `body-lg` · 1.6 line-height (design.md §3 — "language as
-  a meta-barrier" rationale).
-### 5.6 Top Answer Quote Block
-- `ABTopAnswer` (struct.md §2) · embedded, optional.
-### 5.7 Vote / Comment Stats
-### 5.8 Match-a-Volunteer CTA
-- `→ VolunteerMatchView` with originating `ABQAPost` carried forward
-  (becomes `ABSharedContext` in §8 ChatView).
-- Currently empty closure — defines the navigation target [open].
-### 5.9 Models touched
-### 5.10 Edge cases
-- No Top Answer yet — block hidden vs placeholder?
-- Post tagged `OLD LAW` — does CTA still show, or is it disabled?
+- `§3 Community` and `§4 Q&A List` overlap on Q&A surfaces; Community
+  is the segmented entry, Q&A List is the deep filter view.
+- `§5 → §6 → §8` is the load-bearing flow that proves Mechanism 4 +
+  Mechanism 5 (originating ABQAPost rides into Chat as
+  ABSharedContext). See §11.2 cross-page flow.
 
 ---
 
-## 6. Volunteer Match
+## §1 Onboarding
 
-> Mechanism 4 — algorithm legibility via visible match reasons.
+> M1 — first-launch identity capture; the captured ABUser drives all
+> downstream filtering.
 
-### 6.1 Purpose & data flow
-### 6.2 Layout (top to bottom)
-### 6.3 Hero Match Card
-- `ABMatchResult` top entry · `matchPercentage` display rule.
-- "Why she's a match for you" reasons list — render every `matchReason`
-  (no truncation; legibility > density).
-### 6.4 More Matches (compact cards)
-### 6.5 Initiate Conversation Action
-- Creates `ABConversation` + mounts originating `ABQAPost` as
-  `ABSharedContext` → `ChatView`.
-### 6.6 Models touched
-### 6.7 Edge cases
-- No matches above threshold — what shows?
-- Match reasons empty — degrade gracefully?
+### Overview
 
----
+Onboarding is the personalization engine's initialization step. On
+first launch the user fills a short profile — preferred language,
+current status, location, time-in-Australia. The captured ABUser is
+written to app-level state and consumed by every downstream page
+(Home recommendations, Q&A relevance, volunteer match reasons). The
+form is intentionally short and warm rather than long and exhaustive
+— "language is a meta-barrier" means the entry gate itself cannot
+feel like an interrogation. A Skip path exists so users can defer
+personalization and still reach Home with a default profile.
 
-## 7. Message List (Inbox)
+### Feature
 
-> Mechanism 5 — inbox / re-entry surface.
+**Parameters**
 
-### 7.1 Purpose & data flow
-### 7.2 Layout (top to bottom)
-### 7.3 Segment Control (All / Unread)
-- Unread badge count = `conversations.filter(\.isUnread).count`.
-### 7.4 Conversation Row
-- Avatar + online indicator + participant + last message + timestamp.
-- Adapter: `ABConversation.toItemData()`.
-### 7.5 Row Tap Action
-- `→ ChatView` with selected `ABConversation` (preserves attached
-  `ABSharedContext`).
-### 7.6 Models touched
-### 7.7 Edge cases
-- Empty inbox — first-time-user copy?
-- All-read state for Unread tab?
+| Field    | Type         | Values                                                                  | Required | Default          |
+| -------- | ------------ | ----------------------------------------------------------------------- | :------: | ---------------- |
+| language | ABLanguage   | english · mandarin · spanish · arabic · hindi · other                   |   yes    | english          |
+| status   | ABUserStatus | immigrantStudent · working · lookingForWork · businessOwner             |   yes    | immigrantStudent |
+| location | ABLocation   | { city: String; state: String }                                         |   yes    | { Sydney, NSW }  |
+| duration | ABDuration   | notYetArrived · justLanded · oneToSix · sixToTwelve · oneYearPlus       |   yes    | justLanded       |
 
----
+**Actions**
 
-## 8. Chat
+| ID    | Trigger              | Effect                                                                       |
+| ----- | -------------------- | ---------------------------------------------------------------------------- |
+| §1.A1 | tap a language card  | set local state `language` to tapped value (single-select)                   |
+| §1.A2 | tap a status card    | set local state `status` to tapped value (single-select)                     |
+| §1.A3 | edit city/state      | set local state `location.city` / `location.state`                           |
+| §1.A4 | tap a duration chip  | set local state `duration` to tapped value (single-select)                   |
+| §1.A5 | tap "Continue"       | write `ABUser(language, status, location, duration)` to AppState; → §2 Home  |
+| §1.A6 | tap "Skip for now"   | write default `ABUser` to AppState; → §2 Home                                |
 
-> Mechanism 5 — context-aware chat with shared-context handoff.
+### Layout
 
-### 8.1 Purpose & data flow
-### 8.2 Layout (top to bottom)
-### 8.3 Header
-- Participant name + online status; back affordance `← MessageListView`.
-### 8.4 Shared Context Card
-- `ABSharedContext` mounting rule — see §10.4.
-- Always at top of conversation, persists across re-entries.
-### 8.5 Action Pills (horizontal scroll)
-- `ABContentAction` set: Share My Profile Tags / Ask about the Q&A post
-  / Suggest a 5-min call.
-- Each pill action target [open].
-### 8.6 Date Separator
-### 8.7 Message Bubbles
-- Self vs other styling · timestamp grouping rule.
-### 8.8 Input Area
-- `@State draft` · onSend rule · empty-input disabled-send rule.
-### 8.9 Models touched
-### 8.10 Edge cases
-- Conversation opened without a `SharedContext` (e.g. direct DM, no
-  Q&A origin) — does the card hide or show a default?
-- Long shared-context preview — collapse rule?
+Vertical-scroll form with a fixed sticky footer overlay.
+
+1. **Header bar** — page title
+2. **Hero intro** — hero block (headline + supporting paragraph)
+3. **Language section** — section label + single-select card grid (6 options, 2 cols; each card: flag + language name) (§1.A1)
+4. **Status section** — section label + single-select icon-card grid (4 options, 2 cols; each card: icon + label) (§1.A2)
+5. **Location section** — section label + city/state picker (§1.A3)
+6. **Duration section** — section label + single-select chip row (5 options, wraps) (§1.A4)
+7. **Tip card** — informational card (title + body)
+8. **Sticky footer overlay** — primary button "Continue" (§1.A5) + text link "Skip for now" (§1.A6)
 
 ---
 
-## 9. Mechanism × Page coverage matrix
+## §2 Home
 
-A grid that proves the 5 Context-First mechanisms each land on at least
-one page, and no page is mechanism-orphaned.
+> M2 — contextual home hub; push, not pull. Recommendations and the
+> Featured Guide are pre-filtered against the captured ABUser.
+
+### Overview
+
+_to fill_
+
+### Feature
+
+**Parameters**
+
+| Field | Type | Values | Required | Default |
+| ----- | ---- | ------ | :------: | ------- |
+| _to fill_ |  |  |  |  |
+
+**Actions**
+
+| ID    | Trigger | Effect |
+| ----- | ------- | ------ |
+| §2.A1 | _to fill_ | _to fill_ |
+
+### Layout
+
+_to fill — one sentence on topology, then numbered bullets._
+
+---
+
+## §3 Community
+
+> M2 + M3 — segmented entry to Q&A discussions vs people-to-help.
+
+### Overview
+
+_to fill_
+
+### Feature
+
+**Parameters**
+
+| Field | Type | Values | Required | Default |
+| ----- | ---- | ------ | :------: | ------- |
+| _to fill_ |  |  |  |  |
+
+**Actions**
+
+| ID    | Trigger | Effect |
+| ----- | ------- | ------ |
+| §3.A1 | _to fill_ | _to fill_ |
+
+### Layout
+
+_to fill_
+
+---
+
+## §4 Q&A List
+
+> M3 — credibility tags surfaced at list level so non-native readers
+> can parse trust without parsing prose.
+
+### Overview
+
+_to fill_
+
+### Feature
+
+**Parameters**
+
+| Field | Type | Values | Required | Default |
+| ----- | ---- | ------ | :------: | ------- |
+| _to fill_ |  |  |  |  |
+
+**Actions**
+
+| ID    | Trigger | Effect |
+| ----- | ------- | ------ |
+| §4.A1 | _to fill_ | _to fill_ |
+
+### Layout
+
+_to fill_
+
+---
+
+## §5 Q&A Detail
+
+> M3 + bridge into M4 — single thread + Top Answer + match-volunteer
+> escalation. The originating ABQAPost rides forward as ABSharedContext
+> when the user escalates to a volunteer chat.
+
+### Overview
+
+_to fill_
+
+### Feature
+
+**Parameters**
+
+| Field | Type | Values | Required | Default |
+| ----- | ---- | ------ | :------: | ------- |
+| _to fill_ |  |  |  |  |
+
+**Actions**
+
+| ID    | Trigger | Effect |
+| ----- | ------- | ------ |
+| §5.A1 | _to fill_ | _to fill_ |
+
+### Layout
+
+_to fill_
+
+---
+
+## §6 Volunteer Match
+
+> M4 — algorithm legibility via visible match reasons. Every matched
+> volunteer renders the explicit reasons they fit, not just a score.
+
+### Overview
+
+_to fill_
+
+### Feature
+
+**Parameters**
+
+| Field | Type | Values | Required | Default |
+| ----- | ---- | ------ | :------: | ------- |
+| _to fill_ |  |  |  |  |
+
+**Actions**
+
+| ID    | Trigger | Effect |
+| ----- | ------- | ------ |
+| §6.A1 | _to fill_ | _to fill_ |
+
+### Layout
+
+_to fill_
+
+---
+
+## §7 Message List
+
+> M5 — inbox / re-entry surface. Existing conversations preserve their
+> ABSharedContext on re-open.
+
+### Overview
+
+_to fill_
+
+### Feature
+
+**Parameters**
+
+| Field | Type | Values | Required | Default |
+| ----- | ---- | ------ | :------: | ------- |
+| _to fill_ |  |  |  |  |
+
+**Actions**
+
+| ID    | Trigger | Effect |
+| ----- | ------- | ------ |
+| §7.A1 | _to fill_ | _to fill_ |
+
+### Layout
+
+_to fill_
+
+---
+
+## §8 Chat
+
+> M5 — context-aware chat. The originating ABQAPost (when present)
+> mounts at the top as ABSharedContext and persists across re-entries.
+
+### Overview
+
+_to fill_
+
+### Feature
+
+**Parameters**
+
+| Field | Type | Values | Required | Default |
+| ----- | ---- | ------ | :------: | ------- |
+| _to fill_ |  |  |  |  |
+
+**Actions**
+
+| ID    | Trigger | Effect |
+| ----- | ------- | ------ |
+| §8.A1 | _to fill_ | _to fill_ |
+
+### Layout
+
+_to fill_
+
+---
+
+## §9 Mechanism × Page coverage
+
+Proves the 5 Context-First mechanisms each land on at least one page,
+and no page is mechanism-orphaned.
+
+Legend: ● this page **originates** the mechanism · ◐ this page
+**consumes** mechanism output produced elsewhere.
 
 |                          | M1 Identity | M2 Home Hub | M3 Tags | M4 Match | M5 Chat |
 | ------------------------ | :---------: | :---------: | :-----: | :------: | :-----: |
-| 1. Onboarding            | ●           |             |         |          |         |
-| 2. Home                  |             | ●           |         |          |         |
-| 3. Community             |             | ●           | ●       |          |         |
-| 4. Q&A List              |             |             | ●       |          |         |
-| 5. Q&A Detail            |             |             | ●       | ● (CTA)  |         |
-| 6. Volunteer Match       |             |             |         | ●        |         |
-| 7. Message List          |             |             |         |          | ●       |
-| 8. Chat                  |             |             |         |          | ●       |
+| §1 Onboarding            | ●           |             |         |          |         |
+| §2 Home                  | ◐           | ●           |         |          |         |
+| §3 Community             | ◐           | ●           | ◐       |          |         |
+| §4 Q&A List              | ◐           |             | ●       |          |         |
+| §5 Q&A Detail            |             |             | ●       | ◐ (CTA)  |         |
+| §6 Volunteer Match       | ◐           |             |         | ●        |         |
+| §7 Message List          |             |             |         |          | ●       |
+| §8 Chat                  |             |             |         | ◐        | ●       |
 
-If a future page has all-blank row, it's a candidate for cutting. If a
-mechanism column is empty, the product thesis has a gap.
-
----
-
-## 10. Global Behaviors
-
-Cross-page conventions written once so each page section above can
-reference them by §10.x rather than re-stating.
-
-### 10.1 Tab Bar
-- Always visible on Home / Community / Message List ([open] — visible
-  on Q&A pages too?).
-- Hidden on modal / detail / chat surfaces.
-- Selected-state color: `primary` gradient.
-
-### 10.2 Card adapter rule
-- Pages never render Models directly. Each page's adapter
-  (`toCardData()` / `toItemData()` / `toHeroData()`) maps a Model to the
-  exact props its component needs. Living examples: `Pages/CommunityView`,
-  `Pages/MessageListView`, `Pages/VolunteerMatchView`.
-
-### 10.3 Tag ordering and rendering rule
-- Render `ABContentTag`s in this severity-aware order:
-  STUDENT/SENIOR MATCH → GOVERNMENT VERIFIED → TOP ANSWER → NEW →
-  UNVERIFIED → OLD LAW.
-- Width-overflow rule: wrap; never horizontal-scroll inside a card.
-- `OLD LAW` always renders strikethrough, even when it would be
-  ordering-deprioritised.
-
-### 10.4 Shared Context mounting rule
-- An `ABConversation` initiated from `QADetailView → VolunteerMatchView`
-  carries the originating `ABQAPost` into the resulting Chat as
-  `ABSharedContext`.
-- The card mounts at the top of the chat, above the first message, and
-  persists across re-entries (it is not a one-time banner).
-
-### 10.5 Empty / loading / error states
-- Default: every list page has a designed empty state (illustration +
-  one-line copy + optional CTA).
-- Loading: skeleton rows for lists; spinner for hero / detail.
-- Error: in-line retry on the page that failed (not a full-screen
-  takeover) [open] — confirm with iOS HIG before locking.
-
-### 10.6 Navigation back-stack
-- Forward navigation via standard SwiftUI `NavigationStack` push.
-- Back-swipe always available; modal sheets dismiss on backdrop tap
-  with no unsaved-content confirmation (prototype reduces friction).
+If a page row is all-blank, it's a candidate for cutting. If a column
+is empty, the product thesis has a gap.
 
 ---
 
-## 11. Cross-page flows
+## §10 Global Behaviors
 
-Three named end-to-end journeys; each is ≤ 6 numbered steps and calls
-out which entity travels between pages.
+Cross-page conventions written once so each page section can reference
+them rather than restate them. Visual rules belong in `design.md`; this
+section keeps only **layout/data topology** that crosses pages.
 
-### 11.1 First-launch flow
-Onboarding → Home — captured `ABUser` profile drives Home filtering.
+### §10.1 Tab bar visibility
 
-### 11.2 Q&A → human help flow
-QAList → QADetail → VolunteerMatch → Chat — originating `ABQAPost`
-mounts as `ABSharedContext` in the resulting chat.
+The bottom tab bar is visible on the 3 root tabs (§2 Home · §3
+Community · §7 Message List) and hidden on detail / chat / modal
+surfaces. Visibility on §4 Q&A List is `[open]` — see §11.
 
-### 11.3 Inbox re-entry flow
-MessageList → Chat — resume an existing conversation with its
-persisted `ABSharedContext` still attached.
+### §10.2 Card adapter rule
+
+Pages never bind Models directly into rendered components. Each page
+declares an adapter (e.g. `toCardData() / toItemData() / toHeroData()`)
+that maps a Model to the props its component needs. Living examples:
+§3 Community, §6 Volunteer Match, §7 Message List.
+
+### §10.3 Shared Context mounting
+
+Any ABConversation initiated via the §5 → §6 → §8 flow carries the
+originating ABQAPost into §8 Chat as ABSharedContext, mounted at the
+top of the conversation, above the first message, persisting across
+re-entries (it is not a one-time banner).
 
 ---
 
-## 12. Open Questions
+## §11 Open Questions
 
-Decisions that block this spec from being final. Each must either be
-folded into the relevant §1–§8 page section, or explicitly deferred to
-a future version, before the affected page section is authoritative.
+Decisions that block this spec from going final. Each must either fold
+into the relevant page section, or be explicitly deferred.
 
-- **Empty-button targets** — Onboarding `Continue` / `Skip` (§1.7) ·
-  QADetail `Match a volunteer` (§5.8) · QAList `Ask a Question` (§4.3) ·
-  Chat action pills (§8.5).
+- **Empty-button targets** — §1.A5/§1.A6 navigation, §4 "Ask a Question"
+  CTA, §5 "Match a volunteer" CTA, §8 action pills.
 - **Empty / loading / error states** — none of the 8 pages currently
-  render a non-mock state (see §10.5).
-- **Data plumbing** — how does the onboarding profile (`ABUser`) reach
-  Home / Q&A feeds? Options: app-level `@Observable` store,
-  `EnvironmentObject`, or hardcoded mock filter for prototype only.
-- **v1 empty closures** — spec'd as v1 acceptance criteria, or deferred
-  as v2 work? Affects whether `Match a volunteer` must navigate in v1.
-- **Tab bar visibility** — visible on Q&A pages or hidden? (§10.1)
-- **Featured Guide selection** — currently `ABMockData.guides[0]`;
-  should it be filter-driven for v1 or only for v2? (§2.5)
-- **In-flow translation** — does Onboarding (and elsewhere) live-
-  translate UI copy when the user changes language mid-flow? (§1.9)
+  render a non-mock state in v1 SwiftUI. Spec'd as v2 work?
+- **Data plumbing** — how does the captured ABUser reach §2/§4/§6 as
+  filter input? Options: `@Observable` AppState, `EnvironmentObject`,
+  or hardcoded mock filter for prototype only.
+- **v1 empty closures** — spec'd as v1 acceptance criteria, or
+  deferred to v2?
+- **Tab bar on §4 Q&A List** — visible (consistent with root tabs) or
+  hidden (treats Q&A List as a deep filter view)?
+- **Featured Guide selection** — v1 currently `ABMockData.guides[0]`;
+  filter-driven in v1 or v2?
+- **In-flow translation** — when the user changes `language` mid-
+  Onboarding, does in-page copy live-translate or only on next launch?
 
 ---
 
-## 13. Verification
+## §12 Verification
 
-After the spec is filled, the prototype is **spec-aligned** when:
+The prototype is **spec-aligned** when:
 
-1. For each of the 8 pages (§1–§8), the SwiftUI file under
-   `ABDesignSystem/Sources/Pages/` renders the layout described.
-2. Every Open Question in §12 is resolved — folded into the relevant
-   page section, or explicitly deferred to a future version (v3).
-3. The three flows in §11 can be reproduced end-to-end via Xcode Canvas
-   previews (and, once an installable target exists, on a real device).
+1. For each filled page (§1–§8), the SwiftUI file under
+   `ABDesignSystem/Sources/Pages/` renders the layout described and
+   the actions table matches its closures.
+2. Every Open Question in §11 is resolved — folded into the relevant
+   page section, or explicitly deferred.
+3. The flows in §11 / Page Map (§0.5) reproduce end-to-end via Xcode
+   Canvas previews.
 
-A page is **section-aligned** (a smaller bar, useful per-PR) when its
-§1–§8 entry's *Layout* and *Interactions* sub-sections match its
-SwiftUI file.
+A page is **section-aligned** (per-PR bar) when its Parameters,
+Actions, and Layout match its SwiftUI file.
