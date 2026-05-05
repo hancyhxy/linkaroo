@@ -79,7 +79,7 @@ treatments and not in-house component names. The standard vocabulary:
 | List        | vertical list · horizontal carousel · category-grouped list                   |
 | Toggle      | toggle · tab bar                                                              |
 | Block       | hero block · dark hero panel · informational card · banner · tip card · quote block |
-| Action      | primary button · text link · floating action button · sticky footer overlay · back bar |
+| Action      | primary button · text link · floating action button · sticky footer overlay · back bar (title?: optional small heading) |
 | Card        | content card · row card · compact card · hero card                            |
 | Tag         | tag chip · category chip · status badge                                       |
 
@@ -96,9 +96,17 @@ above) when the page wants editorial breathing room rather than the
 compact `ABHeader.pageTitle` (back + title in one row).
 
 `back bar` resolves to the `ABBackBar` component — a slim (≈56pt)
-frosted overlay holding only the back chevron. Use as a `ZStack`-top
-overlay above a `ScrollView` whose first content element is a
-`page hero`.
+frosted overlay with a back chevron pinned left and an *optional*
+centered small title (`abTitleSm` 14pt Bold, `abOnSurface`). Two
+usages, same init:
+
+- `back bar` (no title) — pair with a `page hero` below; the page
+  title lives in the content flow.
+- `back bar (title: "...")` — for mid-depth pages (forms,
+  intermediate views) that want a small page name on the chrome
+  itself. Lighter than `ABHeader.pageTitle` (which is 64pt with a
+  20pt `abHeadlineMd` title) — pick `back bar` for editorial
+  density, `ABHeader.pageTitle` for compact detail pages.
 
 Add a row when the existing vocabulary cannot describe a real region.
 Don't introduce ad-hoc terms inline.
