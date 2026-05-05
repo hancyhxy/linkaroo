@@ -183,7 +183,12 @@ enum ABUserStatus: String, Codable, CaseIterable, Identifiable {
 }
 
 /// 用户在澳时长
-enum ABDuration: String, Codable, CaseIterable, Identifiable {
+///
+/// Conforms to `CustomStringConvertible` so picker components like
+/// ABChipPicker (which is generic over `Hashable & CustomStringConvertible`)
+/// can stringify each case for display without requiring the call-site
+/// to declare the conformance separately.
+enum ABDuration: String, Codable, CaseIterable, Identifiable, CustomStringConvertible {
     case notYetArrived = "Not yet arrived"
     case justLanded    = "Just landed"
     case oneToSix      = "1-6 months"
@@ -191,6 +196,7 @@ enum ABDuration: String, Codable, CaseIterable, Identifiable {
     case oneYearPlus   = "1 year+"
 
     var id: String { rawValue }
+    var description: String { rawValue }
 }
 
 /// 地理位置

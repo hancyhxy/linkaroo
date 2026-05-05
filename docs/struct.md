@@ -106,6 +106,8 @@ Time-in-Australia bucket. Drives the "First 7 Days Checklist" surfacing logic on
 
 > Cases: `notYetArrived`, `justLanded`, `oneToSix`, `sixToTwelve`, `oneYearPlus`. Implemented as `enum ABDuration: String`. **Bucketed not numeric** because UI changes at thresholds (a "just landed" user sees the First 7 Days guide; a "1-year+" user does not), and continuous days-since-arrival would force every screen to declare its own thresholds.
 
+> Conforms to `CustomStringConvertible` (`description == rawValue`) so generic picker components like `ABChipPicker<T: Hashable & CustomStringConvertible>` can display each case without forcing the call-site to declare the conformance.
+
 → A **Duration** is held by exactly one **User**.
 
 ---

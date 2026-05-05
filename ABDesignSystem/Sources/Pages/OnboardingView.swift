@@ -140,12 +140,6 @@ struct OnboardingView: View {
     }
 }
 
-// MARK: - ABDuration CustomStringConvertible (for ABChipPicker)
-
-extension ABDuration: CustomStringConvertible {
-    public var description: String { rawValue }
-}
-
 // MARK: - Preview
 
 #Preview("Onboarding") {
