@@ -195,25 +195,48 @@ Vertical-scroll form with a fixed sticky footer overlay.
 
 ### Overview
 
-_to fill_
+Home is the first surface a returning user lands on after onboarding,
+acting as a profile-driven push layer rather than a generic hub. It
+greets the user, exposes a search entry, lays out the 10 essential
+service categories as quick jumps, and lifts one Featured Guide plus
+a list of recommendations chosen by the user's profile (status ×
+duration × language). The page reverses the discovery gap surfaced
+in user research ("I only knew about that service because a friend
+mentioned it") — instead of waiting for the user to know what to
+look for, Home surfaces what likely matches their stage.
 
 ### Feature
 
 **Parameters**
 
-| Field | Type | Values | Required | Default |
-| ----- | ---- | ------ | :------: | ------- |
-| _to fill_ |  |  |  |  |
+| Field           | Type                  | Values                                                                                          | Required | Default                  |
+| --------------- | --------------------- | ----------------------------------------------------------------------------------------------- | :------: | ------------------------ |
+| searchText      | String                | free text                                                                                       |    no    | `""`                     |
+| selectedTab     | ABTab                 | home · community · profile                                                                      |   yes    | home                     |
+| services        | [ABServiceCategoryType] | job · housing · healthcare · visa · bank · education · transport · social · finance · utilities |   yes    | all 10, fixed order      |
+| featuredGuide   | ABGuide               | resolved from ABMockData; selection rule [open §11]                                             |   yes    | `ABMockData.guides[0]`   |
+| recommendations | [ABGuide]             | resolved from ABMockData; filter rule [open §11]                                                |   yes    | `ABMockData.guides.dropFirst()` |
 
 **Actions**
 
-| ID    | Trigger | Effect |
-| ----- | ------- | ------ |
-| §2.A1 | _to fill_ | _to fill_ |
+| ID    | Trigger                              | Effect                                                                       |
+| ----- | ------------------------------------ | ---------------------------------------------------------------------------- |
+| §2.A1 | type in search bar                   | bind to local state `searchText`; submit target [open §11]                   |
+| §2.A2 | tap a service category icon          | navigation target [open §11] — currently no closure in v1                    |
+| §2.A3 | tap the Featured Guide card          | navigation target [open §11]                                                 |
+| §2.A4 | tap a recommendation card            | navigation target [open §11]                                                 |
+| §2.A5 | tap a tab in the bottom tab bar      | switch `selectedTab`; root-tab routing [open §11]                            |
 
 ### Layout
 
-_to fill — one sentence on topology, then numbered bullets._
+Vertical-scroll page with a fixed bottom tab bar overlay.
+
+1. **Brand header** — header bar (brand variant)
+2. **Search hero** — hero block (greeting line + supporting paragraph + search input below)
+3. **Services grid** — section label + horizontal-flowing icon grid (10 items, label below each icon) (§2.A2)
+4. **Featured section** — section label + hero card (title + description) (§2.A3)
+5. **Recommendations section** — section label + vertical list of content cards; each card contains tag chip + title + description + read-time caption (§2.A4)
+6. **Bottom tab bar overlay** — tab bar (3 items: Home / Community / Profile) (§2.A5)
 
 ---
 
@@ -423,9 +446,11 @@ section keeps only **layout/data topology** that crosses pages.
 
 ### §10.1 Tab bar visibility
 
-The bottom tab bar is visible on the 3 root tabs (§2 Home · §3
-Community · §7 Message List) and hidden on detail / chat / modal
-surfaces. Visibility on §4 Q&A List is `[open]` — see §11.
+`ABTab` has 3 cases: `home · community · profile`. The bottom tab
+bar is visible on §2 Home · §3 Community and on whatever §3 surfaces
+the Profile tab. It is hidden on detail / chat / modal surfaces (§4 §5
+§6 §8). Visibility on §4 Q&A List, the destination of the Profile
+tab, and the entry point for §7 Message List are all `[open]` — see §11.
 
 ### §10.2 Card adapter rule
 
@@ -459,6 +484,13 @@ into the relevant page section, or be explicitly deferred.
   deferred to v2?
 - **Tab bar on §4 Q&A List** — visible (consistent with root tabs) or
   hidden (treats Q&A List as a deep filter view)?
+- **§7 Message List entry point** — `ABTab` only has 3 cases (home /
+  community / profile). Is Message List reached via the Profile tab,
+  via a header icon on §2/§3, or does the tab bar grow a 4th case?
+- **Profile tab destination** — what page does `selectedTab = .profile`
+  show? Not currently specified anywhere.
+- **Search submit / category-tap navigation** — §2.A1 / §2.A2 currently
+  have no closures in v1. Spec'd as v1 acceptance or deferred to v2?
 - **Featured Guide selection** — v1 currently `ABMockData.guides[0]`;
   filter-driven in v1 or v2?
 - **In-flow translation** — when the user changes `language` mid-
