@@ -74,22 +74,48 @@ See `docs/product-context.md` for the full mechanism summary.
 
 ## AI workflow
 
-This repo is built with a **spec-driven** workflow. The four `docs/*.md` files are the source of truth — code is derived from them, never the other way around. AI assistance (Claude Code) is bounded to *executing each layer against the layer above it*, not free-form generation.
+This repo is built with a **spec-driven** workflow. The four `docs/*.md` files are the source of truth, and AI (Claude Code) is bounded to *executing each layer against the layer above it* — no free-form generation.
 
-The pipeline is six layers, each with one concrete artefact:
+The four spec layers, top-down:
 
-| Layer | Artefact | What this layer answers |
-| ----- | -------- | ------------------------ |
+| Layer | Artefact | What it answers |
+| ----- | -------- | ----------------- |
 | 1. Why | `docs/product-context.md` | What product mechanism is being built and *why it exists* (5 Context-First moments). |
-| 2. How it looks | `docs/design.md` | Tokens, typography scale, elevation rules, component visual grammar. |
+| 2. How it looks | `docs/design.md` | Tokens, typography scale, elevation, component visual grammar. |
 | 3. What it stores | `docs/struct.md` | 22 entities + relationships across 5 Context-First layers. Mirrored in `ABModels.swift`. |
-| 4. What each page does | `docs/spec.md` | 4-block template (Overview / Parameters / Actions / Layout) per page. Wireframe-precision; *no visual decisions* (those belong to layer 2). |
-| 5. Spec-driven prototype experiments | `Sources/Prototypes/` (gitignored sandbox) | Each page is re-implemented from `spec.md` *without reading the existing `Pages/` source*. The exercise validates whether the spec is sufficient on its own — gaps show up as "had to self-pick a token / mockup / behaviour" notes inside the prototype. Multiple generations (V1→V4) preserved as evolution snapshots. |
-| 6. Final SwiftUI | `Sources/Pages/` | Once a prototype reaches V4 (no remaining gaps), it graduates to `Pages/` and becomes the shipped implementation. |
+| 4. What each page does | `docs/spec.md` | Per-page 4-block template (Overview / Parameters / Actions / Layout). Wireframe-precision. |
 
-Why this matters: the prototype layer (5) is what catches *spec drift* — places where `spec.md` says "section title" but no token resolves it, or where a mockup string disagrees with a Pages literal. Without that intermediate experiment, the spec stays authoritative on paper but unverifiable in practice.
+### How the SwiftUI implementation got there
 
-The control-vocabulary table in `spec.md §0.4` is the contract between layers 4 and 5 — every region a layer-4 spec describes must resolve to a real Component. When it doesn't, the gap is logged and the vocabulary or the component library is extended.
+The implementation didn't go straight from spec to `Pages/`. It went through `Sources/Prototypes/`, which is where each page is **re-implemented from `spec.md` without reading the existing `Pages/` source**. The exercise validates whether the spec is sufficient to drive an implementation on its own — every place where the prototype had to self-pick a token, a copy string, or a behaviour is logged as a SPEC GAP at the top of the file.
+
+The actual sequence:
+
+1. **Two pages first** — Onboarding (`§1`) and Home (`§2`) were re-implemented from `spec.md` as the first experiment.
+2. **Four iterations on those two** — V1 → V2 → V3 → V4. Each generation surfaced new gaps in the spec or the component library; each closure produced concrete repo changes (new components like `ABBackBar` / `ABPageHero` / `ABSectionTitle`, vocabulary additions in `spec.md §0.4`, copy-authority rule in `§0.5b`).
+3. **The other 6 pages, re-rendered once** — by the time V4 stabilised on Onboarding + Home, the workflow was mature enough to re-derive Community / QA List / QA Detail / Volunteer Match / Message List / Chat in a single pass. Each first version is V4.
+4. **Graduation to `Pages/`** — V4 prototypes that match their mockup and have no unresolved gaps become the shipped `Pages/*View.swift`.
+
+```mermaid
+flowchart TD
+    A["docs/product-context.md<br/><i>why</i>"] --> B["docs/design.md<br/><i>how it looks</i>"]
+    B --> C["docs/struct.md<br/><i>what it stores</i>"]
+    C --> D["docs/spec.md<br/><i>what each page does</i>"]
+    D --> E["Prototypes/<br/>Onboarding + Home V1→V4<br/><i>2 pages × 4 iterations</i>"]
+    E -->|spec gaps fed back| D
+    E --> F["Prototypes/<br/>other 6 pages, V4 only<br/><i>6 pages × 1 pass</i>"]
+    F --> G["Pages/<br/>final 8 SwiftUI pages"]
+
+    style A fill:#e8f4ff,stroke:#00639b,color:#171c21
+    style B fill:#e8f4ff,stroke:#00639b,color:#171c21
+    style C fill:#e8f4ff,stroke:#00639b,color:#171c21
+    style D fill:#e8f4ff,stroke:#00639b,color:#171c21
+    style E fill:#fff3e0,stroke:#c4983f,color:#171c21
+    style F fill:#fff3e0,stroke:#c4983f,color:#171c21
+    style G fill:#dcfce7,stroke:#16a34a,color:#171c21
+```
+
+`Sources/Prototypes/` stays in the repo as the evolution record — see `Sources/Prototypes/README.md` for what's in there and how to read it.
 
 ## Where the rest of the project lives
 
