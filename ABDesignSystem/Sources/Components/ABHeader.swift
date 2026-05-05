@@ -35,7 +35,7 @@ struct ABHeader: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, ABSpacing.s5)
         .background(headerBackground)
-        .abShadowAmbient()
+        .modifier(ABHeaderShadow(variant: variant))
     }
 
     // MARK: - Brand Content
@@ -122,13 +122,30 @@ struct ABHeader: View {
             // Frosted glass for brand header (homepage)
             Color.clear.abFrostedGlass()
         case .pageTitle, .chat:
-            // Solid white with subtle bottom border
-            Color.abSurfaceCard
-                .overlay(alignment: .bottom) {
-                    Rectangle()
-                        .fill(Color.abBorderHairline.opacity(0.5))
-                        .frame(height: 0.5)
-                }
+            // Inherit page background so detail headers dissolve into
+            // the surface beneath. No hairline — once the header shares
+            // the page's surface tone, a divider only re-introduces a
+            // visual seam (Canvas note 2026-05-05).
+            Color.abSurface
+        }
+    }
+}
+
+// MARK: - Variant-aware shadow
+//
+// `.brand` is a frosted overlay that wants the ambient lift recipe
+// from design.md §4 (Home page hero stays atmospheric). `.pageTitle`
+// and `.chat` inherit `Color.abSurface` so they should fully dissolve
+// into the page beneath — no shadow, no hairline.
+private struct ABHeaderShadow: ViewModifier {
+    let variant: ABHeaderVariant
+
+    func body(content: Content) -> some View {
+        switch variant {
+        case .brand:
+            content.abShadowAmbient()
+        case .pageTitle, .chat:
+            content
         }
     }
 }
