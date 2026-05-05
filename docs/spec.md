@@ -97,16 +97,22 @@ compact `ABHeader.pageTitle` (back + title in one row).
 
 `back bar` resolves to the `ABBackBar` component — a slim (≈56pt)
 frosted overlay with a back chevron pinned left and an *optional*
-centered small title (`abTitleSm` 14pt Bold, `abOnSurface`). Two
-usages, same init:
+left-aligned title sitting next to the chevron (`abTitleLg` 18pt
+Bold, `abOnSurface`, brand-strip style — not iOS centered nav-bar
+style). Two usages, same init:
 
 - `back bar` (no title) — pair with a `page hero` below; the page
-  title lives in the content flow.
-- `back bar (title: "...")` — for mid-depth pages (forms,
-  intermediate views) that want a small page name on the chrome
-  itself. Lighter than `ABHeader.pageTitle` (which is 64pt with a
-  20pt `abHeadlineMd` title) — pick `back bar` for editorial
-  density, `ABHeader.pageTitle` for compact detail pages.
+  title lives in the content flow as a long welcome headline.
+- `back bar (title: "...")` — pair with a `page hero` below as well,
+  but the back bar shows a *short nav-context label* (e.g.
+  "Profile Setup") next to the chevron. The two titles play distinct
+  roles: back bar = "where am I in the flow" (short, stable);
+  page hero = "what should I do here" (long, welcoming). Both
+  exist on the same page when navigation context matters.
+
+Pick `ABHeader.pageTitle` instead for compact detail pages (Q&A
+Detail, Volunteer Match) where one taller 64pt header replaces the
+back-bar + page-hero pair entirely.
 
 Add a row when the existing vocabulary cannot describe a real region.
 Don't introduce ad-hoc terms inline.
@@ -224,7 +230,7 @@ Vertical-scroll form with a back-bar overlay on top and a sticky
 footer overlay at the bottom; the page hero lives in the content
 flow, not in the back bar.
 
-1. **Back bar overlay** — back bar (frosted)
+1. **Back bar overlay** — back bar (title: "Profile Setup")
 2. **Page hero** — page hero (headline + subtitle)
 3. **Language section** — section title (level: section) + single-select card grid (6 options, 2 cols; each card: flag + language name) (§1.A1)
 4. **Status section** — section title (level: section) + single-select icon-card grid (4 options, 2 cols; each card: icon + label) (§1.A2)

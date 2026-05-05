@@ -3,19 +3,21 @@ import SwiftUI
 // MARK: - ABBackBar
 //
 // Slim frosted sticky bar with a back chevron and an *optional*
-// centered title.
+// left-aligned title that sits next to the chevron (brand-strip
+// style, not iOS centered nav-bar style).
 //
 // Two typical usages, same init:
 //   • `ABBackBar(onBack:)` — back-only, when the page title lives in
 //     the content flow as `ABPageHero` (Onboarding, multi-step
-//     editorial flows).
-//   • `ABBackBar(title:onBack:)` — back + small centered title, when
-//     the page is mid-depth (form pages like NewQuestion) but doesn't
-//     warrant the heavy `ABHeader.pageTitle` 64pt frame.
+//     editorial flows). Title slot stays empty.
+//   • `ABBackBar(title:onBack:)` — back + left-aligned title, when
+//     the page wants a short nav-context label like "Profile Setup"
+//     glued to the chevron, with the long welcome headline still
+//     living below in `ABPageHero`.
 //
 // Use `ABHeader(variant: .pageTitle)` instead for compact detail
 // pages (Q&A Detail, Volunteer Match) that already lean on the
-// taller header treatment.
+// taller 64pt header treatment.
 
 struct ABBackBar: View {
     var title: String? = nil
@@ -26,29 +28,26 @@ struct ABBackBar: View {
     private let height: CGFloat = ABLayout.headerHeight - 8
 
     var body: some View {
-        ZStack {
-            // Centered title layer — independent of the back chevron's
-            // 32pt slot, so the title sits on the bar's true midline.
+        HStack(spacing: ABSpacing.s3) {
+            Button(action: { onBack?() }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 18, weight: .medium))
+                    .foregroundStyle(Color.abOnSurface)
+                    .frame(width: 32, height: 32)
+            }
+
+            // Title sits immediately right of the chevron — brand-strip
+            // style. Picking abTitleLg (18pt Inter Bold) per mockup
+            // `personalization.html` line 20 (`text-lg font-bold`).
             if let title, !title.isEmpty {
                 Text(title)
-                    .font(.abTitleSm)
-                    .fontWeight(.bold)
+                    .font(.abTitleLg)
                     .foregroundStyle(Color.abOnSurface)
                     .lineLimit(1)
                     .truncationMode(.tail)
-                    .padding(.horizontal, 48) // keep clear of the back chevron
             }
 
-            // Back chevron pinned left.
-            HStack(spacing: 0) {
-                Button(action: { onBack?() }) {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundStyle(Color.abOnSurface)
-                        .frame(width: 32, height: 32)
-                }
-                Spacer()
-            }
+            Spacer()
         }
         .padding(.horizontal, ABSpacing.s4)
         .frame(height: height)
@@ -85,7 +84,7 @@ struct ABBackBar: View {
 
 #Preview("ABBackBar — with title") {
     VStack(spacing: 0) {
-        ABBackBar(title: "New Question", onBack: {})
+        ABBackBar(title: "Profile Setup", onBack: {})
 
         ScrollView {
             VStack(alignment: .leading, spacing: ABSpacing.s4) {
