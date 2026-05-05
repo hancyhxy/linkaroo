@@ -13,44 +13,48 @@ enum CommunitySegment: String, CaseIterable, CustomStringConvertible {
 }
 
 public struct CommunityView: View {
-    public init() {}
+    public let onSelectPost: (ABQAPost) -> Void
+    public let onSelectHelpRequest: (ABHelpRequest) -> Void
 
+    public init(
+        onSelectPost: @escaping (ABQAPost) -> Void = { _ in },
+        onSelectHelpRequest: @escaping (ABHelpRequest) -> Void = { _ in }
+    ) {
+        self.onSelectPost = onSelectPost
+        self.onSelectHelpRequest = onSelectHelpRequest
+    }
 
     // MARK: Parameters (spec §3)
     @State private var segment: CommunitySegment = .discussions
-    @State private var selectedTab: ABTab = .community
 
     private var qaPosts: [ABQAPost] { ABMockData.qaPosts }
     private var helpRequests: [ABHelpRequest] { ABMockData.helpRequests }
 
     public var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ABHeader(variant: .pageTitle(title: "Community", showBack: false))
+            ScrollView {
+                VStack(alignment: .leading, spacing: ABSpacing.s5) {
+                    ABSegmentedControl(
+                        options: CommunitySegment.allCases,
+                        selected: $segment
+                    )
+                    .padding(.horizontal, ABLayout.pagePadding)
 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: ABSpacing.s5) {
-                        ABSegmentedControl(
-                            options: CommunitySegment.allCases,
-                            selected: $segment
-                        )
-                        .padding(.horizontal, ABLayout.pagePadding)
-
-                        switch segment {
-                        case .discussions:
-                            discussionsBody
-                        case .peopleYouCanHelp:
-                            peopleToHelpBody
-                        }
+                    switch segment {
+                    case .discussions:
+                        discussionsBody
+                    case .peopleYouCanHelp:
+                        peopleToHelpBody
                     }
-                    .padding(.top, ABSpacing.s4)
-                    .padding(.bottom, ABLayout.tabBarHeight + ABSpacing.s4)
                 }
+                .padding(.top, ABSpacing.s4)
+                .padding(.bottom, ABSpacing.s8)
             }
-
-            ABTabBar(selectedTab: $selectedTab)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                ABHeader(variant: .pageTitle(title: "Community", showBack: false))
+            }
         }
     }
 
@@ -74,7 +78,7 @@ public struct CommunityView: View {
                             topAnswer: post.topAnswer?.excerpt
                         ),
                         onTap: {
-                            // §3.A2 — → §5 Q&A Detail [open §11]
+                            onSelectPost(post)
                         }
                     )
                     .padding(.horizontal, ABLayout.pagePadding)
@@ -109,7 +113,7 @@ public struct CommunityView: View {
                                     : Color.abAccentButter
                             ),
                             onCTA: {
-                                // §3.A3 [open §11]
+                                onSelectHelpRequest(req)
                             }
                         )
                         .frame(width: 280)

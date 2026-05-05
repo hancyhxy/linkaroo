@@ -6,8 +6,19 @@ import SwiftUI
 // First-launch identity capture. Captured ABUser drives all downstream filtering.
 
 public struct OnboardingView: View {
-    public init() {}
+    public let onFinish: (ABUser) -> Void
+    public let onSkip: () -> Void
+    public let onBack: (() -> Void)?
 
+    public init(
+        onFinish: @escaping (ABUser) -> Void = { _ in },
+        onSkip: @escaping () -> Void = {},
+        onBack: (() -> Void)? = nil
+    ) {
+        self.onFinish = onFinish
+        self.onSkip = onSkip
+        self.onBack = onBack
+    }
 
     // MARK: Parameters (spec §1)
     @State private var language: ABLanguage = .english
@@ -37,9 +48,9 @@ public struct OnboardingView: View {
                 .padding(.bottom, ABSpacing.s24)
             }
 
-            ABBackBar(title: "Profile Setup", onBack: {
-                // §1 back navigation [open §11]
-            })
+            if let onBack {
+                ABBackBar(title: "Profile Setup", onBack: onBack)
+            }
 
             VStack {
                 Spacer()
@@ -47,10 +58,20 @@ public struct OnboardingView: View {
                     primaryTitle: "Finish Setup",
                     skipTitle: "Skip for now",
                     onPrimary: {
-                        // §1.A5 — write ABUser to AppState; → §2 Home [open §11]
+                        // §1.A5 — write captured ABUser to AppState; → §2 Home
+                        let user = ABUser(
+                            displayName: "You",
+                            username: "u/you",
+                            preferredLanguage: language,
+                            currentStatus: status,
+                            location: location,
+                            durationInAustralia: duration
+                        )
+                        onFinish(user)
                     },
                     onSkip: {
-                        // §1.A6 — write default ABUser to AppState; → §2 Home [open §11]
+                        // §1.A6 — skip with default ABUser
+                        onSkip()
                     }
                 )
             }
@@ -114,7 +135,6 @@ public struct OnboardingView: View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
             ABSectionTitle("Location", level: .section)
             ABLocationPicker(city: location.city, state: location.state)
-            // §1.A3 — picker is display-only in v1; edit hook [open §11]
         }
     }
 

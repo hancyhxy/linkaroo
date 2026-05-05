@@ -6,37 +6,44 @@ import SwiftUI
 // Profile-driven push hub: search + 10 services + Featured Guide + recommendations.
 
 public struct HomeView: View {
-    public init() {}
+    public let onSelectCategory: (ABServiceCategoryType) -> Void
+    public let onSelectFeaturedGuide: (ABGuide) -> Void
+    public let onSelectGuide: (ABGuide) -> Void
 
+    public init(
+        onSelectCategory: @escaping (ABServiceCategoryType) -> Void = { _ in },
+        onSelectFeaturedGuide: @escaping (ABGuide) -> Void = { _ in },
+        onSelectGuide: @escaping (ABGuide) -> Void = { _ in }
+    ) {
+        self.onSelectCategory = onSelectCategory
+        self.onSelectFeaturedGuide = onSelectFeaturedGuide
+        self.onSelectGuide = onSelectGuide
+    }
 
     // MARK: Parameters (spec §2)
     @State private var searchText: String = ""
-    @State private var selectedTab: ABTab = .home
 
     private var featuredGuide: ABGuide { ABMockData.guides[0] }
     private var recommendations: [ABGuide] { Array(ABMockData.guides.dropFirst()) }
 
     public var body: some View {
-        ZStack(alignment: .bottom) {
+        ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 
-            VStack(spacing: 0) {
-                ABHeader(variant: .brand)
-
-                ScrollView {
-                    VStack(alignment: .leading, spacing: ABSpacing.s8) {
-                        searchHero
-                        servicesGrid
-                        featuredSection
-                        recommendationsSection
-                    }
-                    .padding(.horizontal, ABLayout.pagePadding)
-                    .padding(.top, ABSpacing.s4)
-                    .padding(.bottom, ABLayout.tabBarHeight + ABSpacing.s4)
+            ScrollView {
+                VStack(alignment: .leading, spacing: ABSpacing.s8) {
+                    searchHero
+                    servicesGrid
+                    featuredSection
+                    recommendationsSection
                 }
+                .padding(.horizontal, ABLayout.pagePadding)
+                .padding(.top, ABSpacing.s4)
+                .padding(.bottom, ABSpacing.s8)
             }
-
-            ABTabBar(selectedTab: $selectedTab)
+            .safeAreaInset(edge: .top, spacing: 0) {
+                ABHeader(variant: .brand)
+            }
         }
     }
 
@@ -49,7 +56,7 @@ public struct HomeView: View {
                 .multilineTextAlignment(.center)
 
             ABSearchBar(text: $searchText, variant: .hero, onSubmit: {
-                // §2.A1 [open §11]
+                // §2.A1 search submit (kept local for now)
             })
         }
         .padding(.vertical, ABSpacing.s8)
@@ -68,8 +75,10 @@ public struct HomeView: View {
                 items: ABServiceCategoryType.allCases.map { type in
                     ABServiceItem(id: type.rawValue, label: type.rawValue, icon: type.icon)
                 },
-                onTap: { _ in
-                    // §2.A2 [open §11]
+                onTap: { item in
+                    if let category = ABServiceCategoryType(rawValue: item.id) {
+                        onSelectCategory(category)
+                    }
                 }
             )
         }
@@ -84,7 +93,7 @@ public struct HomeView: View {
                 title: featuredGuide.title,
                 description: featuredGuide.description,
                 onTap: {
-                    // §2.A3 [open §11]
+                    onSelectFeaturedGuide(featuredGuide)
                 }
             )
         }
@@ -98,7 +107,7 @@ public struct HomeView: View {
             VStack(spacing: ABSpacing.s3) {
                 ForEach(recommendations) { guide in
                     Button {
-                        // §2.A4 [open §11]
+                        onSelectGuide(guide)
                     } label: {
                         recommendationCard(guide)
                     }

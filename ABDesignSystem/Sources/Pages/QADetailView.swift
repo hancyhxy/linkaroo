@@ -9,9 +9,17 @@ public struct QADetailView: View {
 
     // MARK: Parameters (spec §5)
     public let post: ABQAPost
+    public let onMatchVolunteer: (ABQAPost) -> Void
+    public let onBack: () -> Void
 
-    public init(post: ABQAPost = ABMockData.qaPosts[0]) {
+    public init(
+        post: ABQAPost = ABMockData.qaPosts[0],
+        onMatchVolunteer: @escaping (ABQAPost) -> Void = { _ in },
+        onBack: @escaping () -> Void = {}
+    ) {
         self.post = post
+        self.onMatchVolunteer = onMatchVolunteer
+        self.onBack = onBack
     }
 
     public var body: some View {
@@ -34,10 +42,9 @@ public struct QADetailView: View {
                 .padding(.bottom, ABSpacing.s8)
             }
 
-            ABBackBar(title: "Q&A", onBack: {
-                // §5.A1 — back to §3 / §4 [open §11]
-            })
+            ABBackBar(title: "Q&A", onBack: onBack)
         }
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     private var tagRow: some View {
@@ -117,8 +124,7 @@ public struct QADetailView: View {
                     icon: "person.badge.plus",
                     fullWidth: true
                 ) {
-                    // §5.A2 — capture `post` as originating ABQAPost; → §6
-                    // ABSharedContext propagation [open §11]
+                    onMatchVolunteer(post)
                 }
             }
         }

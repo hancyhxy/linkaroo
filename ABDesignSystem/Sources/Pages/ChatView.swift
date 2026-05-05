@@ -12,17 +12,23 @@ public struct ChatView: View {
     public let conversation: ABConversation
     public let messages: [ABChatMessage]
     public let actions: [ABContextAction]
+    public let onBack: () -> Void
+    public let onOpenSharedContext: ((UUID) -> Void)?
 
     @State private var draft: String = ""
 
     public init(
         conversation: ABConversation = ABMockData.conversations[0],
         messages: [ABChatMessage] = ABMockData.chatMessages,
-        actions: [ABContextAction] = ABMockData.contextActions
+        actions: [ABContextAction] = ABMockData.contextActions,
+        onBack: @escaping () -> Void = {},
+        onOpenSharedContext: ((UUID) -> Void)? = nil
     ) {
         self.conversation = conversation
         self.messages = messages
         self.actions = actions
+        self.onBack = onBack
+        self.onOpenSharedContext = onOpenSharedContext
     }
 
     private var sharedContext: ABSharedContext? {
@@ -41,10 +47,10 @@ public struct ChatView: View {
                         isOnline: conversation.participant.isOnline
                     ),
                     onBack: {
-                        // §8.A1 [open §11]
+                        onBack()
                     },
                     onMenu: {
-                        // chat header overflow menu [open §11]
+                        // chat header overflow menu — kept inert
                     }
                 )
 
@@ -55,7 +61,7 @@ public struct ChatView: View {
                                 title: context.title,
                                 linkText: context.linkText,
                                 onTap: {
-                                    // §8.A2 — return to §5 by relatedPostID [open §11]
+                                    onOpenSharedContext?(context.relatedPostID)
                                 }
                             )
                         }
@@ -75,7 +81,7 @@ public struct ChatView: View {
                     text: $draft,
                     placeholder: "Type a message…",
                     onSend: {
-                        // §8.A5 — append outgoing ABChatMessage [open §11]
+                        // §8.A5 — append outgoing ABChatMessage [open §11 — needs message store]
                         draft = ""
                     },
                     onPlus: {
@@ -84,6 +90,7 @@ public struct ChatView: View {
                 )
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
     }
 
     private var actionPillRow: some View {
@@ -95,7 +102,7 @@ public struct ChatView: View {
                         icon: action.icon,
                         variant: action.variant == .blue ? .blue : .orange,
                         onTap: {
-                            // §8.A3 [open §11]
+                            // §8.A3 — context action handler [open §11]
                         }
                     )
                 }

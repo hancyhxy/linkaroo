@@ -6,8 +6,19 @@ import SwiftUI
 // M4 — algorithm legibility via visible match reasons.
 
 public struct VolunteerMatchView: View {
-    public init() {}
+    public let originatingPost: ABQAPost?
+    public let onStartChat: (ABVolunteer) -> Void
+    public let onBack: () -> Void
 
+    public init(
+        originatingPost: ABQAPost? = nil,
+        onStartChat: @escaping (ABVolunteer) -> Void = { _ in },
+        onBack: @escaping () -> Void = {}
+    ) {
+        self.originatingPost = originatingPost
+        self.onStartChat = onStartChat
+        self.onBack = onBack
+    }
 
     // MARK: Parameters (spec §6)
     private var matches: [ABMatchResult] { ABMockData.matchResults }
@@ -29,7 +40,7 @@ public struct VolunteerMatchView: View {
                 VStack(alignment: .leading, spacing: ABSpacing.s6) {
                     ABPageHero(
                         headline: "Best Matches for You",
-                        subtitle: "Volunteers matched to your profile, needs, and language"
+                        subtitle: subtitleCopy
                     )
 
                     if let top = topChoice {
@@ -42,10 +53,16 @@ public struct VolunteerMatchView: View {
                 .padding(.bottom, ABSpacing.s8)
             }
 
-            ABBackBar(title: "Volunteer", onBack: {
-                // §6.A1 — back to §5 [open §11]
-            })
+            ABBackBar(title: "Volunteer", onBack: onBack)
         }
+        .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var subtitleCopy: String {
+        if let originatingPost {
+            return "Matched for your question on \"\(originatingPost.title)\""
+        }
+        return "Volunteers matched to your profile, needs, and language"
     }
 
     private func topChoiceSection(_ result: ABMatchResult) -> some View {
@@ -75,8 +92,7 @@ public struct VolunteerMatchView: View {
                     bio: result.volunteer.bio
                 ),
                 onCTA: {
-                    // §6.A2 — → §8 Chat; mount ABSharedContext per §10.3
-                    // [open §11 — propagation mechanism]
+                    onStartChat(result.volunteer)
                 }
             )
 
@@ -135,7 +151,7 @@ public struct VolunteerMatchView: View {
                             bio: result.volunteer.bio
                         ),
                         onCTA: {
-                            // §6.A3 — → §8 Chat [open §11]
+                            onStartChat(result.volunteer)
                         }
                     )
                 }

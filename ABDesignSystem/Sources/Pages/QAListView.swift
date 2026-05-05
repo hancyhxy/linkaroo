@@ -6,12 +6,25 @@ import SwiftUI
 // Reddit-style Q&A list with category filter + CTA banner.
 
 public struct QAListView: View {
-    public init() {}
+    public let category: ABServiceCategoryType?
+    public let onSelectPost: (ABQAPost) -> Void
+    public let onAskQuestion: () -> Void
+    public let onBack: () -> Void
 
+    public init(
+        category: ABServiceCategoryType? = nil,
+        onSelectPost: @escaping (ABQAPost) -> Void = { _ in },
+        onAskQuestion: @escaping () -> Void = {},
+        onBack: @escaping () -> Void = {}
+    ) {
+        self.category = category
+        self.onSelectPost = onSelectPost
+        self.onAskQuestion = onAskQuestion
+        self.onBack = onBack
+    }
 
     // MARK: Parameters (spec §4)
     @State private var selectedCategoryId: String = "all"
-    @State private var selectedTab: ABTab = .community
 
     private var categories: [ABCategoryTabItem] {
         [
@@ -23,9 +36,12 @@ public struct QAListView: View {
         ]
     }
 
-    // §4 filter rule [open §11] — show all until specified
     private var filteredPosts: [ABQAPost] {
-        ABMockData.qaPosts
+        if let category {
+            let filtered = ABMockData.qaPosts.filter { $0.category == category }
+            return filtered.isEmpty ? ABMockData.qaPosts : filtered
+        }
+        return ABMockData.qaPosts
     }
 
     public var body: some View {
@@ -39,7 +55,7 @@ public struct QAListView: View {
                         bodyText: "Our community of locals and seniors are here to help.",
                         ctaTitle: "Ask a Question",
                         onCTA: {
-                            // §4.A1 [open §11]
+                            onAskQuestion()
                         }
                     )
                     .padding(.horizontal, ABLayout.pagePadding)
@@ -63,7 +79,7 @@ public struct QAListView: View {
                                     topAnswer: post.topAnswer?.excerpt
                                 ),
                                 onTap: {
-                                    // §4.A3 — → §5 Q&A Detail [open §11]
+                                    onSelectPost(post)
                                 }
                             )
                             .padding(.horizontal, ABLayout.pagePadding)
@@ -71,19 +87,19 @@ public struct QAListView: View {
                     }
                 }
                 .padding(.top, (ABLayout.headerHeight - 8) + ABSpacing.s4)
-                .padding(.bottom, ABLayout.tabBarHeight + ABSpacing.s4)
+                .padding(.bottom, ABSpacing.s8)
             }
 
-            ABBackBar(title: "Q&A & Guides", onBack: {
-                // §4 back navigation [open §11]
-            })
-
-            // §10.1: tab bar visibility on §4 [open §11] — showing for now
-            VStack {
-                Spacer()
-                ABTabBar(selectedTab: $selectedTab)
-            }
+            ABBackBar(title: titleForCategory, onBack: onBack)
         }
+        .toolbar(.hidden, for: .navigationBar)
+    }
+
+    private var titleForCategory: String {
+        if let category {
+            return "\(category.rawValue) Q&A"
+        }
+        return "Q&A & Guides"
     }
 }
 
