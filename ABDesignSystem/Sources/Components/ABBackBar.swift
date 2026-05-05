@@ -56,6 +56,11 @@ struct ABBackBar: View {
             Color.abSurface
                 .opacity(0.85)
                 .background(.ultraThinMaterial)
+                // Extend the frosted background up under the status bar
+                // so the bar reads as one continuous strip instead of
+                // a band sitting under a solid surface stripe. Content
+                // (chevron + title) still respects the safe area.
+                .ignoresSafeArea(.container, edges: .top)
         )
     }
 }
