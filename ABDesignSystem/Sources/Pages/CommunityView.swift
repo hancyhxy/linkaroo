@@ -3,14 +3,10 @@ import SwiftUI
 // MARK: - CommunityView
 //
 // §3 Community — see docs/spec.md §3.
-// Two segments: Discussions / People to help.
-
-enum CommunitySegment: String, CaseIterable, CustomStringConvertible {
-    case discussions = "Discussions"
-    case peopleYouCanHelp = "People to help"
-
-    public var description: String { rawValue }
-}
+// Single-page Community hub: a horizontal "People You Can Help" carousel
+// at the top + a vertical "Questions You Can Answer" list below.
+// No internal segmented control — the previous Discussions / Messages
+// split was folded into the bottom tab bar (Messages is its own tab now).
 
 public struct CommunityView: View {
     public let onSelectPost: (ABQAPost) -> Void
@@ -25,8 +21,6 @@ public struct CommunityView: View {
     }
 
     // MARK: Parameters (spec §3)
-    @State private var segment: CommunitySegment = .discussions
-
     private var qaPosts: [ABQAPost] { ABMockData.qaPosts }
     private var helpRequests: [ABHelpRequest] { ABMockData.helpRequests }
 
@@ -35,19 +29,9 @@ public struct CommunityView: View {
             Color.abSurface.ignoresSafeArea()
 
             ScrollView {
-                VStack(alignment: .leading, spacing: ABSpacing.s5) {
-                    ABSegmentedControl(
-                        options: CommunitySegment.allCases,
-                        selected: $segment
-                    )
-                    .padding(.horizontal, ABLayout.pagePadding)
-
-                    switch segment {
-                    case .discussions:
-                        discussionsBody
-                    case .peopleYouCanHelp:
-                        peopleToHelpBody
-                    }
+                VStack(alignment: .leading, spacing: ABSpacing.s6) {
+                    peopleYouCanHelpSection
+                    questionsYouCanAnswerSection
                 }
                 .padding(.top, ABSpacing.s4)
                 .padding(.bottom, ABSpacing.s8)
@@ -58,37 +42,8 @@ public struct CommunityView: View {
         }
     }
 
-    // MARK: Discussions
-    private var discussionsBody: some View {
-        VStack(alignment: .leading, spacing: ABSpacing.s3) {
-            ABSectionTitle("Questions You Can Answer", level: .section)
-                .padding(.horizontal, ABLayout.pagePadding)
-
-            VStack(spacing: ABSpacing.s3) {
-                ForEach(qaPosts) { post in
-                    ABQAPostCard(
-                        post: ABQAPostData(
-                            author: post.author.username,
-                            timeAgo: post.timeAgoString,
-                            title: post.title,
-                            preview: post.preview,
-                            tags: post.tags.map { (text: $0.text, style: tagStyle(for: $0.type)) },
-                            voteCount: post.voteCount,
-                            commentCount: post.commentCount,
-                            topAnswer: post.topAnswer?.excerpt
-                        ),
-                        onTap: {
-                            onSelectPost(post)
-                        }
-                    )
-                    .padding(.horizontal, ABLayout.pagePadding)
-                }
-            }
-        }
-    }
-
-    // MARK: People to help
-    private var peopleToHelpBody: some View {
+    // MARK: People You Can Help — horizontal carousel
+    private var peopleYouCanHelpSection: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
             ABSectionTitle("People You Can Help", level: .section)
                 .padding(.horizontal, ABLayout.pagePadding)
@@ -120,6 +75,35 @@ public struct CommunityView: View {
                     }
                 }
                 .padding(.horizontal, ABLayout.pagePadding)
+            }
+        }
+    }
+
+    // MARK: Questions You Can Answer — vertical list
+    private var questionsYouCanAnswerSection: some View {
+        VStack(alignment: .leading, spacing: ABSpacing.s3) {
+            ABSectionTitle("Questions You Can Answer", level: .section)
+                .padding(.horizontal, ABLayout.pagePadding)
+
+            VStack(spacing: ABSpacing.s3) {
+                ForEach(qaPosts) { post in
+                    ABQAPostCard(
+                        post: ABQAPostData(
+                            author: post.author.username,
+                            timeAgo: post.timeAgoString,
+                            title: post.title,
+                            preview: post.preview,
+                            tags: post.tags.map { (text: $0.text, style: tagStyle(for: $0.type)) },
+                            voteCount: post.voteCount,
+                            commentCount: post.commentCount,
+                            topAnswer: post.topAnswer?.excerpt
+                        ),
+                        onTap: {
+                            onSelectPost(post)
+                        }
+                    )
+                    .padding(.horizontal, ABLayout.pagePadding)
+                }
             }
         }
     }
