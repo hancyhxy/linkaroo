@@ -51,9 +51,13 @@ docs/
 
 ## Quick start
 
+There are two ways to run this prototype, depending on what you want to see.
+
+### A. Single-page Canvas preview (design-system view)
+
 1. Open `ABDesignSystem/Package.swift` in Xcode.
-2. In the project navigator, click any file under `Sources/Pages/`.
-3. Press `⌥⌘↵` to reveal the Canvas; choose **iPhone 15 Pro** (or **iPhone Dynamic Island**) as the preview target.
+2. In the project navigator, click any file under `Sources/Pages/` or `Sources/Components/`.
+3. Press `⌥⌘↵` to reveal the Canvas; choose an **iPhone 16 Pro** simulator as the preview target.
 4. Click the live-preview ▶ button on the Canvas toolbar — interactions (scroll, tap, type) work in this mode.
 
 To verify the package builds:
@@ -61,6 +65,24 @@ To verify the package builds:
 cd ABDesignSystem
 swift build
 ```
+
+### B. Full iOS App in the simulator (functional view)
+
+The App Target is generated declaratively from `AussieBridgeApp/project.yml` via [XcodeGen](https://github.com/yonaskolb/XcodeGen). The committed `.xcodeproj` will work as-is, but if you want to regenerate it locally:
+
+```sh
+brew install xcodegen           # if not already installed
+cd AussieBridgeApp
+xcodegen generate
+```
+
+Then:
+
+1. Open `AussieBridgeApp/AussieBridge.xcodeproj` in Xcode.
+2. Select an **iPhone 16 Pro** simulator from the run-destination menu.
+3. Press ▶ (or `⌘R`) to build and run.
+
+The launch flow is: Onboarding → Home → tap any service tile → Q&A list → tap a post → Q&A Detail → "Match a volunteer" → Volunteer Match (originating post surfaces as a subtitle) → "Start chat" → auto-hops to Messages tab → Chat (with shared-context card). Tap the shared-context card to round-trip back to the originating Q&A in Home tab. The Profile tab shows the user record captured during onboarding.
 
 ## Design rationale
 
