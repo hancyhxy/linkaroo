@@ -32,3 +32,8 @@ node_modules/
 *.local
 .env
 .env.*
+
+# Throwaway prototype sandbox — local only, never committed.
+# Spec re-implementations of Pages/* live here while we test spec.md
+# fidelity. Delete the directory to discard.
+ABDesignSystem/Sources/Prototypes/
