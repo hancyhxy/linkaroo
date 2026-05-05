@@ -2,28 +2,28 @@ import SwiftUI
 
 // MARK: - Help Card Data
 
-struct ABHelpCardData {
-    let name: String
-    let subtitle: String
-    let avatarURL: URL?
-    var tags: [(text: String, style: ABTagStyle)] = []
-    var quote: String = ""
-    var achievementText: String? = nil
-    var achievementIcon: String = "medal"
-    var achievementColor: Color = Color.abTagTopAdviceText
-    var achievementBg: Color = Color.abAccentButter
-    var ctaTitle: String = "Answer"
+public struct ABHelpCardData {
+    public let name: String
+    public let subtitle: String
+    public let avatarURL: URL?
+    public var tags: [(text: String, style: ABTagStyle)] = []
+    public var quote: String = ""
+    public var achievementText: String? = nil
+    public var achievementIcon: String = "medal"
+    public var achievementColor: Color = Color.abTagTopAdviceText
+    public var achievementBg: Color = Color.abAccentButter
+    public var ctaTitle: String = "Answer"
 }
 
 // MARK: - ABHelpCard
 
 /// Horizontal scroll card for community "People You Can Help" section.
 /// Fixed width at 280pt.
-struct ABHelpCard: View {
-    let data: ABHelpCardData
-    var onCTA: (() -> Void)? = nil
+public struct ABHelpCard: View {
+    public let data: ABHelpCardData
+    public var onCTA: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
             // Header
             HStack(spacing: ABSpacing.s3) {

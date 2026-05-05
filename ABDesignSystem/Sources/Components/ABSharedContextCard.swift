@@ -4,12 +4,12 @@ import SwiftUI
 
 /// Context reference card shown at the top of chat conversations,
 /// linking back to the original Q&A post.
-struct ABSharedContextCard: View {
-    let title: String
-    var linkText: String = "View Q&A Post"
-    var onTap: (() -> Void)? = nil
+public struct ABSharedContextCard: View {
+    public let title: String
+    public var linkText: String = "View Q&A Post"
+    public var onTap: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         Button(action: { onTap?() }) {
             HStack(spacing: 0) {
                 // Left accent border

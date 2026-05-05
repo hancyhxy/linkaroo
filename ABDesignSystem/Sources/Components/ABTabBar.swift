@@ -2,14 +2,14 @@ import SwiftUI
 
 // MARK: - Tab Definition
 
-enum ABTab: String, CaseIterable, Identifiable {
+public enum ABTab: String, CaseIterable, Identifiable {
     case home = "Home"
     case community = "Community"
     case profile = "Profile"
 
-    var id: String { rawValue }
+    public var id: String { rawValue }
 
-    var icon: String {
+    public var icon: String {
         switch self {
         case .home: return "house.fill"
         case .community: return "person.2.fill"
@@ -20,10 +20,10 @@ enum ABTab: String, CaseIterable, Identifiable {
 
 // MARK: - ABTabBar
 
-struct ABTabBar: View {
+public struct ABTabBar: View {
     @Binding var selectedTab: ABTab
 
-    var body: some View {
+    public var body: some View {
         HStack {
             ForEach(ABTab.allCases) { tab in
                 tabItem(tab)

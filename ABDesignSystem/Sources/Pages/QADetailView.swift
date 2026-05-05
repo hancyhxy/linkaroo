@@ -8,13 +8,13 @@ import SwiftUI
 struct QADetailView: View {
 
     // MARK: Parameters (spec §5)
-    let post: ABQAPost
+    public let post: ABQAPost
 
-    init(post: ABQAPost = ABMockData.qaPosts[0]) {
+    public init(post: ABQAPost = ABMockData.qaPosts[0]) {
         self.post = post
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 

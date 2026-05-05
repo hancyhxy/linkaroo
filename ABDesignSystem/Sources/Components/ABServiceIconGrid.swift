@@ -2,22 +2,22 @@ import SwiftUI
 
 // MARK: - Service Item
 
-struct ABServiceItem: Identifiable {
-    let id: String
-    let label: String
-    var icon: String = "questionmark.circle"
+public struct ABServiceItem: Identifiable {
+    public let id: String
+    public let label: String
+    public var icon: String = "questionmark.circle"
 }
 
 // MARK: - ABServiceIconGrid
 
 /// 5-column grid of service category icons (homepage "Essential Services").
-struct ABServiceIconGrid: View {
-    let items: [ABServiceItem]
-    var onTap: ((ABServiceItem) -> Void)? = nil
+public struct ABServiceIconGrid: View {
+    public let items: [ABServiceItem]
+    public var onTap: ((ABServiceItem) -> Void)? = nil
 
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 12), count: 5)
 
-    var body: some View {
+    public var body: some View {
         LazyVGrid(columns: columns, spacing: 12) {
             ForEach(items) { item in
                 serviceIcon(item)
@@ -56,8 +56,8 @@ struct ABServiceIconGrid: View {
 
 // MARK: - Default Service Items
 
-extension ABServiceItem {
-    static let defaults: [ABServiceItem] = [
+public extension ABServiceItem {
+    public static let defaults: [ABServiceItem] = [
         ABServiceItem(id: "job", label: "Job", icon: "briefcase.fill"),
         ABServiceItem(id: "housing", label: "Housing", icon: "house.fill"),
         ABServiceItem(id: "healthcare", label: "Healthcare", icon: "cross.case.fill"),

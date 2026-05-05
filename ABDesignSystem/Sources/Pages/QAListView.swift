@@ -26,7 +26,7 @@ struct QAListView: View {
         ABMockData.qaPosts
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 

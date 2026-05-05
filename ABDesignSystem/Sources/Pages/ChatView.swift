@@ -9,13 +9,13 @@ import SwiftUI
 struct ChatView: View {
 
     // MARK: Parameters (spec §8)
-    let conversation: ABConversation
-    let messages: [ABChatMessage]
-    let actions: [ABContextAction]
+    public let conversation: ABConversation
+    public let messages: [ABChatMessage]
+    public let actions: [ABContextAction]
 
     @State private var draft: String = ""
 
-    init(
+    public init(
         conversation: ABConversation = ABMockData.conversations[0],
         messages: [ABChatMessage] = ABMockData.chatMessages,
         actions: [ABContextAction] = ABMockData.contextActions
@@ -29,7 +29,7 @@ struct ChatView: View {
         conversation.sharedContext ?? ABMockData.chatContext
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack {
             Color.abSurface.ignoresSafeArea()
 

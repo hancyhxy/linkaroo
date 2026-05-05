@@ -2,20 +2,20 @@ import SwiftUI
 
 // MARK: - Chat Bubble Alignment
 
-enum ABChatAlignment {
+public enum ABChatAlignment {
     case incoming
     case outgoing
 }
 
 // MARK: - ABChatBubble
 
-struct ABChatBubble: View {
-    let text: String
-    let timestamp: String
-    var alignment: ABChatAlignment = .incoming
-    var avatarContent: ABAvatarContent? = nil
+public struct ABChatBubble: View {
+    public let text: String
+    public let timestamp: String
+    public var alignment: ABChatAlignment = .incoming
+    public var avatarContent: ABAvatarContent? = nil
 
-    var body: some View {
+    public var body: some View {
         HStack(alignment: .bottom, spacing: ABSpacing.s2) {
             if alignment == .incoming {
                 incomingLayout
@@ -78,11 +78,11 @@ struct ABChatBubble: View {
 // MARK: - Custom Bubble Shape with Asymmetric Corners
 
 struct ChatBubbleShape: Shape {
-    let alignment: ABChatAlignment
-    let cornerRadius: CGFloat = 16
-    let flatCorner: CGFloat = 6
+    public let alignment: ABChatAlignment
+    public let cornerRadius: CGFloat = 16
+    public let flatCorner: CGFloat = 6
 
-    func path(in rect: CGRect) -> Path {
+    public func path(in rect: CGRect) -> Path {
         let tl: CGFloat
         let tr: CGFloat
         let bl: CGFloat

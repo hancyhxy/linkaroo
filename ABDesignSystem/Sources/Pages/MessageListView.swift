@@ -9,7 +9,7 @@ enum MessageSegment: String, CaseIterable, CustomStringConvertible {
     case all = "All"
     case unread = "Unread"
 
-    var description: String { rawValue }
+    public var description: String { rawValue }
 }
 
 struct MessageListView: View {
@@ -29,7 +29,7 @@ struct MessageListView: View {
         ABMockData.conversations.filter(\.isUnread).count
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .bottom) {
             Color.abSurface.ignoresSafeArea()
 

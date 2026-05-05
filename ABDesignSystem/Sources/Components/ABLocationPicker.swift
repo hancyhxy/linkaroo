@@ -4,13 +4,13 @@ import SwiftUI
 
 /// Static location picker for onboarding — display selected city + state, with a "Detect" affordance
 /// and a stylised mini-map placeholder. Tapping the row triggers `onTap`.
-struct ABLocationPicker: View {
-    let city: String
-    let state: String
-    var onDetect: (() -> Void)? = nil
-    var onTap: (() -> Void)? = nil
+public struct ABLocationPicker: View {
+    public let city: String
+    public let state: String
+    public var onDetect: (() -> Void)? = nil
+    public var onTap: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: ABSpacing.s3) {
             // Row: pin + city/state + detect
             HStack(spacing: ABSpacing.s3) {

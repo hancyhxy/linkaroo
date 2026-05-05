@@ -14,7 +14,7 @@ struct HomeView: View {
     private var featuredGuide: ABGuide { ABMockData.guides[0] }
     private var recommendations: [ABGuide] { Array(ABMockData.guides.dropFirst()) }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .bottom) {
             Color.abSurface.ignoresSafeArea()
 

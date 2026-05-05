@@ -4,13 +4,13 @@ import SwiftUI
 
 /// Bottom-pinned chat composer wrapping `ABTextInput(.chat)` with safe-area padding
 /// and a soft separator to lift it above the message stream.
-struct ABChatInputArea: View {
+public struct ABChatInputArea: View {
     @Binding var text: String
-    var placeholder: String = "Type a message..."
-    var onSend: (() -> Void)? = nil
-    var onPlus: (() -> Void)? = nil
+    public var placeholder: String = "Type a message..."
+    public var onSend: (() -> Void)? = nil
+    public var onPlus: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             Rectangle()
                 .fill(Color.abBorderHairline.opacity(0.5))

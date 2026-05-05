@@ -3,10 +3,10 @@ import SwiftUI
 // MARK: - ABDateSeparator
 
 /// Centered pill separator used in chat for date dividers (e.g., "TODAY").
-struct ABDateSeparator: View {
-    let text: String
+public struct ABDateSeparator: View {
+    public let text: String
 
-    var body: some View {
+    public var body: some View {
         HStack {
             Spacer()
             Text(text.uppercased())

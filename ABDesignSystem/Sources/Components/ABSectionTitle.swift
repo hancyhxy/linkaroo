@@ -13,7 +13,7 @@ import SwiftUI
 ///                Lower weight than `.major`, still title-cased.
 /// - `.label`   — tightest fieldset-style label, all-caps with letter
 ///                tracking (e.g. tiny "Quick filters" above a chip row).
-enum ABSectionTitleLevel {
+public enum ABSectionTitleLevel {
     case major
     case section
     case label
@@ -25,16 +25,16 @@ enum ABSectionTitleLevel {
 /// `sectionHeading(_:)` helpers each page would otherwise re-invent.
 /// Spec.md references this as `section title (level: <case>)` in the
 /// §0.4 control vocabulary.
-struct ABSectionTitle: View {
-    let text: String
-    var level: ABSectionTitleLevel = .section
+public struct ABSectionTitle: View {
+    public let text: String
+    public var level: ABSectionTitleLevel = .section
 
-    init(_ text: String, level: ABSectionTitleLevel = .section) {
+    public init(_ text: String, level: ABSectionTitleLevel = .section) {
         self.text = text
         self.level = level
     }
 
-    var body: some View {
+    public var body: some View {
         Text(displayText)
             .font(font)
             .fontWeight(weight)

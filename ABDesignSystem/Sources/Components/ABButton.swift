@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Button Style
 
-enum ABButtonVariant {
+public enum ABButtonVariant {
     /// Gradient fill (primary-gradient), white text, blue shadow
     case primaryGradient
     /// White bg, primary-bright border, primary text
@@ -15,7 +15,7 @@ enum ABButtonVariant {
 
 // MARK: - Button Size
 
-enum ABButtonSize {
+public enum ABButtonSize {
     /// 56-64pt height — hero CTAs, main actions
     case large
     /// 48pt height — standard buttons
@@ -23,7 +23,7 @@ enum ABButtonSize {
     /// 36pt height — compact actions, inline
     case small
 
-    var verticalPadding: CGFloat {
+    public var verticalPadding: CGFloat {
         switch self {
         case .large: return 16
         case .medium: return 12
@@ -31,7 +31,7 @@ enum ABButtonSize {
         }
     }
 
-    var horizontalPadding: CGFloat {
+    public var horizontalPadding: CGFloat {
         switch self {
         case .large: return 40
         case .medium: return 24
@@ -39,7 +39,7 @@ enum ABButtonSize {
         }
     }
 
-    var font: Font {
+    public var font: Font {
         switch self {
         case .large: return .abLabelLg
         case .medium: return .abLabelLg
@@ -50,23 +50,23 @@ enum ABButtonSize {
 
 // MARK: - ABButton View
 
-struct ABButton: View {
-    let title: String
-    var variant: ABButtonVariant = .primaryGradient
-    var size: ABButtonSize = .medium
-    var icon: String? = nil
-    var iconPosition: IconPosition = .leading
-    var fullWidth: Bool = false
-    var isDisabled: Bool = false
-    let action: () -> Void
+public struct ABButton: View {
+    public let title: String
+    public var variant: ABButtonVariant = .primaryGradient
+    public var size: ABButtonSize = .medium
+    public var icon: String? = nil
+    public var iconPosition: IconPosition = .leading
+    public var fullWidth: Bool = false
+    public var isDisabled: Bool = false
+    public let action: () -> Void
 
-    enum IconPosition {
+    public enum IconPosition {
         case leading, trailing
     }
 
     @State private var isPressed = false
 
-    var body: some View {
+    public var body: some View {
         Button(action: action) {
             HStack(spacing: 8) {
                 if let icon, iconPosition == .leading {
@@ -153,8 +153,8 @@ struct ABButton: View {
 
 // MARK: - Press Animation Style
 
-struct ABPressStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
+public struct ABPressStyle: ButtonStyle {
+    public func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
             .animation(.spring(response: 0.3, dampingFraction: 0.7), value: configuration.isPressed)
@@ -164,13 +164,13 @@ struct ABPressStyle: ButtonStyle {
 // MARK: - Type-erased ViewModifier helper
 
 private struct AnyViewModifier: ViewModifier {
-    let transform: (AnyView) -> AnyView
+    public let transform: (AnyView) -> AnyView
 
     init<V: View>(_ transform: @escaping (AnyView) -> V) {
         self.transform = { AnyView(transform($0)) }
     }
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         transform(AnyView(content))
     }
 }

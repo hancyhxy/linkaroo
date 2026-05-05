@@ -4,14 +4,14 @@ import SwiftUI
 
 /// Bottom-pinned action bar with optional skip text-button + a primary CTA.
 /// Used at the bottom of onboarding-style flows.
-struct ABStickyFooter: View {
-    let primaryTitle: String
-    var skipTitle: String? = "Skip for now"
-    var isPrimaryDisabled: Bool = false
-    var onPrimary: (() -> Void)? = nil
-    var onSkip: (() -> Void)? = nil
+public struct ABStickyFooter: View {
+    public let primaryTitle: String
+    public var skipTitle: String? = "Skip for now"
+    public var isPrimaryDisabled: Bool = false
+    public var onPrimary: (() -> Void)? = nil
+    public var onSkip: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: ABSpacing.s4) {
             if let skipTitle {
                 ABButton(title: skipTitle, variant: .text, size: .medium) {

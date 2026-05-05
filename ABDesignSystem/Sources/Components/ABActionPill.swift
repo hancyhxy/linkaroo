@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Action Pill Variant
 
-enum ABActionPillVariant {
+public enum ABActionPillVariant {
     case blue
     case orange
 }
@@ -11,13 +11,13 @@ enum ABActionPillVariant {
 
 /// Horizontal-scroll pill with leading icon. Used in chat for context actions
 /// (e.g. "Share My Profile Tags", "Suggest a 5-min call").
-struct ABActionPill: View {
-    let text: String
-    let icon: String
-    var variant: ABActionPillVariant = .blue
-    var onTap: (() -> Void)? = nil
+public struct ABActionPill: View {
+    public let text: String
+    public let icon: String
+    public var variant: ABActionPillVariant = .blue
+    public var onTap: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         Button(action: { onTap?() }) {
             HStack(spacing: 6) {
                 Image(systemName: icon)

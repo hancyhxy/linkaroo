@@ -19,15 +19,15 @@ import SwiftUI
 // pages (Q&A Detail, Volunteer Match) that already lean on the
 // taller 64pt header treatment.
 
-struct ABBackBar: View {
-    var title: String? = nil
-    var onBack: (() -> Void)? = nil
+public struct ABBackBar: View {
+    public var title: String? = nil
+    public var onBack: (() -> Void)? = nil
 
     /// Slimmer than ABHeader so the page hero below feels editorial.
     /// Mockup `personalization.html` uses py-3 ≈ 56pt total.
     private let height: CGFloat = ABLayout.headerHeight - 8
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: ABSpacing.s3) {
             Button(action: { onBack?() }) {
                 Image(systemName: "chevron.left")

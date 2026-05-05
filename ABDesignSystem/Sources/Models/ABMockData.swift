@@ -4,11 +4,11 @@ import Foundation
 // MARK: - Mock Data (用于 Xcode Preview 和开发阶段)
 // ============================================================================
 
-enum ABMockData {
+public enum ABMockData {
 
     // MARK: - Users
 
-    static let currentUser = ABUser(
+    public static let currentUser = ABUser(
         displayName: "Amara D.",
         username: "u/amara_d",
         preferredLanguage: .english,
@@ -18,7 +18,7 @@ enum ABMockData {
         isOnline: true
     )
 
-    static let meiLin = ABUser(
+    public static let meiLin = ABUser(
         displayName: "Mei Lin",
         username: "u/mei_lin",
         preferredLanguage: .mandarin,
@@ -28,7 +28,7 @@ enum ABMockData {
         isOnline: false
     )
 
-    static let davidO = ABUser(
+    public static let davidO = ABUser(
         displayName: "David O.",
         username: "u/david_o",
         currentStatus: .immigrantStudent,
@@ -36,14 +36,14 @@ enum ABMockData {
         isOnline: true
     )
 
-    static let rahulK = ABUser(
+    public static let rahulK = ABUser(
         displayName: "Rahul K.",
         username: "u/rahul_k",
         currentStatus: .working,
         durationInAustralia: .oneYearPlus
     )
 
-    static let sarahL = ABUser(
+    public static let sarahL = ABUser(
         displayName: "Sarah L.",
         username: "u/sarah_l",
         currentStatus: .working,
@@ -51,7 +51,7 @@ enum ABMockData {
         isOnline: true
     )
 
-    static let sarahM = ABUser(
+    public static let sarahM = ABUser(
         displayName: "Sarah M.",
         username: "u/sarah_m",
         currentStatus: .immigrantStudent
@@ -59,7 +59,7 @@ enum ABMockData {
 
     // MARK: - Volunteers
 
-    static let volunteerSarah = ABVolunteer(
+    public static let volunteerSarah = ABVolunteer(
         user: sarahL,
         role: "Senior Community Advisor",
         rating: 4.9,
@@ -73,7 +73,7 @@ enum ABMockData {
         specializations: ["Housing", "Visa"]
     )
 
-    static let volunteerDavid = ABVolunteer(
+    public static let volunteerDavid = ABVolunteer(
         user: ABUser(displayName: "David K.", username: "u/david_k"),
         role: "Immigration Lawyer",
         rating: 4.7,
@@ -86,7 +86,7 @@ enum ABMockData {
         specializations: ["Visa", "Legal"]
     )
 
-    static let volunteerChen = ABVolunteer(
+    public static let volunteerChen = ABVolunteer(
         user: ABUser(displayName: "Chen W.", username: "u/chen_w"),
         role: "Tech Professional & Mentor",
         rating: 4.5,
@@ -101,7 +101,7 @@ enum ABMockData {
 
     // MARK: - Match Results
 
-    static let matchResults: [ABMatchResult] = [
+    public static let matchResults: [ABMatchResult] = [
         ABMatchResult(volunteer: volunteerSarah, matchPercentage: 98, isTopChoice: true,
                       matchReasons: ["Same university background", "Housing expertise matches your need"]),
         ABMatchResult(volunteer: volunteerDavid, matchPercentage: 82,
@@ -112,7 +112,7 @@ enum ABMockData {
 
     // MARK: - Q&A Posts
 
-    static let qaPosts: [ABQAPost] = [
+    public static let qaPosts: [ABQAPost] = [
         ABQAPost(
             author: ABUser(displayName: "SydneySilver", username: "u/SydneySilver"),
             title: "What are the best suburbs for seniors in Sydney with good public transport?",
@@ -166,7 +166,7 @@ enum ABMockData {
 
     // MARK: - Conversations
 
-    static let conversations: [ABConversation] = [
+    public static let conversations: [ABConversation] = [
         ABConversation(
             participant: davidO,
             lastMessage: "Thanks for the engineering intern...",
@@ -195,7 +195,7 @@ enum ABMockData {
 
     // MARK: - Chat Messages
 
-    static let chatMessages: [ABChatMessage] = [
+    public static let chatMessages: [ABChatMessage] = [
         ABChatMessage(
             senderID: volunteerSarah.id,
             text: "Hello! I see you're looking into renting rights in Sydney. Since I'm also a former international student, I've been through this. How can I help?",
@@ -212,14 +212,14 @@ enum ABMockData {
 
     // MARK: - Shared Context
 
-    static let chatContext = ABSharedContext(
+    public static let chatContext = ABSharedContext(
         title: "Renting rights when landlord sells",
         relatedPostID: qaPosts[1].id
     )
 
     // MARK: - Context Actions
 
-    static let contextActions: [ABContextAction] = [
+    public static let contextActions: [ABContextAction] = [
         ABContextAction(text: "Share My Profile Tags", icon: "person.text.rectangle", variant: .blue),
         ABContextAction(text: "Ask about the Q&A post", icon: "text.bubble", variant: .blue),
         ABContextAction(text: "Suggest a 5-min call", icon: "phone.fill", variant: .orange),
@@ -227,13 +227,13 @@ enum ABMockData {
 
     // MARK: - Service Categories
 
-    static let serviceCategories: [ABServiceCategory] = ABServiceCategoryType.allCases.enumerated().map { index, type in
+    public static let serviceCategories: [ABServiceCategory] = ABServiceCategoryType.allCases.enumerated().map { index, type in
         ABServiceCategory(type: type, displayOrder: index)
     }
 
     // MARK: - Guides
 
-    static let guides: [ABGuide] = [
+    public static let guides: [ABGuide] = [
         ABGuide(
             title: "The First 7 Days Checklist",
             description: "Everything you need to do in your first week in Australia - from getting a phone number to opening a bank account.",
@@ -266,7 +266,7 @@ enum ABMockData {
 
     // MARK: - Help Requests
 
-    static let helpRequests: [ABHelpRequest] = [
+    public static let helpRequests: [ABHelpRequest] = [
         ABHelpRequest(
             requester: meiLin,
             subtitle: "Just arrived in Sydney",

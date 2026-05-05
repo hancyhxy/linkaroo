@@ -3,12 +3,12 @@ import SwiftUI
 // MARK: - ABTipCard
 
 /// Warm peach tip card — used for advisory/contextual hints (e.g. profile completion).
-struct ABTipCard: View {
-    let title: String
-    let bodyText: String
-    var icon: String = "lightbulb.fill"
+public struct ABTipCard: View {
+    public let title: String
+    public let bodyText: String
+    public var icon: String = "lightbulb.fill"
 
-    var body: some View {
+    public var body: some View {
         ABCard(variant: .tip) {
             HStack(alignment: .top, spacing: ABSpacing.s4) {
                 ZStack {

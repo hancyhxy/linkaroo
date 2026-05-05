@@ -2,26 +2,26 @@ import SwiftUI
 
 // MARK: - Volunteer Hero Data
 
-struct ABVolunteerHeroData {
-    let name: String
-    let role: String
-    let imageURL: URL?
-    var matchPercent: Int = 0
-    var rating: Double = 0
-    var helpedCount: Int = 0
-    var skills: [(text: String, style: ABTagStyle)] = []
-    var bio: String = ""
+public struct ABVolunteerHeroData {
+    public let name: String
+    public let role: String
+    public let imageURL: URL?
+    public var matchPercent: Int = 0
+    public var rating: Double = 0
+    public var helpedCount: Int = 0
+    public var skills: [(text: String, style: ABTagStyle)] = []
+    public var bio: String = ""
 }
 
 // MARK: - ABVolunteerHeroCard
 
 /// Full-width hero card for the "Best Fit" volunteer match.
-struct ABVolunteerHeroCard: View {
-    let data: ABVolunteerHeroData
-    var ctaTitle: String = "View Full Profile & Message"
-    var onCTA: (() -> Void)? = nil
+public struct ABVolunteerHeroCard: View {
+    public let data: ABVolunteerHeroData
+    public var ctaTitle: String = "View Full Profile & Message"
+    public var onCTA: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         VStack(spacing: 0) {
             // Image section
             ZStack(alignment: .bottom) {
@@ -151,14 +151,14 @@ struct ABVolunteerHeroCard: View {
 
 /// Horizontal wrapping layout for tags/chips.
 struct FlowLayout: Layout {
-    var spacing: CGFloat = 6
+    public var spacing: CGFloat = 6
 
-    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+    public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
         let result = arrange(proposal: proposal, subviews: subviews)
         return result.size
     }
 
-    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+    public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         let result = arrange(proposal: proposal, subviews: subviews)
         for (index, position) in result.positions.enumerated() {
             subviews[index].place(

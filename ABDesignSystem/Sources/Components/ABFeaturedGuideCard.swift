@@ -3,14 +3,14 @@ import SwiftUI
 // MARK: - ABFeaturedGuideCard
 
 /// Dark editorial card for the home page "Featured Guide" — gold badge + title + description + CTA.
-struct ABFeaturedGuideCard: View {
-    let title: String
-    let description: String
-    var badgeText: String = "FEATURED GUIDE"
-    var ctaTitle: String = "Start Reading"
-    var onTap: (() -> Void)? = nil
+public struct ABFeaturedGuideCard: View {
+    public let title: String
+    public let description: String
+    public var badgeText: String = "FEATURED GUIDE"
+    public var ctaTitle: String = "Start Reading"
+    public var onTap: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         ABCard(variant: .featured) {
             VStack(alignment: .leading, spacing: ABSpacing.s3) {
                 ABTag(text: badgeText, style: .gold, size: .small)

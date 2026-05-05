@@ -3,11 +3,11 @@ import SwiftUI
 // MARK: - ABChipPicker
 
 /// Wrapping flow of selectable chips. Used for compact multi-option pickers (e.g. duration in onboarding).
-struct ABChipPicker<T: Hashable & CustomStringConvertible>: View {
-    let options: [T]
+public struct ABChipPicker<T: Hashable & CustomStringConvertible>: View {
+    public let options: [T]
     @Binding var selected: T
 
-    var body: some View {
+    public var body: some View {
         FlowLayout(spacing: ABSpacing.s2) {
             ForEach(Array(options.enumerated()), id: \.offset) { _, option in
                 chip(option)
@@ -52,7 +52,7 @@ private enum DemoDuration: String, CaseIterable, CustomStringConvertible {
     case sixToTwelve = "6–12 months"
     case oneYearPlus = "1 year+"
 
-    var description: String { rawValue }
+    public var description: String { rawValue }
 }
 
 #Preview("Chip Picker") {

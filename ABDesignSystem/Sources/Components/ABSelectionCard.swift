@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Selection Card Variant
 
-enum ABSelectionVariant {
+public enum ABSelectionVariant {
     /// Icon card — vertical layout with icon + label (e.g., Current Status)
     case iconCard
     /// Text card — compact horizontal label (e.g., Language selection)
@@ -13,14 +13,14 @@ enum ABSelectionVariant {
 
 // MARK: - ABSelectionCard
 
-struct ABSelectionCard: View {
-    let label: String
-    var icon: String? = nil
-    var variant: ABSelectionVariant = .textCard
-    var isSelected: Bool = false
-    var action: () -> Void
+public struct ABSelectionCard: View {
+    public let label: String
+    public var icon: String? = nil
+    public var variant: ABSelectionVariant = .textCard
+    public var isSelected: Bool = false
+    public var action: () -> Void
 
-    var body: some View {
+    public var body: some View {
         Button(action: action) {
             content
                 .background(isSelected ? Color.abSelected : Color.abSurfaceCard)

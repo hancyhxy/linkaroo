@@ -2,23 +2,23 @@ import SwiftUI
 
 // MARK: - Message Item Data
 
-struct ABMessageItemData: Identifiable {
-    let id: String
-    let name: String
-    let preview: String
-    let timeAgo: String
-    var avatarContent: ABAvatarContent = .initials("?")
-    var isOnline: Bool = false
-    var isUnread: Bool = false
+public struct ABMessageItemData: Identifiable {
+    public let id: String
+    public let name: String
+    public let preview: String
+    public let timeAgo: String
+    public var avatarContent: ABAvatarContent = .initials("?")
+    public var isOnline: Bool = false
+    public var isUnread: Bool = false
 }
 
 // MARK: - ABMessageItem
 
-struct ABMessageItem: View {
-    let data: ABMessageItemData
-    var onTap: (() -> Void)? = nil
+public struct ABMessageItem: View {
+    public let data: ABMessageItemData
+    public var onTap: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         Button(action: { onTap?() }) {
             HStack(spacing: ABSpacing.s3) {
                 // Avatar

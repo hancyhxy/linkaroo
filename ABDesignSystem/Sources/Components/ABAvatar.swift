@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Avatar Content Type
 
-enum ABAvatarContent {
+public enum ABAvatarContent {
     /// Remote or local image
     case image(URL?)
     /// Fallback initials with gradient background
@@ -11,12 +11,12 @@ enum ABAvatarContent {
 
 // MARK: - ABAvatar View
 
-struct ABAvatar: View {
-    let content: ABAvatarContent
-    var size: CGFloat = ABAvatarSize.md
-    var showOnline: Bool = false
+public struct ABAvatar: View {
+    public let content: ABAvatarContent
+    public var size: CGFloat = ABAvatarSize.md
+    public var showOnline: Bool = false
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .bottomTrailing) {
             avatarImage
                 .frame(width: size, height: size)

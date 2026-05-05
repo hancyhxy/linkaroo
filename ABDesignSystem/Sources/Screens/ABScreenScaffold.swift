@@ -4,17 +4,17 @@ import SwiftUI
 
 /// Reusable screen wrapper providing consistent layout: Header + scrollable content + optional Tab Bar.
 /// Handles safe area insets, frosted header layering, and tab bar bottom padding.
-struct ABScreenScaffold<Content: View>: View {
-    let header: ABHeaderVariant
-    var showTabBar: Bool = false
+public struct ABScreenScaffold<Content: View>: View {
+    public let header: ABHeaderVariant
+    public var showTabBar: Bool = false
     @Binding var selectedTab: ABTab
-    var onBack: (() -> Void)? = nil
-    var onMenu: (() -> Void)? = nil
+    public var onBack: (() -> Void)? = nil
+    public var onMenu: (() -> Void)? = nil
     @ViewBuilder let content: () -> Content
 
     @Environment(\.horizontalSizeClass) private var sizeClass
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .bottom) {
             // Background
             Color.abSurface.ignoresSafeArea()
@@ -45,9 +45,9 @@ struct ABScreenScaffold<Content: View>: View {
 
 // MARK: - Convenience init without tab bar
 
-extension ABScreenScaffold {
+public extension ABScreenScaffold {
     /// Initializer for screens without a tab bar.
-    init(
+    public init(
         header: ABHeaderVariant,
         onBack: (() -> Void)? = nil,
         onMenu: (() -> Void)? = nil,
@@ -65,10 +65,10 @@ extension ABScreenScaffold {
 // MARK: - Adaptive Grid Helper
 
 /// Switches column count based on device size class.
-struct ABAdaptiveGrid<Content: View>: View {
-    var compactColumns: Int = 5
-    var regularColumns: Int = 8
-    var spacing: CGFloat = 12
+public struct ABAdaptiveGrid<Content: View>: View {
+    public var compactColumns: Int = 5
+    public var regularColumns: Int = 8
+    public var spacing: CGFloat = 12
     @ViewBuilder let content: () -> Content
 
     @Environment(\.horizontalSizeClass) private var sizeClass
@@ -77,7 +77,7 @@ struct ABAdaptiveGrid<Content: View>: View {
         sizeClass == .regular ? regularColumns : compactColumns
     }
 
-    var body: some View {
+    public var body: some View {
         LazyVGrid(
             columns: Array(repeating: GridItem(.flexible(), spacing: spacing), count: columnCount),
             spacing: spacing

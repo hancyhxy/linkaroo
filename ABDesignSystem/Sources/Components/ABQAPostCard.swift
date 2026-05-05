@@ -2,26 +2,26 @@ import SwiftUI
 
 // MARK: - QA Post Data
 
-struct ABQAPostData {
-    let author: String
-    let timeAgo: String
-    let title: String
-    let preview: String
-    var tags: [(text: String, style: ABTagStyle)] = []
-    var voteCount: Int = 0
-    var commentCount: Int = 0
-    var topAnswer: String? = nil
+public struct ABQAPostData {
+    public let author: String
+    public let timeAgo: String
+    public let title: String
+    public let preview: String
+    public var tags: [(text: String, style: ABTagStyle)] = []
+    public var voteCount: Int = 0
+    public var commentCount: Int = 0
+    public var topAnswer: String? = nil
 }
 
 // MARK: - ABQAPostCard
 
-struct ABQAPostCard: View {
-    let post: ABQAPostData
-    var onVoteUp: (() -> Void)? = nil
-    var onVoteDown: (() -> Void)? = nil
-    var onTap: (() -> Void)? = nil
+public struct ABQAPostCard: View {
+    public let post: ABQAPostData
+    public var onVoteUp: (() -> Void)? = nil
+    public var onVoteDown: (() -> Void)? = nil
+    public var onTap: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         Button(action: { onTap?() }) {
             HStack(alignment: .top, spacing: ABSpacing.s3) {
                 // Vote Column

@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Header Variant
 
-enum ABHeaderVariant {
+public enum ABHeaderVariant {
     /// Brand logo header — "AussieBridge" in Liberation Serif italic
     case brand
     /// Page title with optional back button
@@ -13,12 +13,12 @@ enum ABHeaderVariant {
 
 // MARK: - ABHeader
 
-struct ABHeader: View {
-    let variant: ABHeaderVariant
-    var onBack: (() -> Void)? = nil
-    var onMenu: (() -> Void)? = nil
+public struct ABHeader: View {
+    public let variant: ABHeaderVariant
+    public var onBack: (() -> Void)? = nil
+    public var onMenu: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: ABSpacing.s3) {
             switch variant {
             case .brand:
@@ -138,9 +138,9 @@ struct ABHeader: View {
 // and `.chat` inherit `Color.abSurface` so they should fully dissolve
 // into the page beneath — no shadow, no hairline.
 private struct ABHeaderShadow: ViewModifier {
-    let variant: ABHeaderVariant
+    public let variant: ABHeaderVariant
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         switch variant {
         case .brand:
             content.abShadowAmbient()

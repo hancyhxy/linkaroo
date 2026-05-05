@@ -19,7 +19,7 @@ struct VolunteerMatchView: View {
         return matches.filter { $0.id != top.id }
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 

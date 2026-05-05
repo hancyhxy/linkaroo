@@ -13,7 +13,7 @@ struct OnboardingView: View {
     @State private var location: ABLocation = ABLocation(city: "Sydney", state: "NSW")
     @State private var duration: ABDuration = .justLanded
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .top) {
             Color.abSurface.ignoresSafeArea()
 

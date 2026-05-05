@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Tag Style
 
-enum ABTagStyle {
+public enum ABTagStyle {
     /// Blue — STUDENT MATCH, SENIOR MATCH
     case contextMatch
     /// Green solid — GOVERNMENT VERIFIED
@@ -26,7 +26,7 @@ enum ABTagStyle {
     /// Match percentage badge
     case matchPercent
 
-    var backgroundColor: Color {
+    public var backgroundColor: Color {
         switch self {
         case .contextMatch, .skillBlue, .matchPercent: return .abTagContextBg
         case .verified: return .abTagVerifiedBg
@@ -39,7 +39,7 @@ enum ABTagStyle {
         }
     }
 
-    var textColor: Color {
+    public var textColor: Color {
         switch self {
         case .contextMatch, .skillBlue, .matchPercent: return .abTagContextText
         case .verified: return .abTagVerifiedText
@@ -52,14 +52,14 @@ enum ABTagStyle {
         }
     }
 
-    var hasStrikethrough: Bool {
+    public var hasStrikethrough: Bool {
         self == .error
     }
 }
 
 // MARK: - Tag Size
 
-enum ABTagSize {
+public enum ABTagSize {
     /// 9px — STUDENT MATCH, OLD LAW, GOVERNMENT VERIFIED
     case micro
     /// 10px — skill tags, category tags
@@ -67,7 +67,7 @@ enum ABTagSize {
     /// 12px — TOP CHOICE, FEATURED GUIDE, match percentage
     case badge
 
-    var font: Font {
+    public var font: Font {
         switch self {
         case .micro: return .abMicro
         case .small: return .abLabelSm
@@ -75,7 +75,7 @@ enum ABTagSize {
         }
     }
 
-    var horizontalPadding: CGFloat {
+    public var horizontalPadding: CGFloat {
         switch self {
         case .micro: return 8
         case .small: return 8
@@ -83,7 +83,7 @@ enum ABTagSize {
         }
     }
 
-    var verticalPadding: CGFloat {
+    public var verticalPadding: CGFloat {
         switch self {
         case .micro: return 3
         case .small: return 2
@@ -91,7 +91,7 @@ enum ABTagSize {
         }
     }
 
-    var tracking: CGFloat {
+    public var tracking: CGFloat {
         switch self {
         case .micro: return 0.9
         case .small: return 0.5
@@ -102,13 +102,13 @@ enum ABTagSize {
 
 // MARK: - ABTag View
 
-struct ABTag: View {
-    let text: String
-    var style: ABTagStyle = .contextMatch
-    var size: ABTagSize = .micro
-    var icon: String? = nil
+public struct ABTag: View {
+    public let text: String
+    public var style: ABTagStyle = .contextMatch
+    public var size: ABTagSize = .micro
+    public var icon: String? = nil
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 4) {
             if let icon {
                 Image(systemName: icon)

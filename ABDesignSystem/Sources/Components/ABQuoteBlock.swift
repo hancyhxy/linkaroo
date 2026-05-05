@@ -3,15 +3,15 @@ import SwiftUI
 // MARK: - ABQuoteBlock
 
 /// Left-bordered quote block used for "Top Answer" excerpts in Q&A cards.
-struct ABQuoteBlock: View {
-    let text: String
-    var showHeader: Bool = false
-    var headerText: String = "Top Answer"
-    var headerIcon: String = "checkmark.circle.fill"
-    var accentColor: Color = .abPrimaryBright
-    var backgroundColor: Color = Color.abSurfaceContainer
+public struct ABQuoteBlock: View {
+    public let text: String
+    public var showHeader: Bool = false
+    public var headerText: String = "Top Answer"
+    public var headerIcon: String = "checkmark.circle.fill"
+    public var accentColor: Color = .abPrimaryBright
+    public var backgroundColor: Color = Color.abSurfaceContainer
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 0) {
             // Left accent border
             Rectangle()

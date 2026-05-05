@@ -16,11 +16,11 @@ import SwiftUI
 //   for the rationale on why detail pages keep `ABHeader.pageTitle`
 //   while editorial / onboarding pages use this pair.
 
-struct ABPageHero: View {
-    let headline: String
-    var subtitle: String? = nil
+public struct ABPageHero: View {
+    public let headline: String
+    public var subtitle: String? = nil
 
-    var body: some View {
+    public var body: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s2) {
             Text(headline)
                 .font(.abHeadlineLg)

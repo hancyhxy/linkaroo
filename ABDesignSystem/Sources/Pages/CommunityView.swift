@@ -9,7 +9,7 @@ enum CommunitySegment: String, CaseIterable, CustomStringConvertible {
     case discussions = "Discussions"
     case peopleYouCanHelp = "People to help"
 
-    var description: String { rawValue }
+    public var description: String { rawValue }
 }
 
 struct CommunityView: View {
@@ -21,7 +21,7 @@ struct CommunityView: View {
     private var qaPosts: [ABQAPost] { ABMockData.qaPosts }
     private var helpRequests: [ABHelpRequest] { ABMockData.helpRequests }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .bottom) {
             Color.abSurface.ignoresSafeArea()
 

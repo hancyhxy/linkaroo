@@ -4,12 +4,12 @@ import SwiftUI
 
 /// Custom segmented control matching the design system's pill-style tabs.
 /// Supports optional badge count on individual segments.
-struct ABSegmentedControl<T: Hashable & CustomStringConvertible>: View {
-    let options: [T]
+public struct ABSegmentedControl<T: Hashable & CustomStringConvertible>: View {
+    public let options: [T]
     @Binding var selected: T
-    var badgeCounts: [T: Int] = [:]
+    public var badgeCounts: [T: Int] = [:]
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 0) {
             ForEach(options, id: \.self) { option in
                 segmentButton(option)

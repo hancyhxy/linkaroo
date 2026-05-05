@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Search Bar Variant
 
-enum ABSearchBarVariant {
+public enum ABSearchBarVariant {
     /// Frosted glass overlay on hero images — white/20% bg + backdrop blur
     case hero
     /// Standard white background for regular pages
@@ -11,13 +11,13 @@ enum ABSearchBarVariant {
 
 // MARK: - ABSearchBar
 
-struct ABSearchBar: View {
+public struct ABSearchBar: View {
     @Binding var text: String
-    var placeholder: String = "Search services, guides, Q&A..."
-    var variant: ABSearchBarVariant = .standard
-    var onSubmit: (() -> Void)? = nil
+    public var placeholder: String = "Search services, guides, Q&A..."
+    public var variant: ABSearchBarVariant = .standard
+    public var onSubmit: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         HStack(spacing: 12) {
             Image(systemName: "magnifyingglass")
                 .font(.system(size: 15))

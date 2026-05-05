@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - Hex Color Initializer
 
 extension Color {
-    init(hex: String) {
+    public init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
@@ -32,10 +32,10 @@ extension Color {
 
 extension Color {
     /// Deep ocean — primary CTA fills, brand wordmark, navigation accent
-    static let abPrimary = Color(hex: "003955")
+    public static let abPrimary = Color(hex: "003955")
 
     /// Mid-tone Pacific — gradient end, hover states, secondary accents
-    static let abPrimaryBright = Color(hex: "005177")
+    public static let abPrimaryBright = Color(hex: "005177")
 }
 
 // MARK: - Surface Hierarchy (the "fine paper stack" model, design.md §2)
@@ -43,35 +43,35 @@ extension Color {
 
 extension Color {
     /// Page base — sun-drenched coast, the airy expansive light
-    static let abSurface = Color(hex: "F7FAFB")
+    public static let abSurface = Color(hex: "F7FAFB")
 
     /// Interactive cards, modals, input lifted state — pure white pop
-    static let abSurfaceCard = Color.white
+    public static let abSurfaceCard = Color.white
 
     /// Secondary section block (sits on `abSurface`)
-    static let abSurfaceContainer = Color(hex: "F1F4F5")
+    public static let abSurfaceContainer = Color(hex: "F1F4F5")
 
     /// Dark editorial sections (Featured Guide Card, dark panels)
-    static let abSurfaceDark = Color(hex: "181C1D")
+    public static let abSurfaceDark = Color(hex: "181C1D")
 }
 
 // MARK: - Text Colors (design.md §3 "Tonal Hierarchy")
 
 extension Color {
     /// Headlines, primary body text — deep editorial near-black
-    static let abOnSurface = Color(hex: "181C1D")
+    public static let abOnSurface = Color(hex: "181C1D")
 
     /// Subtitles, secondary descriptors — clear information scent
-    static let abOnSurfaceVariant = Color(hex: "41484E")
+    public static let abOnSurfaceVariant = Color(hex: "41484E")
 
     /// Placeholder text, inactive labels, timestamps
-    static let abOnSurfaceDisabled = Color(hex: "9CA3AF")
+    public static let abOnSurfaceDisabled = Color(hex: "9CA3AF")
 
     /// Text on primary (deep blue) buttons
-    static let abOnPrimary = Color.white
+    public static let abOnPrimary = Color.white
 
     /// Text on dark surfaces
-    static let abOnDark = Color(hex: "EDF1F8")
+    public static let abOnDark = Color(hex: "EDF1F8")
 }
 
 // MARK: - LEGACY Pastel Card Accents
@@ -81,132 +81,132 @@ extension Color {
 
 extension Color {
     /// LEGACY — Cream / default document cards
-    static let abAccentCream = Color(hex: "F5F2E8")
+    public static let abAccentCream = Color(hex: "F5F2E8")
 
     /// LEGACY — Peach / warm topics. Retained for `ABTipCard` etc.
-    static let abAccentPeach = Color(hex: "FDE5D4")
+    public static let abAccentPeach = Color(hex: "FDE5D4")
 
     /// LEGACY — Sky / tutorial / guidance
-    static let abAccentSky = Color(hex: "D8E5F5")
+    public static let abAccentSky = Color(hex: "D8E5F5")
 
     /// LEGACY — Butter / reflective topics
-    static let abAccentButter = Color(hex: "FFF5D6")
+    public static let abAccentButter = Color(hex: "FFF5D6")
 
     /// LEGACY — Sage / success / growth
-    static let abAccentSage = Color(hex: "D4E5D8")
+    public static let abAccentSage = Color(hex: "D4E5D8")
 
     /// LEGACY — Lavender / community / social
-    static let abAccentLavender = Color(hex: "E0DCEE")
+    public static let abAccentLavender = Color(hex: "E0DCEE")
 }
 
 // MARK: - Border Accents
 
 extension Color {
     /// Selected-state card border — ice-blue (echoes Pacific palette)
-    static let abBorderSky = Color(hex: "B8D4F0")
+    public static let abBorderSky = Color(hex: "B8D4F0")
 
     /// LEGACY — soft peach border
-    static let abBorderPeach = Color(hex: "F2C9A8")
+    public static let abBorderPeach = Color(hex: "F2C9A8")
 
     /// Subtle ghost borders (per design.md §4 "outline-variant at 15% opacity")
-    static let abBorderHairline = Color(hex: "E5E3DD")
+    public static let abBorderHairline = Color(hex: "E5E3DD")
 }
 
 // MARK: - Semantic Tag Colors (per design.md §5 spec)
 
 extension Color {
     // Context match (STUDENT MATCH, SENIOR MATCH) — light Pacific blue
-    static let abTagContextBg = Color(hex: "E0F2FE")
-    static let abTagContextText = Color(hex: "0369A1")
+    public static let abTagContextBg = Color(hex: "E0F2FE")
+    public static let abTagContextText = Color(hex: "0369A1")
 
     // Verified (GOVERNMENT VERIFIED) — institutional green, solid
-    static let abTagVerifiedBg = Color(hex: "059669")
-    static let abTagVerifiedText = Color.white
+    public static let abTagVerifiedBg = Color(hex: "059669")
+    public static let abTagVerifiedText = Color.white
 
     // New (NEW, NEWCOMER) — fresh green
-    static let abTagNewBg = Color(hex: "DCFCE7")
-    static let abTagNewText = Color(hex: "16A34A")
+    public static let abTagNewBg = Color(hex: "DCFCE7")
+    public static let abTagNewText = Color(hex: "16A34A")
 
     // Warning (UNVERIFIED, SOURCE: TIKTOK) — amber
-    static let abTagWarningBg = Color(hex: "FEF3C7")
-    static let abTagWarningText = Color(hex: "D97706")
+    public static let abTagWarningBg = Color(hex: "FEF3C7")
+    public static let abTagWarningText = Color(hex: "D97706")
 
     // Error / Outdated (OLD LAW) — muted red with strikethrough
-    static let abTagErrorBg = Color(hex: "FEE2E2")
-    static let abTagErrorText = Color(hex: "DC2626")
+    public static let abTagErrorBg = Color(hex: "FEE2E2")
+    public static let abTagErrorText = Color(hex: "DC2626")
 
     // Outdated (muted gray)
-    static let abTagOutdatedBg = Color(hex: "F1F5F9")
-    static let abTagOutdatedText = Color(hex: "64748B")
+    public static let abTagOutdatedBg = Color(hex: "F1F5F9")
+    public static let abTagOutdatedText = Color(hex: "64748B")
 
     // Gold (FEATURED GUIDE, TOP CHOICE) — warm sun on dark
-    static let abTagGoldBg = Color(hex: "C4983F")
-    static let abTagGoldText = Color.white
+    public static let abTagGoldBg = Color(hex: "C4983F")
+    public static let abTagGoldText = Color.white
 
     // Skill blue (UNSW Alumna, Legal Background)
-    static let abTagSkillBlueBg = Color(hex: "CEE5FF")
-    static let abTagSkillBlueText = Color(hex: "001D33")
+    public static let abTagSkillBlueBg = Color(hex: "CEE5FF")
+    public static let abTagSkillBlueText = Color(hex: "001D33")
 
     // Skill warm (NSW Renting Specialist) — tertiary sun-warmth (design.md §5)
-    static let abTagSkillWarmBg = Color(hex: "FFDDB7")
-    static let abTagSkillWarmText = Color(hex: "2A1700")
+    public static let abTagSkillWarmBg = Color(hex: "FFDDB7")
+    public static let abTagSkillWarmText = Color(hex: "2A1700")
 
     // Top Advice — amber, calmer than warning
-    static let abTagTopAdviceBg = Color(hex: "FEF3C7")
-    static let abTagTopAdviceText = Color(hex: "D97706")
+    public static let abTagTopAdviceBg = Color(hex: "FEF3C7")
+    public static let abTagTopAdviceText = Color(hex: "D97706")
 }
 
 // MARK: - Accent & Status Colors
 
 extension Color {
     /// Tip card warm fill — sun-warmth, not pastel (design.md §5 "tertiary")
-    static let abAccentGold = Color(hex: "FFDDB7")
+    public static let abAccentGold = Color(hex: "FFDDB7")
     /// Gold badge text on warm backgrounds
-    static let abAccentGoldDark = Color(hex: "855400")
+    public static let abAccentGoldDark = Color(hex: "855400")
 
     /// Orange accent for call-to-action pills
-    static let abAccentOrange = Color(hex: "F97316")
+    public static let abAccentOrange = Color(hex: "F97316")
     /// Orange accent darker variant
-    static let abAccentOrangeDark = Color(hex: "EA580C")
+    public static let abAccentOrangeDark = Color(hex: "EA580C")
 
     /// Online indicator dot — fresh green
-    static let abStatusOnline = Color(hex: "22C55E")
+    public static let abStatusOnline = Color(hex: "22C55E")
     /// Online label text
-    static let abStatusOnlineText = Color(hex: "16A34A")
+    public static let abStatusOnlineText = Color(hex: "16A34A")
     /// Unread badge, notification dots
-    static let abStatusUnread = Color(hex: "EF4444")
+    public static let abStatusUnread = Color(hex: "EF4444")
     /// Selected option background — light Pacific tint
-    static let abSelected = Color(hex: "E6F4FF")
+    public static let abSelected = Color(hex: "E6F4FF")
     /// 2px border on selected items — bright Pacific
-    static let abSelectedBorder = Color(hex: "39ACFF")
+    public static let abSelectedBorder = Color(hex: "39ACFF")
 
     /// Outgoing chat bubble background — light Pacific tint
-    static let abChatOutgoing = Color(hex: "DBEAFE")
+    public static let abChatOutgoing = Color(hex: "DBEAFE")
     /// Action pill blue background (chat)
-    static let abActionPillBlueBg = Color(hex: "F0F8FF")
+    public static let abActionPillBlueBg = Color(hex: "F0F8FF")
     /// Action pill orange background (chat)
-    static let abActionPillOrangeBg = Color(hex: "FFF7ED")
+    public static let abActionPillOrangeBg = Color(hex: "FFF7ED")
 }
 
 // MARK: - Gradients (design.md §2 "Glass & Gradient Rule")
 
 extension LinearGradient {
     /// Primary CTA — Pacific gradient adds "soul" beyond flat hex (design.md §2)
-    static let abPrimaryGradient = LinearGradient(
+    public static let abPrimaryGradient = LinearGradient(
         colors: [Color(hex: "003955"), Color(hex: "005177")],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
     )
 
     /// Editorial variant — alternate gradient angle for hero sections
-    static let abPrimaryGradientEditorial = LinearGradient(
+    public static let abPrimaryGradientEditorial = LinearGradient(
         colors: [Color(hex: "003955"), Color(hex: "39ACFF")],
         startPoint: .top,
         endPoint: .bottomTrailing
     )
 
     /// Hero image overlay — preserves photo legibility under headlines
-    static let abHeroOverlay = LinearGradient(
+    public static let abHeroOverlay = LinearGradient(
         colors: [
             Color.black.opacity(0.20),
             Color.black.opacity(0.55)
@@ -216,7 +216,7 @@ extension LinearGradient {
     )
 
     /// Avatar fallback — warm orange (initial-based avatars)
-    static let abAvatarFallback = LinearGradient(
+    public static let abAvatarFallback = LinearGradient(
         colors: [Color(hex: "F97316"), Color(hex: "EA580C")],
         startPoint: .topLeading,
         endPoint: .bottomTrailing
@@ -227,12 +227,12 @@ extension LinearGradient {
 
 extension ShapeStyle where Self == Color {
     /// Surface frosted — for headers (`surface` at 85% with backdrop blur)
-    static var abSurfaceFrosted: Color {
+    public static var abSurfaceFrosted: Color {
         Color(hex: "F7FAFB").opacity(0.85)
     }
 
     /// White frosted — for bottom nav, floating action bars
-    static var abWhiteFrosted: Color {
+    public static var abWhiteFrosted: Color {
         Color.white.opacity(0.90)
     }
 }

@@ -3,14 +3,14 @@ import SwiftUI
 // MARK: - ABCTABanner
 
 /// Gradient banner with title + body + inverted CTA. Used at the top of QA list etc.
-struct ABCTABanner: View {
-    let title: String
-    let bodyText: String
-    let ctaTitle: String
-    var icon: String = "plus"
-    var onCTA: (() -> Void)? = nil
+public struct ABCTABanner: View {
+    public let title: String
+    public let bodyText: String
+    public let ctaTitle: String
+    public var icon: String = "plus"
+    public var onCTA: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         ABCard(variant: .ctaBanner) {
             VStack(spacing: ABSpacing.s3) {
                 Text(title)

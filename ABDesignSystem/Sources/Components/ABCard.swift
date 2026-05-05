@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Card Variant
 
-enum ABCardVariant {
+public enum ABCardVariant {
     /// White card with subtle ghost border — general purpose
     case standard
     /// Dark background (#2c3136) with gold badge — Featured Guide
@@ -17,11 +17,11 @@ enum ABCardVariant {
 
 /// Configurable card container matching the design system.
 /// Use `@ViewBuilder` content to fill the card interior.
-struct ABCard<Content: View>: View {
-    let variant: ABCardVariant
+public struct ABCard<Content: View>: View {
+    public let variant: ABCardVariant
     @ViewBuilder let content: () -> Content
 
-    var body: some View {
+    public var body: some View {
         content()
             .padding(cardPadding)
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -75,13 +75,13 @@ struct ABCard<Content: View>: View {
 // MARK: - Type-erased ViewModifier
 
 private struct AnyCardModifier: ViewModifier {
-    let transform: (AnyView) -> AnyView
+    public let transform: (AnyView) -> AnyView
 
     init<V: View>(_ transform: @escaping (AnyView) -> V) {
         self.transform = { AnyView(transform($0)) }
     }
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         transform(AnyView(content))
     }
 }

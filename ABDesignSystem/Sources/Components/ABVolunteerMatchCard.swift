@@ -2,23 +2,23 @@ import SwiftUI
 
 // MARK: - Volunteer Match Data
 
-struct ABVolunteerMatchData {
-    let name: String
-    let imageURL: URL?
-    var matchPercent: Int = 0
-    var skills: [(text: String, style: ABTagStyle)] = []
-    var bio: String = ""
+public struct ABVolunteerMatchData {
+    public let name: String
+    public let imageURL: URL?
+    public var matchPercent: Int = 0
+    public var skills: [(text: String, style: ABTagStyle)] = []
+    public var bio: String = ""
 }
 
 // MARK: - ABVolunteerMatchCard
 
 /// Compact volunteer card for "More Matches" section.
-struct ABVolunteerMatchCard: View {
-    let data: ABVolunteerMatchData
-    var ctaTitle: String = "View Profile"
-    var onCTA: (() -> Void)? = nil
+public struct ABVolunteerMatchCard: View {
+    public let data: ABVolunteerMatchData
+    public var ctaTitle: String = "View Profile"
+    public var onCTA: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         HStack(alignment: .top, spacing: ABSpacing.s3) {
             // Thumbnail
             ABAvatar(content: .image(data.imageURL), size: 56)

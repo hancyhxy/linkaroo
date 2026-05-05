@@ -2,7 +2,7 @@ import SwiftUI
 
 // MARK: - Input Variant
 
-enum ABTextInputVariant {
+public enum ABTextInputVariant {
     /// Chat message input — rounded pill with plus and send buttons
     case chat
     /// Standard form input — rounded rectangle with optional leading icon
@@ -11,15 +11,15 @@ enum ABTextInputVariant {
 
 // MARK: - ABTextInput
 
-struct ABTextInput: View {
+public struct ABTextInput: View {
     @Binding var text: String
-    var placeholder: String = "Type a message..."
-    var variant: ABTextInputVariant = .form
-    var leadingIcon: String? = nil
-    var onSend: (() -> Void)? = nil
-    var onPlus: (() -> Void)? = nil
+    public var placeholder: String = "Type a message..."
+    public var variant: ABTextInputVariant = .form
+    public var leadingIcon: String? = nil
+    public var onSend: (() -> Void)? = nil
+    public var onPlus: (() -> Void)? = nil
 
-    var body: some View {
+    public var body: some View {
         switch variant {
         case .chat:
             chatInput
