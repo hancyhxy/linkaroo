@@ -72,15 +72,22 @@ treatments and not in-house component names. The standard vocabulary:
 
 | Group       | Standard terms                                                                |
 | ----------- | ----------------------------------------------------------------------------- |
+| Heading     | section title (level: major / section / label)                                |
 | Selection   | single-select card grid · multi-select card grid · single-select chip row · radio list · segmented control |
 | Text        | single-line text input · multi-line text area · search input                  |
 | Picker      | city/state picker · date picker · dropdown                                    |
 | List        | vertical list · horizontal carousel · category-grouped list                   |
 | Toggle      | toggle · tab bar                                                              |
-| Block       | hero block · informational card · banner · tip card · quote block             |
+| Block       | hero block · dark hero panel · informational card · banner · tip card · quote block |
 | Action      | primary button · text link · floating action button · sticky footer overlay   |
 | Card        | content card · row card · compact card · hero card                            |
 | Tag         | tag chip · category chip · status badge                                       |
+
+`section title (level: section)` resolves to the `ABSectionTitle`
+component (3-level hierarchy: `.major` for editorial headings,
+`.section` for form-section headings, `.label` for tightest fieldset
+labels). Layout bullets must specify which level to lock visual
+hierarchy across pages.
 
 Add a row when the existing vocabulary cannot describe a real region.
 Don't introduce ad-hoc terms inline.
@@ -102,6 +109,25 @@ encode the action's semantics:
 
 If a future product decision locks specific wording (legal disclaimer,
 brand voice line), that string promotes into Layout in quotes.
+
+### 0.5b Copy authority
+
+When a region needs concrete copy (preview / canvas / screenshot /
+demo), the source-of-truth precedence is:
+
+1. **`docs/mockups/*.html`** — design-stage product copy. Highest
+   authority because it is the artefact a designer signed off on.
+2. **`Pages/*.swift` string literals** — implementation-stage copy.
+   Treated as a developer's adaptation; does not override mockups.
+3. **Self-authored placeholder** — only when neither of the above
+   covers a region; mark with `// TODO: copy` so it is grep-able.
+
+If `Pages/*.swift` and `docs/mockups/` disagree on a string, the
+mockup wins and the SwiftUI string is the bug. (Discovered during the
+§1/§2 spec-vs-prototype experiment: v1 SwiftUI used "Continue" /
+"Hi, Amara" / "Heads-up" while mockups specify "Finish Setup" /
+"G'day, Welcome Home." / "Tailored for New Arrivals". Mockups are
+authoritative.)
 
 ### 0.6 Status badges
 
