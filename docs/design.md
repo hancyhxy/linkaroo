@@ -67,7 +67,26 @@ All components utilize the `md` (0.75rem) or `lg` (1rem) roundedness scale to fe
 
 ---
 
-## 6. Do's and Don'ts
+## 6. Information Density Patterns
+
+Pages within the system span a deliberate density spectrum. Two named ends of that spectrum:
+
+### High-Density Editorial (Home, Community, Q&A surfaces)
+Hero card + horizontal grid + multiple list sections + tag chips per row. The user's eye should always have *the next thing* in view. Use `surface_container_lowest` cards on `surface_container_low` ground; tag chips carry the credibility/context layer (mechanism 3). Goal: dense scanning without overwhelm.
+
+### Low-Density Identity Surfaces (Profile)
+The opposite end: a single centered hero + one read-only field card + one compact provenance row + one secondary action button. Used only when the page's job is *make the captured identity visible* rather than *push new content*. Visual rules specific to this density:
+
+- **Centered identity hero** — 96 × 96 avatar with `primary` → `primary_container` gradient and a subtle ambient shadow (single-letter fallback when `avatarURL == nil`); display name + `body_sm` username caption stacked beneath.
+- **List-in-card, not card-in-list** — the four ABUser onboarding fields render as labelled rows inside a single `surface_container_lowest` card, separated by 1px hairlines on `outline_variant @ 8% opacity` (the "No-Line" rule's narrow exception: rows inside a card may use the lightest possible divider). Each row is `caption` uppercase label + `body_md` value with a leading icon in `primary` container colour.
+- **Single-row provenance card** — a compact `tertiary_fixed` (#ffddb7) row carrying a bold "Why we ask" lead and a one-sentence explainer; sits between the field card and the action button. **Critical**: this is the row-shaped variant of the onboarding tip card, not the block-shaped variant — high information weight on Onboarding (where context is being established), low weight on Profile (where context is being recalled).
+- **Secondary outlined button** — `surface_container_lowest` fill, `outline_variant @ 8%` ghost border, `on_surface` text, `primary` icon. Profile is a leaf surface; a `primary` gradient button would imply commit-style action. The button label "Edit profile" routes back into Onboarding (M1 single-source rule, see `product-context.md` §1).
+
+This dual-density rule keeps the design system honest: the same tokens compose both ends of the spectrum without introducing density-specific variants.
+
+---
+
+## 7. Do's and Don'ts
 
 ### Do
 - **Do** use white space as a structural element. If a layout feels crowded, increase spacing to `spacing-12` (3rem).

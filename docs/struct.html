@@ -584,7 +584,7 @@ main {
       <header class="layer-header">
         <h2>§1 — Identity Layer</h2>
         <p class="layer-mechanism">M1 — onboarding captures identity, used as filter input downstream</p>
-        <p class="layer-thesis">Onboarding captures the "first context" (language, status, location, time-in-country) and stores it on the User. Every downstream surface — home recommendations, Q&amp;A relevance, volunteer matching — reads from this profile. The identity is the <em>filter</em>, not a <em>feature page</em>.</p>
+        <p class="layer-thesis">Onboarding captures the "first context" (language, status, location, time-in-country) and stores it on the User. Every downstream surface — home recommendations, Q&amp;A relevance, volunteer matching — reads from this profile silently. The identity is primarily a <em>filter</em>, not a <em>feature page</em> — but the <strong>Profile tab (spec §9)</strong> is the one surface that makes the captured identity <em>visible</em> to the user, and is also the only entry point into the edit flow (which re-uses <code>OnboardingView</code> with the current ABUser prefilled, so identity-capture remains single-sourced).</p>
       </header>
 
       <article class="entity" id="user">
@@ -611,7 +611,7 @@ main {
             <tr><td class="field-name">initials</td><td class="field-type">String</td><td><span class="field-mut computed">computed</span></td><td><span class="origin-chip engineering">+ engineering</span></td><td class="field-why">Derived from <code>displayName</code> for avatar fallback</td></tr>
           </tbody>
         </table>
-        <p class="entity-relationship">A <strong>User</strong> posts <strong>HelpRequests</strong>, sends <strong>ChatMessages</strong>, owns one <strong>Location</strong>, has one <strong>UserStatus</strong> and one <strong>Duration</strong>, and tracks completion of <strong>Tasks</strong>.</p>
+        <p class="entity-relationship">A <strong>User</strong> posts <strong>HelpRequests</strong>, sends <strong>ChatMessages</strong>, owns one <strong>Location</strong>, has one <strong>UserStatus</strong> and one <strong>Duration</strong>, and tracks completion of <strong>Tasks</strong>. <em>Read-back surface</em>: spec §9 Profile renders 4 of the User's onboarding-captured fields (<code>preferredLanguage</code>, <code>currentStatus</code>, <code>location</code>, <code>durationInAustralia</code>) and routes the "Edit profile" action back into the §1 OnboardingView form.</p>
       </article>
 
       <article class="entity" id="language">

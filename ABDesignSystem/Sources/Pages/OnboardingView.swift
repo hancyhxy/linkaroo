@@ -3,28 +3,41 @@ import SwiftUI
 // MARK: - OnboardingView
 //
 // §1 Onboarding — see docs/spec.md §1.
-// First-launch identity capture. Captured ABUser drives all downstream filtering.
+// Identity capture form — used both for first-launch (write a fresh ABUser)
+// and for §9 Profile edit (re-enter with `prefilledUser` to load existing
+// fields). Single-source identity capture, see spec §11.4.
 
 public struct OnboardingView: View {
+    public let prefilledUser: ABUser?
     public let onFinish: (ABUser) -> Void
     public let onSkip: () -> Void
     public let onBack: (() -> Void)?
 
     public init(
+        prefilledUser: ABUser? = nil,
         onFinish: @escaping (ABUser) -> Void = { _ in },
         onSkip: @escaping () -> Void = {},
         onBack: (() -> Void)? = nil
     ) {
+        self.prefilledUser = prefilledUser
         self.onFinish = onFinish
         self.onSkip = onSkip
         self.onBack = onBack
+
+        // Initialize @State from prefilledUser if present (edit mode).
+        _language = State(initialValue: prefilledUser?.preferredLanguage ?? .english)
+        _status = State(initialValue: prefilledUser?.currentStatus ?? .immigrantStudent)
+        _location = State(initialValue: prefilledUser?.location ?? ABLocation(city: "Sydney", state: "NSW"))
+        _duration = State(initialValue: prefilledUser?.durationInAustralia ?? .justLanded)
     }
 
+    private var isEditMode: Bool { prefilledUser != nil }
+
     // MARK: Parameters (spec §1)
-    @State private var language: ABLanguage = .english
-    @State private var status: ABUserStatus = .immigrantStudent
-    @State private var location: ABLocation = ABLocation(city: "Sydney", state: "NSW")
-    @State private var duration: ABDuration = .justLanded
+    @State private var language: ABLanguage
+    @State private var status: ABUserStatus
+    @State private var location: ABLocation
+    @State private var duration: ABDuration
 
     public var body: some View {
         ZStack(alignment: .top) {
@@ -33,8 +46,8 @@ public struct OnboardingView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: ABSpacing.s8) {
                     ABPageHero(
-                        headline: "Let's personalize your journey",
-                        subtitle: "Help us tailor the best experience for you"
+                        headline: isEditMode ? "Update your profile" : "Let's personalize your journey",
+                        subtitle: isEditMode ? "Refine your answers — we'll re-rank guides, Q&A, and matches against the new profile." : "Help us tailor the best experience for you"
                     )
 
                     languageSection
@@ -49,19 +62,22 @@ public struct OnboardingView: View {
             }
 
             if let onBack {
-                ABBackBar(title: "Profile Setup", onBack: onBack)
+                ABBackBar(title: isEditMode ? "Edit Profile" : "Profile Setup", onBack: onBack)
             }
 
             VStack {
                 Spacer()
                 ABStickyFooter(
-                    primaryTitle: "Finish Setup",
-                    skipTitle: "Skip for now",
+                    primaryTitle: isEditMode ? "Save changes" : "Finish Setup",
+                    skipTitle: isEditMode ? "Cancel" : "Skip for now",
                     onPrimary: {
-                        // §1.A5 — write captured ABUser to AppState; → §2 Home
+                        // §1.A5 — write/update ABUser to AppState.
+                        // In edit mode we preserve the existing displayName/username;
+                        // in first-launch we use placeholder values that v2 onboarding
+                        // can later prompt for explicitly.
                         let user = ABUser(
-                            displayName: "You",
-                            username: "u/you",
+                            displayName: prefilledUser?.displayName ?? "You",
+                            username: prefilledUser?.username ?? "u/you",
                             preferredLanguage: language,
                             currentStatus: status,
                             location: location,
@@ -70,7 +86,8 @@ public struct OnboardingView: View {
                         onFinish(user)
                     },
                     onSkip: {
-                        // §1.A6 — skip with default ABUser
+                        // §1.A6 — first-launch: skip with default ABUser.
+                        //         edit mode: cancel without saving (route back via onSkip closure).
                         onSkip()
                     }
                 )

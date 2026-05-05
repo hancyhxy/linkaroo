@@ -39,7 +39,7 @@ Every field listed here has a 1:1 implementation in `../ABDesignSystem/Sources/M
 
 # §1 — Identity Layer
 
-> **Mechanism 1: Identity awareness.** Onboarding captures the "first context" (language, status, location, time-in-country) and stores it on the User. Every downstream surface — home recommendations, Q&A relevance, volunteer matching — reads from this profile. The identity is the *filter*, not a *feature page*.
+> **Mechanism 1: Identity awareness.** Onboarding captures the "first context" (language, status, location, time-in-country) and stores it on the User. Every downstream surface — home recommendations, Q&A relevance, volunteer matching — reads from this profile silently. The identity is primarily a *filter*, not a *feature page* — but the **Profile tab (spec §9)** is the one surface that makes the captured identity *visible* to the user, and is also the only entry point into the edit flow (which re-uses `OnboardingView` with the current ABUser prefilled, so identity-capture remains single-sourced).
 
 ## 1. User
 
@@ -61,7 +61,7 @@ The core user entity, populated during onboarding and used as the filter input b
 | `createdAt` | `Date` | `var` | + engineering | Account creation timestamp; powers cohort analytics ("users who joined in their first week") |
 | `initials` | `String` | computed | + engineering | Derived from `displayName` for avatar fallback. Computed (not stored) to stay in sync with name edits |
 
-→ A **User** posts **HelpRequests**, sends **ChatMessages**, owns one **Location**, has one **UserStatus** and one **Duration**, and tracks completion of **Tasks**.
+→ A **User** posts **HelpRequests**, sends **ChatMessages**, owns one **Location**, has one **UserStatus** and one **Duration**, and tracks completion of **Tasks**. Read-back surface: spec §9 Profile renders 4 of the User's onboarding-captured fields (`preferredLanguage`, `currentStatus`, `location`, `durationInAustralia`) and routes the "Edit profile" action back into the §1 OnboardingView form.
 
 ---
 

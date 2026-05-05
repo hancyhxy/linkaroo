@@ -9,11 +9,13 @@ This document captures the five places that filter shows up in the iOS prototype
 
 ## 1. Identity awareness — onboarding as the first context capture
 
-**Where**: `Pages/OnboardingView.swift`
+**Where**: `Pages/OnboardingView.swift` (write) + `Pages/ProfileView.swift` (read-back + edit)
 
 **What it captures**: preferred language → current status (immigrant student / working / job-seeker / business owner) → location (city + state) → time-in-Australia bucket (not yet arrived / just landed / 1–6 months / 6–12 months / 1 year+).
 
 **Why it matters**: every downstream feed (Home recommendations, Q&A relevance ranking, volunteer matches) reads from this profile. The onboarding form is short and warm rather than long and exhaustive — language as a meta-barrier means the entry-gate itself can't feel like an interrogation.
+
+**Read-back symmetry**: the captured identity is silently consumed everywhere except the **Profile tab**, which is the one surface that makes the identity visible to the user. Editing the profile re-enters `OnboardingView` with the current ABUser prefilled — the same form that wrote the identity is the form that updates it, so identity capture stays single-sourced and any new field automatically appears on both surfaces.
 
 ---
 
@@ -67,23 +69,30 @@ This document captures the five places that filter shows up in the iOS prototype
 
 ```
                  ┌─────────────────────────────┐
-                 │   Onboarding (mechanism 1)  │
-                 └─────────────┬───────────────┘
-                               │  identity profile
-                               ▼
-            ┌────────────────────────────────────────┐
-            │  Filtered home + Q&A feeds (m. 2 + 3)  │
-            └────────────────────┬───────────────────┘
-                                 │  selected Q&A post
-                                 ▼
-            ┌────────────────────────────────────────┐
-            │ Volunteer match w/ visible reasons (m. 4) │
-            └────────────────────┬───────────────────┘
-                                 │  matched volunteer + originating post
-                                 ▼
-            ┌────────────────────────────────────────┐
-            │  Chat with auto-mounted context (m. 5) │
-            └────────────────────────────────────────┘
+                 │   Onboarding (mechanism 1)  │◄────────┐
+                 └─────────────┬───────────────┘         │
+                               │  identity profile       │
+                               ▼                          │
+            ┌────────────────────────────────────────┐    │
+            │  Filtered home + Q&A feeds (m. 2 + 3)  │    │
+            └────────────────────┬───────────────────┘    │
+                                 │  selected Q&A post     │
+                                 ▼                         │
+            ┌────────────────────────────────────────┐    │
+            │ Volunteer match w/ visible reasons (m. 4) │  │
+            └────────────────────┬───────────────────┘    │
+                                 │  matched volunteer +   │
+                                 │  originating post      │
+                                 ▼                         │
+            ┌────────────────────────────────────────┐    │
+            │  Chat with auto-mounted context (m. 5) │    │
+            └────────────────────────────────────────┘    │
+                                                          │
+                 ┌─────────────────────────────┐          │
+                 │   Profile  (m. 1 read-back) │──────────┘
+                 │   reads ABUser ← AppState   │  edit re-enters
+                 │   "Edit profile" → §1       │  Onboarding (prefilled)
+                 └─────────────────────────────┘
 ```
 
-The user's identity flows through the system as data, not as something they must re-state at each step. That is the entire thesis: **context is plumbing, not a feature page.**
+The user's identity flows through the system as data, not as something they must re-state at each step. That is the thesis: **context is plumbing, not a re-explanation tax.** The Profile tab is the one place the plumbing surfaces — making the captured identity visible *and* edit-able through the same form that captured it.

@@ -7,8 +7,8 @@
 > looking at the SwiftUI source.
 >
 > **Status:** §1 Onboarding is filled as the canonical sample.
-> §2–§8 carry the 4-block template with empty bodies, awaiting fill.
-> See §11 Open Questions for what blocks `final`.
+> §2–§9 carry the 4-block template with empty bodies, awaiting fill.
+> See §12 Open Questions for what blocks `final`.
 
 This spec assumes:
 
@@ -29,7 +29,7 @@ Parameters + 1 bullet in Layout + maybe 1 row in Actions).
 
 ### 0.1 Page template
 
-Every §1–§8 page section uses the same 4 blocks, in this order:
+Every §1–§9 page section uses the same 4 blocks, in this order:
 
 ```
 ## §X PageName
@@ -125,7 +125,7 @@ high-value action (e.g. "Ask a Question" on §4).
 
 `shared context card` resolves to the `ABSharedContextCard` component —
 a pinned card at the top of a chat thread that links back to the
-originating ABQAPost. Persists across re-entries (see §10.3).
+originating ABQAPost. Persists across re-entries (see §11.3).
 
 `action pill row` resolves to a horizontal scroll of `ABActionPill`
 items — short context-aware shortcuts (e.g. "Share My Profile Tags",
@@ -210,17 +210,21 @@ Navigation topology. Read this once before any page section.
 ```
 First-launch:  §1 Onboarding ──► (TabBar root)
 
-TabBar root:
-  ├─ §2 Home
-  ├─ §3 Community ──► §4 Q&A List ──► §5 Q&A Detail ──► §6 Volunteer Match ──► §8 Chat
-  └─ §7 Message List ──► §8 Chat
+TabBar root (4 tabs):
+  ├─ Home tab      → §2 Home
+  ├─ Community tab → §3 Community ──► §4 Q&A List ──► §5 Q&A Detail ──► §6 Volunteer Match ──► §8 Chat
+  ├─ Messages tab  → §7 Message List ──► §8 Chat
+  └─ Profile tab   → §9 Profile  ──► (re-run §1 Onboarding via §9.A1)
 ```
 
 - `§3 Community` and `§4 Q&A List` overlap on Q&A surfaces; Community
   is the segmented entry, Q&A List is the deep filter view.
 - `§5 → §6 → §8` is the load-bearing flow that proves Mechanism 4 +
   Mechanism 5 (originating ABQAPost rides into Chat as
-  ABSharedContext). See §11.2 cross-page flow.
+  ABSharedContext). See §12 cross-page flow.
+- `§9 Profile` is the **read-back** of the ABUser written by §1
+  Onboarding — the only surface where the captured identity becomes
+  visible to the user. Symmetric to §1 (write) ↔ §9 (read).
 
 ---
 
@@ -304,20 +308,20 @@ look for, Home surfaces what likely matches their stage.
 | Field           | Type                  | Values                                                                                          | Required | Default                  |
 | --------------- | --------------------- | ----------------------------------------------------------------------------------------------- | :------: | ------------------------ |
 | searchText      | String                | free text                                                                                       |    no    | `""`                     |
-| selectedTab     | ABTab                 | home · community · profile                                                                      |   yes    | home                     |
+| selectedTab     | ABTab                 | home · community · messages · profile                                                           |   yes    | home                     |
 | services        | [ABServiceCategoryType] | job · housing · healthcare · visa · bank · education · transport · social · finance · utilities |   yes    | derived from `ABServiceCategoryType.allCases` |
-| featuredGuide   | ABGuide               | resolved from ABMockData; selection rule [open §11]                                             |   yes    | `ABMockData.guides[0]`   |
-| recommendations | [ABGuide]             | resolved from ABMockData; filter rule [open §11]                                                |   yes    | `ABMockData.guides.dropFirst()` |
+| featuredGuide   | ABGuide               | resolved from ABMockData; selection rule [open §12]                                             |   yes    | `ABMockData.guides[0]`   |
+| recommendations | [ABGuide]             | resolved from ABMockData; filter rule [open §12]                                                |   yes    | `ABMockData.guides.dropFirst()` |
 
 **Actions**
 
 | ID    | Trigger                              | Effect                                                                       |
 | ----- | ------------------------------------ | ---------------------------------------------------------------------------- |
-| §2.A1 | type in search bar                   | bind to local state `searchText`; submit target [open §11]                   |
-| §2.A2 | tap a service category icon          | navigation target [open §11] — currently no closure in v1                    |
-| §2.A3 | tap the Featured Guide card          | navigation target [open §11]                                                 |
-| §2.A4 | tap a recommendation card            | navigation target [open §11]                                                 |
-| §2.A5 | tap a tab in the bottom tab bar      | switch `selectedTab`; root-tab routing [open §11]                            |
+| §2.A1 | type in search bar                   | bind to local state `searchText`; submit target [open §12]                   |
+| §2.A2 | tap a service category icon          | navigation target [open §12] — currently no closure in v1                    |
+| §2.A3 | tap the Featured Guide card          | navigation target [open §12]                                                 |
+| §2.A4 | tap a recommendation card            | navigation target [open §12]                                                 |
+| §2.A5 | tap a tab in the bottom tab bar      | switch `selectedTab`; root-tab routing [open §12]                            |
 
 ### Layout
 
@@ -328,26 +332,26 @@ Vertical-scroll page with a fixed bottom tab bar overlay.
 3. **Services grid** — section title (level: major) + horizontal-flowing icon grid (10 items derived from `ABServiceCategoryType.allCases`; label below each icon) (§2.A2)
 4. **Featured section** — section title (level: major) + hero card (title + description) (§2.A3)
 5. **Recommendations section** — section title (level: major) + vertical list of content cards; each card contains tag chip (first tag of `ABGuide.tags`, style mapped per design.md) + title + description + read-time caption (§2.A4)
-6. **Bottom tab bar overlay** — tab bar (3 items: Home / Community / Profile) (§2.A5)
+6. **Bottom tab bar overlay** — tab bar (4 items: Home / Community / Messages / Profile) (§2.A5)
 
 ---
 
 ## §3 Community
 
-> M2 + M3 — segmented entry to Q&A discussions vs people-to-help.
+> M2 + M3 — single hub combining "people to help" + "questions to
+> answer". Messages live as a separate tab (§7), not a Community segment.
 
 ### Overview
 
-Community is the social spine of the app: a single page with two
-segments toggling between *what the user can read / ask* (Discussions)
-and *what the user can give back* (People to help). The segmented
-control is intentional — it folds two different mental models
-("seeking" vs "contributing") into one tab so a returning user does
-not feel siloed into one role. Discussions surfaces ABQAPost rows;
-People to help surfaces ABHelpRequest rows where the current user's
-profile (status × duration × language) overlaps with the requester's
-need. Both segments feed into the same downstream surfaces (§5 Q&A
-Detail / §8 Chat) — Community is a discovery layer, not a destination.
+Community is the social spine of the app: a single-page hub that puts
+"who you can help right now" (a horizontal carousel of ABHelpRequest)
+above "what you can answer" (a vertical list of ABQAPost). There is
+no internal segmented control — the earlier Discussions / Messages
+split was promoted to the bottom tab bar (Messages is its own tab,
+§7) so the user does not need to remember which segment was last
+selected. Both sections feed the same downstream surfaces (§5 Q&A
+Detail / §6 Volunteer Match / §8 Chat) — Community is a discovery
+layer, not a destination.
 
 ### Feature
 
@@ -355,8 +359,7 @@ Detail / §8 Chat) — Community is a discovery layer, not a destination.
 
 | Field         | Type                | Values                                   | Required | Default            |
 | ------------- | ------------------- | ---------------------------------------- | :------: | ------------------ |
-| segment       | CommunitySegment    | discussions · peopleYouCanHelp           |   yes    | discussions        |
-| selectedTab   | ABTab               | home · community · profile               |   yes    | community          |
+| selectedTab   | ABTab               | home · community · messages · profile    |   yes    | community          |
 | qaPosts       | [ABQAPost]          | resolved from `ABMockData.qaPosts`       |   yes    | `ABMockData.qaPosts` |
 | helpRequests  | [ABHelpRequest]     | resolved from `ABMockData.helpRequests`  |   yes    | `ABMockData.helpRequests` |
 
@@ -364,21 +367,19 @@ Detail / §8 Chat) — Community is a discovery layer, not a destination.
 
 | ID    | Trigger                              | Effect                                                                       |
 | ----- | ------------------------------------ | ---------------------------------------------------------------------------- |
-| §3.A1 | tap a segment                        | set local state `segment` to tapped value                                    |
-| §3.A2 | tap a Q&A post card (Discussions)    | → §5 Q&A Detail with the tapped `ABQAPost`                                   |
-| §3.A3 | tap a help-request card (People)     | navigation target [open §11] — escalation path to §6 / §8 not yet wired      |
-| §3.A4 | tap a tab in the bottom tab bar      | switch `selectedTab`; root-tab routing [open §11]                            |
+| §3.A1 | tap a help-request card CTA          | navigation target [open §12] — escalation path to §6 / §8 not yet wired      |
+| §3.A2 | tap a Q&A post card                  | → §5 Q&A Detail with the tapped `ABQAPost`                                   |
+| §3.A3 | tap a tab in the bottom tab bar      | switch `selectedTab`; root-tab routing                                       |
 
 ### Layout
 
-Vertical-scroll page with a fixed bottom tab bar overlay; segmented
-control swaps the body between two layouts.
+Vertical-scroll page with a fixed bottom tab bar overlay; single body,
+no segmented control.
 
 1. **Header bar** — header bar (page-title variant, no back) — title "Community"
-2. **Segment selector** — segmented control (2 options: "Discussions" / "People to help") (§3.A1)
-3. **Discussions body** *(when `segment == discussions`)* — vertical list of content cards (one per `ABQAPost`; tap target §3.A2)
-4. **People-to-help body** *(when `segment == peopleYouCanHelp`)* — section title (level: section) + horizontal carousel of content cards (one per `ABHelpRequest`; tap target §3.A3)
-5. **Bottom tab bar overlay** — tab bar (3 items: Home / Community / Profile) (§3.A4)
+2. **People You Can Help section** — section title (level: section) + horizontal carousel of content cards (one per `ABHelpRequest`; tap target §3.A1)
+3. **Questions You Can Answer section** — section title (level: section) + vertical list of content cards (one per `ABQAPost`; tap target §3.A2)
+4. **Bottom tab bar overlay** — tab bar (4 items: Home / Community / Messages / Profile) (§3.A3)
 
 ---
 
@@ -405,27 +406,27 @@ list as a participation surface rather than a read-only feed.
 | Field              | Type                | Values                                                          | Required | Default            |
 | ------------------ | ------------------- | --------------------------------------------------------------- | :------: | ------------------ |
 | selectedCategoryId | String              | "all" · "renting" · "subletting" · "utilities" · "visa"         |   yes    | "all"              |
-| selectedTab        | ABTab               | home · community · profile                                      |   yes    | community          |
-| posts              | [ABQAPost]          | resolved from `ABMockData.qaPosts`; filter by `selectedCategoryId` [open §11] | yes | `ABMockData.qaPosts` |
+| selectedTab        | ABTab               | home · community · messages · profile                           |   yes    | community          |
+| posts              | [ABQAPost]          | resolved from `ABMockData.qaPosts`; filter by `selectedCategoryId` [open §12] | yes | `ABMockData.qaPosts` |
 
 **Actions**
 
 | ID    | Trigger                              | Effect                                                                       |
 | ----- | ------------------------------------ | ---------------------------------------------------------------------------- |
-| §4.A1 | tap "Ask a Question"                 | navigation target [open §11] — author-flow page not yet built                |
+| §4.A1 | tap "Ask a Question"                 | navigation target [open §12] — author-flow page not yet built                |
 | §4.A2 | tap a category tab                   | set local state `selectedCategoryId` to tapped value                         |
 | §4.A3 | tap a Q&A post card                  | → §5 Q&A Detail with the tapped `ABQAPost`                                   |
-| §4.A4 | tap a tab in the bottom tab bar      | switch `selectedTab`; root-tab routing [open §11]                            |
+| §4.A4 | tap a tab in the bottom tab bar      | switch `selectedTab`; root-tab routing [open §12]                            |
 
 ### Layout
 
-Vertical-scroll page; tab bar visibility [open §11 — see §10.1].
+Vertical-scroll page; tab bar visibility [open §12 — see §11.1].
 
 1. **Header bar** — header bar (page-title variant, with back) — title "Q&A & Guides"
 2. **CTA banner** — CTA banner with primary button "Ask a Question" (§4.A1)
 3. **Category filter** — horizontal category tabs (5 items: All / Renting / Subletting / Utilities / Visa) (§4.A2)
 4. **Posts list** — vertical list of content cards (one per filtered `ABQAPost`; each card carries inline tag chips for credibility / source) (§4.A3)
-5. **Bottom tab bar overlay** *(if visible)* — tab bar (3 items: Home / Community / Profile) (§4.A4)
+5. **Bottom tab bar overlay** *(if visible)* — tab bar (4 items: Home / Community / Messages / Profile) (§4.A4)
 
 ---
 
@@ -443,7 +444,7 @@ Top Answer surfaced as a quote block, but its load-bearing role is
 to escalate the reader from passive reading into a 1-on-1 match. The
 "Match a volunteer" CTA at the bottom forks the user into §6, and the
 originating ABQAPost rides forward as `ABSharedContext` when the user
-eventually lands in §8 Chat — see §10.3. The page is intentionally
+eventually lands in §8 Chat — see §11.3. The page is intentionally
 linear (no comments thread in v1): the choice is *trust the answer
 and act* vs *escalate to a human*, not *scroll deeper*.
 
@@ -460,12 +461,12 @@ and act* vs *escalate to a human*, not *scroll deeper*.
 | ID    | Trigger                              | Effect                                                                                                  |
 | ----- | ------------------------------------ | ------------------------------------------------------------------------------------------------------- |
 | §5.A1 | tap header back chevron              | dismiss; → previous surface (§3 Community or §4 Q&A List)                                               |
-| §5.A2 | tap "Match a volunteer"              | → §6 Volunteer Match; `post` is captured as the originating ABQAPost for downstream §10.3 mounting       |
+| §5.A2 | tap "Match a volunteer"              | → §6 Volunteer Match; `post` is captured as the originating ABQAPost for downstream §11.3 mounting       |
 
 ### Layout
 
 Vertical-scroll detail page using the compact 64pt header; no tab bar
-on this surface (§10.1 — detail / chat / modal hides the tab bar).
+on this surface (§11.1 — detail / chat / modal hides the tab bar).
 
 1. **Header bar** — header bar (page-title variant, with back) — title "Q&A"
 2. **Tag row** — horizontal row of tag chips (one per `post.tags`; styles drive credibility legibility — verified / unverified / outdated / source / contextMatch)
@@ -493,7 +494,7 @@ checkmark-bulleted reasons list, then a smaller stack of additional
 matches. The hero treatment carries the algorithmic claim; the
 secondary list shows alternates without forcing the user to compare
 five symmetric tiles. Choosing a volunteer initiates §8 Chat with
-the originating ABQAPost mounted as ABSharedContext (see §10.3).
+the originating ABQAPost mounted as ABSharedContext (see §11.3).
 
 ### Feature
 
@@ -501,7 +502,7 @@ the originating ABQAPost mounted as ABSharedContext (see §10.3).
 
 | Field      | Type             | Values                                                          | Required | Default                  |
 | ---------- | ---------------- | --------------------------------------------------------------- | :------: | ------------------------ |
-| matches    | [ABMatchResult]  | resolved from `ABMockData.matchResults`; ordered by selection rule [open §11] | yes | `ABMockData.matchResults` |
+| matches    | [ABMatchResult]  | resolved from `ABMockData.matchResults`; ordered by selection rule [open §12] | yes | `ABMockData.matchResults` |
 | topChoice  | ABMatchResult?   | first match where `isTopChoice == true`, else `matches.first`   |   yes    | derived                  |
 
 **Actions**
@@ -509,8 +510,8 @@ the originating ABQAPost mounted as ABSharedContext (see §10.3).
 | ID    | Trigger                              | Effect                                                                       |
 | ----- | ------------------------------------ | ---------------------------------------------------------------------------- |
 | §6.A1 | tap header back chevron              | dismiss; → previous surface (typically §5 Q&A Detail)                        |
-| §6.A2 | tap Top Choice hero card (or its CTA)| → §8 Chat with the chosen volunteer; mount originating ABQAPost as `ABSharedContext` per §10.3 |
-| §6.A3 | tap a More-matches card (or its CTA) | → §8 Chat with the chosen volunteer; mount originating ABQAPost as `ABSharedContext` per §10.3 |
+| §6.A2 | tap Top Choice hero card (or its CTA)| → §8 Chat with the chosen volunteer; mount originating ABQAPost as `ABSharedContext` per §11.3 |
+| §6.A3 | tap a More-matches card (or its CTA) | → §8 Chat with the chosen volunteer; mount originating ABQAPost as `ABSharedContext` per §11.3 |
 
 ### Layout
 
@@ -536,9 +537,9 @@ escalation. The page is intentionally inbox-shaped: an `All / Unread`
 segment is the only filter, the unread segment carries a numeric
 badge, and each row shows online-state on the avatar. Tapping a row
 returns to §8 Chat with the same `ABSharedContext` still mounted at
-the top of the thread (see §10.3) — re-entry is not a fresh page,
+the top of the thread (see §11.3) — re-entry is not a fresh page,
 it's a continuation. The entry point into this surface is currently
-[open §11].
+[open §12].
 
 ### Feature
 
@@ -554,7 +555,7 @@ it's a continuation. The entry point into this surface is currently
 
 | ID    | Trigger                              | Effect                                                                       |
 | ----- | ------------------------------------ | ---------------------------------------------------------------------------- |
-| §7.A1 | tap header back chevron              | dismiss; → previous surface (entry point [open §11])                          |
+| §7.A1 | tap header back chevron              | dismiss; → previous surface (entry point [open §12])                          |
 | §7.A2 | tap a segment                        | set local state `segment` to tapped value                                    |
 | §7.A3 | tap a conversation row               | → §8 Chat with the tapped `ABConversation` (preserves its `sharedContext`)   |
 
@@ -605,8 +606,8 @@ used elsewhere.
 | ID    | Trigger                              | Effect                                                                       |
 | ----- | ------------------------------------ | ---------------------------------------------------------------------------- |
 | §8.A1 | tap header back chevron              | dismiss; → previous surface (§6 or §7)                                       |
-| §8.A2 | tap shared context card              | navigation target [open §11] — return to originating §5 Q&A Detail by `relatedPostID` |
-| §8.A3 | tap an action pill                   | per-pill effect [open §11] — currently no closures in v1                     |
+| §8.A2 | tap shared context card              | navigation target [open §12] — return to originating §5 Q&A Detail by `relatedPostID` |
+| §8.A3 | tap an action pill                   | per-pill effect [open §12] — currently no closures in v1                     |
 | §8.A4 | type in chat input area              | bind to local state `draft`                                                  |
 | §8.A5 | tap send                             | append outgoing `ABChatMessage` to `messages`; clear `draft`                  |
 
@@ -625,7 +626,58 @@ surface.
 
 ---
 
-## §9 Mechanism × Page coverage
+## §9 Profile
+
+> M1 read-back — the only surface where the captured ABUser becomes
+> visible to the user. Symmetric to §1 (write) ↔ §9 (read). Editing
+> re-enters §1 OnboardingView with the current ABUser prefilled, so
+> there is exactly one form for capturing identity in this app.
+
+### Overview
+
+Profile is the leaf surface of the Profile tab and the *read-back* end
+of Mechanism 1. After §1 Onboarding writes an `ABUser` into AppState,
+every downstream surface (§2 Home recommendations, §4 Q&A relevance,
+§6 Volunteer Match reasons) consumes that profile silently — Profile is
+the one page that makes the captured identity *visible* to the user.
+The page is intentionally low-density: a centered identity hero, a
+single read-only card holding the four onboarding fields, a one-line
+"Why we ask" provenance hint that doubles as an invitation to edit,
+and a single secondary-styled "Edit profile" button at the bottom.
+Editing does not open a parallel form — it pushes §1 OnboardingView
+with the current `ABUser` prefilled so that §1 ↔ §9 share one source
+of truth for identity capture.
+
+### Feature
+
+**Parameters**
+
+| Field         | Type     | Values                                          | Required | Default                       |
+| ------------- | -------- | ----------------------------------------------- | :------: | ----------------------------- |
+| currentUser   | ABUser?  | resolved from `appState.currentUser`            |   yes    | `nil` (pre-onboarding state)  |
+
+**Actions**
+
+| ID    | Trigger              | Effect                                                                                                |
+| ----- | -------------------- | ----------------------------------------------------------------------------------------------------- |
+| §9.A1 | tap "Edit profile"   | → §1 Onboarding (edit mode) with `currentUser` prefilled; `onFinish` writes the updated ABUser back via `appState.updateUser` (not `completeOnboarding`) |
+
+### Layout
+
+Vertical-scroll page with a fixed bottom tab bar overlay. No back bar
+or page header — Profile is a tab root, the tab bar identifies it.
+
+1. **Identity hero** — centered avatar (initial-letter fallback when `currentUser.avatarURL == nil`) + display name + username caption
+2. **Profile fields card** — single content card containing 4 read-only field rows: Preferred Language · Current Status · Location · Duration in Australia (no inline editors)
+3. **Why-we-ask row** — informational card (compact, single-line: bold "Why we ask" lead + short explainer that doubles as an edit invitation)
+4. **Edit profile button** — secondary button "Edit profile" (white fill, ghost border, `#00639b` icon) (§9.A1)
+5. **Bottom tab bar overlay** — tab bar (4 items: Home / Community / Messages / Profile)
+
+> Empty state: when `currentUser == nil` (user has not completed onboarding), the fields card collapses to a single "No profile yet — finish onboarding first" row and the Edit button hides. This state should not be reachable in normal navigation since RootView gates Profile tab access on `hasCompletedOnboarding`.
+
+---
+
+## §10 Mechanism × Page coverage
 
 Proves the 5 Context-First mechanisms each land on at least one page,
 and no page is mechanism-orphaned.
@@ -643,46 +695,58 @@ Legend: ● this page **originates** the mechanism · ◐ this page
 | §6 Volunteer Match       | ◐           |             |         | ●        |         |
 | §7 Message List          |             |             |         |          | ●       |
 | §8 Chat                  |             |             |         | ◐        | ●       |
+| §9 Profile               | ◐           |             |         |          |         |
 
 If a page row is all-blank, it's a candidate for cutting. If a column
 is empty, the product thesis has a gap.
 
+§9 Profile consumes M1 (reads back the captured ABUser) and is the
+*only* page that makes M1 visible to the user — every other ◐ M1 cell
+consumes the profile silently as a filter input.
+
 ---
 
-## §10 Global Behaviors
+## §11 Global Behaviors
 
 Cross-page conventions written once so each page section can reference
 them rather than restate them. Visual rules belong in `design.md`; this
 section keeps only **layout/data topology** that crosses pages.
 
-### §10.1 Tab bar visibility
+### §11.1 Tab bar visibility
 
-`ABTab` has 3 cases: `home · community · profile`. The bottom tab
-bar is visible on §2 Home · §3 Community and on whatever §3 surfaces
-the Profile tab. It is hidden on detail / chat / modal surfaces (§4 §5
-§6 §8). Visibility on §4 Q&A List, the destination of the Profile
-tab, and the entry point for §7 Message List are all `[open]` — see §11.
+`ABTab` has 4 cases: `home · community · messages · profile`. The
+bottom tab bar is visible on the 4 tab roots — §2 Home · §3 Community
+· §7 Message List · §9 Profile. It is hidden on detail / chat / modal
+surfaces (§4 §5 §6 §8). Visibility on §4 Q&A List is `[open]` — see §12.
 
-### §10.2 Card adapter rule
+### §11.2 Card adapter rule
 
 Pages never bind Models directly into rendered components. Each page
 declares an adapter (e.g. `toCardData() / toItemData() / toHeroData()`)
 that maps a Model to the props its component needs. Living examples:
 §3 Community, §6 Volunteer Match, §7 Message List.
 
-### §10.3 Shared Context mounting
+### §11.3 Shared Context mounting
 
 Any ABConversation initiated via the §5 → §6 → §8 flow carries the
 originating ABQAPost into §8 Chat as ABSharedContext, mounted at the
 top of the conversation, above the first message, persisting across
 re-entries (it is not a one-time banner).
 
+### §11.4 Identity capture single-source
+
+There is exactly one form in the app that captures `ABUser` fields —
+§1 OnboardingView. Both first-launch (§1.A5) and re-edit (§9.A1) reuse
+the same SwiftUI view; only the `onFinish` closure differs (write a new
+ABUser via `completeOnboarding` vs. update an existing ABUser via
+`updateUser`). New ABUser fields therefore land in exactly one place.
+
 ---
 
-## §11 Open Questions
+## §12 Open Questions
 
 Decisions that block this spec from going final. Each is referenced by
-the relevant `[open §11]` marker in §1–§8; once resolved, the question
+the relevant `[open §12]` marker in §1–§9; once resolved, the question
 folds back into its page section and the marker is replaced with the
 concrete decision.
 
@@ -708,23 +772,18 @@ concrete decision.
   algorithm that *populates* `ABMatchResult.matchReasons` and
   `matchPercentage` is not specified.
 - **§5 → §6 → §8 ABSharedContext propagation** — §6.A2 / §6.A3 and
-  §10.3 say the originating ABQAPost mounts as ABSharedContext in §8.
+  §11.3 say the originating ABQAPost mounts as ABSharedContext in §8.
   The mechanism (route param, shared store, callback) is not
   specified. Currently v1 falls back to `ABMockData.chatContext`.
-- **§7 Message List entry point** — `ABTab` only has 3 cases (home /
-  community / profile). Is Message List reached via the Profile tab,
-  via a header icon on §2/§3, or does the tab bar grow a 4th case?
-- **Profile tab destination** — what page does `selectedTab == .profile`
-  show? Not currently specified anywhere; candidate location for
-  §7 Message List entry.
 - **§8 action pill effects** — §8.A3 currently no closures in v1.
   Each `ABContextAction.text` implies a different effect ("Share My
   Profile Tags" → injects a profile-tag bubble; "Suggest a Call" →
   opens a system call sheet?).
 - **§8 shared context tap** — §8.A2 destination: return to §5 by
   `relatedPostID`? Spec'd, not implemented in v1.
-- **Empty / loading / error states** — none of the 8 pages currently
-  render a non-mock state in v1. Spec'd as v2 work.
+- **Empty / loading / error states** — none of the 9 pages currently
+  render a non-mock state in v1 (except §9 Profile's `currentUser ==
+  nil` empty state). Spec'd as v2 work.
 - **Data plumbing** — how does the captured ABUser reach §2/§4/§6 as
   filter input? Options: `@Observable` AppState, `EnvironmentObject`,
   or hardcoded mock filter for prototype only.
@@ -735,17 +794,30 @@ concrete decision.
 
 ---
 
-## §12 Verification
+## §13 Verification
 
 The prototype is **spec-aligned** when:
 
-1. For each filled page (§1–§8), the SwiftUI file under
+1. For each filled page (§1–§9), the SwiftUI file under
    `ABDesignSystem/Sources/Pages/` renders the layout described and
    the actions table matches its closures.
-2. Every Open Question in §11 is resolved — folded into the relevant
+2. Every Open Question in §12 is resolved — folded into the relevant
    page section, or explicitly deferred.
-3. The flows in §11 / Page Map (§0.5) reproduce end-to-end via Xcode
-   Canvas previews.
+3. The flows in §12 / Page Map (§0.5) reproduce end-to-end via Xcode
+   Canvas previews and the running iOS simulator app.
 
 A page is **section-aligned** (per-PR bar) when its Parameters,
 Actions, and Layout match its SwiftUI file.
+
+### §13.1 §1 ↔ §9 round-trip
+
+The Profile read-back closes the M1 loop:
+
+1. §1 OnboardingView writes ABUser → AppState
+2. §9 ProfileView reads ABUser ← AppState (4 fields displayed verbatim)
+3. §9.A1 "Edit profile" → §1 OnboardingView (prefill mode) → AppState
+4. §9 re-renders with updated values
+
+If any step drifts, M1 is broken. Re-run by completing onboarding,
+visiting Profile, tapping Edit, changing one field, finishing, and
+verifying the change appears on Profile.

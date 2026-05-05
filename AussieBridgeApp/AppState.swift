@@ -32,6 +32,13 @@ final class AppState {
         hasCompletedOnboarding = true
     }
 
+    /// §9.A1 — Edit profile 闭环：从 §9 Profile 出发的 OnboardingView 完成后，
+    /// 走这个方法（不是 completeOnboarding），保留 hasCompletedOnboarding 状态，
+    /// 只更新 ABUser 字段。spec §11.4 single-source identity capture 的运行时实现。
+    func updateUser(_ user: ABUser) {
+        currentUser = user
+    }
+
     func captureOriginatingPost(_ post: ABQAPost) {
         originatingPost = post
     }
