@@ -4,7 +4,7 @@ A platform for newly-arrived migrants in Sydney, combining **community Q&A** (ca
 
 ## Status
 
-iOS prototype, built as a SwiftUI design system + 8 self-contained Pages. Currently runnable as Xcode Canvas previews (open `ABDesignSystem/Package.swift`); next-iteration goal is an installable iOS app target.
+iOS prototype, built as a SwiftUI design system + 8 self-contained Pages. All 8 Pages are spec-driven and live behind `#Preview` in Xcode Canvas (open `ABDesignSystem/Package.swift`). Next milestone is an installable iOS app target.
 
 ## Repository layout
 
@@ -14,7 +14,6 @@ Top-level:
 | ----------------- | -------------------------------------------------------------------------- |
 | `ABDesignSystem/` | Swift Package — the iOS prototype itself (tokens · components · models · pages) |
 | `docs/`           | Written specs + Stitch HTML mockups (the project's readable spec set)      |
-| `archive/`        | Superseded versions kept for iteration history                             |
 
 `ABDesignSystem/Sources/` (4-layer architecture):
 
@@ -39,23 +38,15 @@ Sources/
 
 ```
 docs/
-├── design.md           Authoritative design spec (Stitch baseline; "Anchored Horizon")
+├── product-context.md  Context-First mechanism summary (5 contextual moments)
+├── design.md           Authoritative design spec (tokens · type · elevation · components)
 ├── struct.md           Data model — 22 entities organised into 5 Context-First layers
 ├── struct.html         Rendered HTML version of struct.md (open in browser)
-├── spec.md             Page-level functional spec (skeleton; per-page bodies WIP)
-├── product-context.md  Context-First mechanism summary (5 contextual moments)
+├── spec.md             Page-level functional spec — 4-block template per page (§1–§8)
 └── mockups/            Stitch-generated HTML mockups — visual prior to the SwiftUI implementation
     ├── personalization.html · homepage.html · community.html · volunteer.html
     ├── qa.html · qa_scroll.html      (two variants — SwiftUI's QAListView consolidates both)
     ├── message.html · chat.html
-```
-
-`archive/`:
-
-```
-archive/
-├── design.v1-craft.md  v1 design — Craft-aligned visual exploration (replaced by current docs/design.md)
-└── struct.v1.md        v1 data model — flat list (replaced by current docs/struct.md with 5-layer grouping)
 ```
 
 ## Quick start
@@ -81,34 +72,28 @@ This sentence drives every downstream decision: typography line-height, tag cred
 
 See `docs/product-context.md` for the full mechanism summary.
 
+## AI workflow
+
+This repo is built with a **spec-driven** workflow. The four `docs/*.md` files are the source of truth — code is derived from them, never the other way around. AI assistance (Claude Code) is bounded to *executing each layer against the layer above it*, not free-form generation.
+
+The pipeline is six layers, each with one concrete artefact:
+
+| Layer | Artefact | What this layer answers |
+| ----- | -------- | ------------------------ |
+| 1. Why | `docs/product-context.md` | What product mechanism is being built and *why it exists* (5 Context-First moments). |
+| 2. How it looks | `docs/design.md` | Tokens, typography scale, elevation rules, component visual grammar. |
+| 3. What it stores | `docs/struct.md` | 22 entities + relationships across 5 Context-First layers. Mirrored in `ABModels.swift`. |
+| 4. What each page does | `docs/spec.md` | 4-block template (Overview / Parameters / Actions / Layout) per page. Wireframe-precision; *no visual decisions* (those belong to layer 2). |
+| 5. Spec-driven prototype experiments | `Sources/Prototypes/` (gitignored sandbox) | Each page is re-implemented from `spec.md` *without reading the existing `Pages/` source*. The exercise validates whether the spec is sufficient on its own — gaps show up as "had to self-pick a token / mockup / behaviour" notes inside the prototype. Multiple generations (V1→V4) preserved as evolution snapshots. |
+| 6. Final SwiftUI | `Sources/Pages/` | Once a prototype reaches V4 (no remaining gaps), it graduates to `Pages/` and becomes the shipped implementation. |
+
+Why this matters: the prototype layer (5) is what catches *spec drift* — places where `spec.md` says "section title" but no token resolves it, or where a mockup string disagrees with a Pages literal. Without that intermediate experiment, the spec stays authoritative on paper but unverifiable in practice.
+
+The control-vocabulary table in `spec.md §0.4` is the contract between layers 4 and 5 — every region a layer-4 spec describes must resolve to a real Component. When it doesn't, the gap is logged and the vocabulary or the component library is extended.
+
 ## Where the rest of the project lives
 
-This repository is intentionally **product-only**. The supporting course-and-research artefacts live in a separate location, kept clean of build code:
-
-```
-~/Desktop/xinyihan/uts-coursework/ios_innovation_studio/
-├── checkpoint1/         User research, interviews, AI engagement log
-├── checkpoint2/         Course design documentation, rubrics
-├── checkpoint3/         Presentation prep, course-side fallback copy of this product
-├── ideation_doc/        6-direction exploration → AussieBridge convergence (with 23-Mar pivot history)
-└── README.md            Index pointing back to this product repo
-```
-
-If you need:
-- **the user research that justifies the design** → `uts-coursework/.../checkpoint1/interview/`
-- **how AI was used and verified** → `uts-coursework/.../checkpoint1/ai_engagement.md`
-- **how the team converged from 6 directions to AussieBridge** → `uts-coursework/.../ideation_doc/`
-- **the presentation deck and slide narrative** → `uts-coursework/.../checkpoint3/` (assembled from the source files in this repo)
-
-## Iteration plan
-
-| Round | Status | Focus |
-|-------|--------|-------|
-| **v1** (Anchored Horizon) | shipped | AI-generated `docs/design.md` from Google Stitch; faithfully translated into SwiftUI. Current visual = Stitch baseline ≈ 75% of intended quality. |
-| **v2** (Open Harbour exploration) | archived in `archive/design.v1-craft.md` | Hand-tuned Craft aesthetic (warm paper + near-black + pastel accents); reverted to v1 baseline to keep narrative aligned with `docs/design.md`. Worth revisiting for warmth. |
-| **v3** (target) | next | Either (a) graft published design system (Radix Colors / Apple HIG semantic tokens) onto current spec, or (b) selectively re-introduce v2's editorial warmth on top of v1's Pacific palette. Decision pending user-test results. |
-
-User-testing hypotheses for v3 priority-setting: see the presentation script in `uts-coursework/.../checkpoint3/`.
+This repository is intentionally **product-only**. User research, ideation history, and presentation materials live alongside in `~/Desktop/xinyihan/uts-coursework/ios_innovation_studio/` — they're the path that led here, but they don't belong to the product itself.
 
 ## License
 

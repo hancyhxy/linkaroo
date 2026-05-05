@@ -37,3 +37,7 @@ node_modules/
 # Spec re-implementations of Pages/* live here while we test spec.md
 # fidelity. Delete the directory to discard.
 ABDesignSystem/Sources/Prototypes/
+
+# Superseded v1 docs kept locally for personal reference; not part of
+# the public product narrative. README does not reference them.
+archive/
