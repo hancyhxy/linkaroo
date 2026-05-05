@@ -74,46 +74,61 @@ See `docs/product-context.md` for the full mechanism summary.
 
 ## AI workflow
 
-This repo is built with a **spec-driven** workflow. The four `docs/*.md` files are the source of truth, and AI (Claude Code) is bounded to *executing each layer against the layer above it* — no free-form generation.
+This repo is built with a **spec-driven** workflow in 3 stages. AI (Claude Code) is bounded to *executing each step against the artefact upstream of it* — no free-form generation. Components are not a separate stage; they are a *mindset* carried through every stage (every visual / page region resolves to a reusable `AB*` component, never a one-off).
 
-The four spec layers, top-down:
-
-| Layer | Artefact | What it answers |
-| ----- | -------- | ----------------- |
-| 1. Why | `docs/product-context.md` | What product mechanism is being built and *why it exists* (5 Context-First moments). |
-| 2. How it looks | `docs/design.md` | Tokens, typography scale, elevation, component visual grammar. |
-| 3. What it stores | `docs/struct.md` | 22 entities + relationships across 5 Context-First layers. Mirrored in `ABModels.swift`. |
-| 4. What each page does | `docs/spec.md` | Per-page 4-block template (Overview / Parameters / Actions / Layout). Wireframe-precision. |
-
-### How the SwiftUI implementation got there
-
-The implementation didn't go straight from spec to `Pages/`. It went through `Sources/Prototypes/`, which is where each page is **re-implemented from `spec.md` without reading the existing `Pages/` source**. The exercise validates whether the spec is sufficient to drive an implementation on its own — every place where the prototype had to self-pick a token, a copy string, or a behaviour is logged as a SPEC GAP at the top of the file.
-
-The actual sequence:
-
-1. **Two pages first** — Onboarding (`§1`) and Home (`§2`) were re-implemented from `spec.md` as the first experiment.
-2. **Four iterations on those two** — V1 → V2 → V3 → V4. Each generation surfaced new gaps in the spec or the component library; each closure produced concrete repo changes (new components like `ABBackBar` / `ABPageHero` / `ABSectionTitle`, vocabulary additions in `spec.md §0.4`, copy-authority rule in `§0.5b`).
-3. **The other 6 pages, re-rendered once** — by the time V4 stabilised on Onboarding + Home, the workflow was mature enough to re-derive Community / QA List / QA Detail / Volunteer Match / Message List / Chat in a single pass. Each first version is V4.
-4. **Graduation to `Pages/`** — V4 prototypes that match their mockup and have no unresolved gaps become the shipped `Pages/*View.swift`.
+| Stage | Sub-step | Key artefact |
+| ----- | -------- | ------------ |
+| **1. Concept → Ideation** *(form a shared "what are we building")* | (1) Context-First defined as the personal variation: identity / location / urgency act as a *filter* over the same content. | `docs/product-context.md` (5 mechanisms) |
+| | (2) Google Stitch generated 8 page designs + an auto-generated design specification, copied verbatim into the repo. | Stitch design output, hand-pasted into `docs/design.md` |
+| | (3) The 8 Stitch screenshots were converted into static HTML — kept as a fidelity reference for downstream SwiftUI implementations. | `docs/mockups/*.html` (8 pages) |
+| **2. Spec & Component Definition** *(produce the static contract: visual / data / behaviour / building blocks)* | (a) Calibrate the Stitch-pasted design spec — tokens, typography scale, elevation, component visual grammar. | `docs/design.md` |
+| | (b) Personalised data model — the team's group structure refined into 5 Context-First layers (22 entities). Not derived from Stitch; captures how the mechanisms compose at the data level. | `docs/struct.md` + `docs/struct.html` |
+| | (c) Per-page functional spec — 4-block template (Overview / Parameters / Actions / Layout) at wireframe precision, written in conversation with Claude. | `docs/spec.md` (`§1`–`§8`) |
+| | (d) Initial component library — 30 reusable `AB*` views derived from the visual grammar so spec.md regions resolve to real Swift types, not free-form decisions. | `ABDesignSystem/Sources/Components/` |
+| **3. Rendering Test → Final** *(use code to reverse-validate the spec; close gaps, then graduate)* | Each page is re-implemented from `spec.md` *without reading the existing `Pages/` source*. Gaps surface as "had to self-pick a token / copy / behaviour" notes; spec.md and the component library are amended; the prototype iterates until it converges. Once converged, it graduates to `Pages/*View.swift`. | `ABDesignSystem/Sources/Prototypes/` (evolution record) → `ABDesignSystem/Sources/Pages/` (final 8 views) |
 
 ```mermaid
 flowchart TD
-    A["docs/product-context.md<br/><i>why</i>"] --> B["docs/design.md<br/><i>how it looks</i>"]
-    B --> C["docs/struct.md<br/><i>what it stores</i>"]
-    C --> D["docs/spec.md<br/><i>what each page does</i>"]
-    D --> E["Prototypes/<br/>Onboarding + Home V1→V4<br/><i>2 pages × 4 iterations</i>"]
-    E -->|spec gaps fed back| D
-    E --> F["Prototypes/<br/>other 6 pages, V4 only<br/><i>6 pages × 1 pass</i>"]
-    F --> G["Pages/<br/>final 8 SwiftUI pages"]
+    subgraph S1 ["Stage 1 — Concept → Ideation"]
+        direction TB
+        A1["Context-First concept<br/>docs/product-context.md"]
+        A2["Google Stitch demo<br/>8 designs + design spec"]
+        A3["HTML mockups<br/>docs/mockups/*.html"]
+        A1 --> A2 --> A3
+    end
 
-    style A fill:#e8f4ff,stroke:#00639b,color:#171c21
-    style B fill:#e8f4ff,stroke:#00639b,color:#171c21
-    style C fill:#e8f4ff,stroke:#00639b,color:#171c21
-    style D fill:#e8f4ff,stroke:#00639b,color:#171c21
-    style E fill:#fff3e0,stroke:#c4983f,color:#171c21
-    style F fill:#fff3e0,stroke:#c4983f,color:#171c21
-    style G fill:#dcfce7,stroke:#16a34a,color:#171c21
+    subgraph S2 ["Stage 2 — Spec &amp; Component Definition"]
+        direction TB
+        B1["docs/design.md<br/><i>visual grammar</i>"]
+        B2["docs/struct.md<br/><i>5-layer / 22 entities</i>"]
+        B3["docs/spec.md<br/><i>per-page 4-block</i>"]
+        B4["Components/<br/><i>30 AB* views</i>"]
+    end
+
+    subgraph S3 ["Stage 3 — Rendering Test → Final"]
+        direction TB
+        C1["Prototypes/<br/>spec-driven prototypes<br/><i>iterate until convergence</i>"]
+        C2["Pages/<br/>final 8 SwiftUI pages"]
+        C1 --> C2
+    end
+
+    S1 --> S2
+    S2 --> S3
+    C1 -.->|spec gaps fed back| B3
+    C1 -.->|new components| B4
+
+    style A1 fill:#e8f4ff,stroke:#00639b,color:#171c21
+    style A2 fill:#e8f4ff,stroke:#00639b,color:#171c21
+    style A3 fill:#e8f4ff,stroke:#00639b,color:#171c21
+    style B1 fill:#fff3e0,stroke:#c4983f,color:#171c21
+    style B2 fill:#fff3e0,stroke:#c4983f,color:#171c21
+    style B3 fill:#fff3e0,stroke:#c4983f,color:#171c21
+    style B4 fill:#fff3e0,stroke:#c4983f,color:#171c21
+    style C1 fill:#dcfce7,stroke:#16a34a,color:#171c21
+    style C2 fill:#dcfce7,stroke:#16a34a,color:#171c21
 ```
+
+The two dashed feedback edges from Stage 3 back to Stage 2 are what makes this workflow *spec-driven* rather than just spec-aligned: the prototypes don't merely consume the spec — they pressure-test it, and any gap they expose is closed in the spec or the component library before the page graduates.
 
 `Sources/Prototypes/` stays in the repo as the evolution record — see `Sources/Prototypes/README.md` for what's in there and how to read it.
 
