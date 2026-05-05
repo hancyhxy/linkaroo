@@ -5,7 +5,9 @@ import SwiftUI
 // §2 Home — see docs/spec.md §2.
 // Profile-driven push hub: search + 10 services + Featured Guide + recommendations.
 
-struct HomeView: View {
+public struct HomeView: View {
+    public init() {}
+
 
     // MARK: Parameters (spec §2)
     @State private var searchText: String = ""

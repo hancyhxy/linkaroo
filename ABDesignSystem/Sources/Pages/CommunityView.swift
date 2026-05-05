@@ -12,7 +12,9 @@ enum CommunitySegment: String, CaseIterable, CustomStringConvertible {
     public var description: String { rawValue }
 }
 
-struct CommunityView: View {
+public struct CommunityView: View {
+    public init() {}
+
 
     // MARK: Parameters (spec §3)
     @State private var segment: CommunitySegment = .discussions

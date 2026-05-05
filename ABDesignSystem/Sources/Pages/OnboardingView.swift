@@ -5,7 +5,9 @@ import SwiftUI
 // §1 Onboarding — see docs/spec.md §1.
 // First-launch identity capture. Captured ABUser drives all downstream filtering.
 
-struct OnboardingView: View {
+public struct OnboardingView: View {
+    public init() {}
+
 
     // MARK: Parameters (spec §1)
     @State private var language: ABLanguage = .english

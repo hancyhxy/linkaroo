@@ -1,0 +1,415 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0760A72173EBE545FA11632E /* HomeTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6375B973D253E7A70B79F79 /* HomeTab.swift */; };
+		3416A6CCF969661E6A6C13EB /* ABDesignSystem in Frameworks */ = {isa = PBXBuildFile; productRef = 625E8D5213EF41CB60879452 /* ABDesignSystem */; };
+		586D15826B9DAE4299180A01 /* MessagesTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48542436ED1F286550431A34 /* MessagesTab.swift */; };
+		74C49D9F9E3D4D1AEE836996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F76567B0E87A6076985D12D9 /* Assets.xcassets */; };
+		773667BFECB5C0EE8B8D47DF /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83426AE800D0F6925ED3D135 /* RootView.swift */; };
+		91A8E3AFC5624398F08FE226 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1BA15368ECBCB2286B9DBC /* AppState.swift */; };
+		A883DF3AA0D7A4FCAA69AF6E /* AussieBridgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E7852976C3ED4096D0F44C /* AussieBridgeApp.swift */; };
+		AA2A641C508E9C933746B123 /* CommunityTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBAD239AB28F7717601036C /* CommunityTab.swift */; };
+		EB51D23A5513BA346CA13678 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C212EB985D44B5EBDE8C731 /* MainTabView.swift */; };
+		EDC1E46A7843C48A3D02FA78 /* ProfileTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6B2ACBDCB7DB7C5398450 /* ProfileTab.swift */; };
+		EED383C5DE70F0460D752DB3 /* OnboardingFlowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967E3F6B63CC787C7D768797 /* OnboardingFlowView.swift */; };
+		F4279911AEE280AA39B2C9C8 /* Route.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813A82CC470A32B24177E3A6 /* Route.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		01F6B2ACBDCB7DB7C5398450 /* ProfileTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTab.swift; sourceTree = "<group>"; };
+		48542436ED1F286550431A34 /* MessagesTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTab.swift; sourceTree = "<group>"; };
+		6FF10FC4AD15DD8024BF33D3 /* AussieBridge.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AussieBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		7C212EB985D44B5EBDE8C731 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
+		813A82CC470A32B24177E3A6 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
+		83426AE800D0F6925ED3D135 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		967E3F6B63CC787C7D768797 /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
+		9BBAD239AB28F7717601036C /* CommunityTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityTab.swift; sourceTree = "<group>"; };
+		9C6FE37D4A88F4D6F9057C86 /* ABDesignSystem */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ABDesignSystem; path = ../ABDesignSystem; sourceTree = SOURCE_ROOT; };
+		D3E7852976C3ED4096D0F44C /* AussieBridgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AussieBridgeApp.swift; sourceTree = "<group>"; };
+		DE1BA15368ECBCB2286B9DBC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		F6375B973D253E7A70B79F79 /* HomeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTab.swift; sourceTree = "<group>"; };
+		F76567B0E87A6076985D12D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		400D14EB31D54A4AD2F381D3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3416A6CCF969661E6A6C13EB /* ABDesignSystem in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		28C5697425F3F34BB8BA5BEB = {
+			isa = PBXGroup;
+			children = (
+				97D44C48A0F2B5376091DCED /* AussieBridgeApp */,
+				7BBA114E4B6E612117E1C257 /* Packages */,
+				F1A41CA7BC5370BAF0A181EC /* Routing */,
+				502A5C120403BACBFD0BDFC5 /* Tabs */,
+				93147CED996082E9DDB5208E /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		502A5C120403BACBFD0BDFC5 /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				9BBAD239AB28F7717601036C /* CommunityTab.swift */,
+				F6375B973D253E7A70B79F79 /* HomeTab.swift */,
+				48542436ED1F286550431A34 /* MessagesTab.swift */,
+				01F6B2ACBDCB7DB7C5398450 /* ProfileTab.swift */,
+			);
+			path = Tabs;
+			sourceTree = "<group>";
+		};
+		7BBA114E4B6E612117E1C257 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				9C6FE37D4A88F4D6F9057C86 /* ABDesignSystem */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		93147CED996082E9DDB5208E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6FF10FC4AD15DD8024BF33D3 /* AussieBridge.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		97D44C48A0F2B5376091DCED /* AussieBridgeApp */ = {
+			isa = PBXGroup;
+			children = (
+				DE1BA15368ECBCB2286B9DBC /* AppState.swift */,
+				F76567B0E87A6076985D12D9 /* Assets.xcassets */,
+				D3E7852976C3ED4096D0F44C /* AussieBridgeApp.swift */,
+				F1A41CA7BC5370BAF0A181EC /* Routing */,
+				502A5C120403BACBFD0BDFC5 /* Tabs */,
+			);
+			name = AussieBridgeApp;
+			path = .;
+			sourceTree = "<group>";
+		};
+		F1A41CA7BC5370BAF0A181EC /* Routing */ = {
+			isa = PBXGroup;
+			children = (
+				7C212EB985D44B5EBDE8C731 /* MainTabView.swift */,
+				967E3F6B63CC787C7D768797 /* OnboardingFlowView.swift */,
+				83426AE800D0F6925ED3D135 /* RootView.swift */,
+				813A82CC470A32B24177E3A6 /* Route.swift */,
+			);
+			path = Routing;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		59C8FD51655B0B9A3DACA318 /* AussieBridge */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B2F534F80A8BC595521E66C6 /* Build configuration list for PBXNativeTarget "AussieBridge" */;
+			buildPhases = (
+				6E01305F1940C59FCAFAE34F /* Sources */,
+				461E72F5953C57DCDA9CD81C /* Resources */,
+				400D14EB31D54A4AD2F381D3 /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AussieBridge;
+			packageProductDependencies = (
+				625E8D5213EF41CB60879452 /* ABDesignSystem */,
+			);
+			productName = AussieBridge;
+			productReference = 6FF10FC4AD15DD8024BF33D3 /* AussieBridge.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0DD9370FA5BE132374AE7FF7 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					59C8FD51655B0B9A3DACA318 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 78C925645DD71F1257127187 /* Build configuration list for PBXProject "AussieBridge" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 28C5697425F3F34BB8BA5BEB;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E074206DB12208CDF7AC0884 /* XCLocalSwiftPackageReference "../ABDesignSystem" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 93147CED996082E9DDB5208E /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				59C8FD51655B0B9A3DACA318 /* AussieBridge */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		461E72F5953C57DCDA9CD81C /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				74C49D9F9E3D4D1AEE836996 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6E01305F1940C59FCAFAE34F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				91A8E3AFC5624398F08FE226 /* AppState.swift in Sources */,
+				A883DF3AA0D7A4FCAA69AF6E /* AussieBridgeApp.swift in Sources */,
+				AA2A641C508E9C933746B123 /* CommunityTab.swift in Sources */,
+				0760A72173EBE545FA11632E /* HomeTab.swift in Sources */,
+				EB51D23A5513BA346CA13678 /* MainTabView.swift in Sources */,
+				586D15826B9DAE4299180A01 /* MessagesTab.swift in Sources */,
+				EED383C5DE70F0460D752DB3 /* OnboardingFlowView.swift in Sources */,
+				EDC1E46A7843C48A3D02FA78 /* ProfileTab.swift in Sources */,
+				773667BFECB5C0EE8B8D47DF /* RootView.swift in Sources */,
+				F4279911AEE280AA39B2C9C8 /* Route.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4EC73ADF343ECC98E0157E10 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Release;
+		};
+		602B7C8C4124C9F0AFCB6BB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.9;
+			};
+			name = Debug;
+		};
+		98C00ED69212C08E129858A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinyihan.aussiebridge;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		E1E064A0700556658339AE33 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinyihan.aussiebridge;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		78C925645DD71F1257127187 /* Build configuration list for PBXProject "AussieBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				602B7C8C4124C9F0AFCB6BB5 /* Debug */,
+				4EC73ADF343ECC98E0157E10 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		B2F534F80A8BC595521E66C6 /* Build configuration list for PBXNativeTarget "AussieBridge" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E1E064A0700556658339AE33 /* Debug */,
+				98C00ED69212C08E129858A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E074206DB12208CDF7AC0884 /* XCLocalSwiftPackageReference "../ABDesignSystem" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../ABDesignSystem;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		625E8D5213EF41CB60879452 /* ABDesignSystem */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ABDesignSystem;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0DD9370FA5BE132374AE7FF7 /* Project object */;
+}

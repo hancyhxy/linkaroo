@@ -5,7 +5,9 @@ import SwiftUI
 // §6 Volunteer Match — see docs/spec.md §6.
 // M4 — algorithm legibility via visible match reasons.
 
-struct VolunteerMatchView: View {
+public struct VolunteerMatchView: View {
+    public init() {}
+
 
     // MARK: Parameters (spec §6)
     private var matches: [ABMatchResult] { ABMockData.matchResults }

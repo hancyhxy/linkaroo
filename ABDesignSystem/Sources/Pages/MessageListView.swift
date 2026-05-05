@@ -12,7 +12,9 @@ enum MessageSegment: String, CaseIterable, CustomStringConvertible {
     public var description: String { rawValue }
 }
 
-struct MessageListView: View {
+public struct MessageListView: View {
+    public init() {}
+
 
     // MARK: Parameters (spec §7)
     @State private var segment: MessageSegment = .all

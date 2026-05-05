@@ -6,7 +6,7 @@ import SwiftUI
 // Context-aware 1-on-1 chat. Originating ABQAPost mounts as ABSharedContext
 // at the top, persists across re-entries (§10.3).
 
-struct ChatView: View {
+public struct ChatView: View {
 
     // MARK: Parameters (spec §8)
     public let conversation: ABConversation

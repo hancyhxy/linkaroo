@@ -20,6 +20,11 @@ public struct ABPageHero: View {
     public let headline: String
     public var subtitle: String? = nil
 
+    public init(headline: String, subtitle: String? = nil) {
+        self.headline = headline
+        self.subtitle = subtitle
+    }
+
     public var body: some View {
         VStack(alignment: .leading, spacing: ABSpacing.s2) {
             Text(headline)

@@ -5,7 +5,7 @@ import SwiftUI
 // §5 Q&A Detail — see docs/spec.md §5.
 // Single thread + Top Answer + match-volunteer escalation (entry to §6 → §8 flow).
 
-struct QADetailView: View {
+public struct QADetailView: View {
 
     // MARK: Parameters (spec §5)
     public let post: ABQAPost

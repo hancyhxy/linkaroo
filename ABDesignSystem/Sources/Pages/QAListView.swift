@@ -5,7 +5,9 @@ import SwiftUI
 // §4 Q&A List — see docs/spec.md §4.
 // Reddit-style Q&A list with category filter + CTA banner.
 
-struct QAListView: View {
+public struct QAListView: View {
+    public init() {}
+
 
     // MARK: Parameters (spec §4)
     @State private var selectedCategoryId: String = "all"
