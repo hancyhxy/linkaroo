@@ -28,35 +28,39 @@ struct ABSegmentedControl<T: Hashable & CustomStringConvertible>: View {
                 selected = option
             }
         } label: {
-            ZStack(alignment: .topTrailing) {
+            // Label + badge wrapped tightly, then centered inside the
+            // segment slot. This anchors the badge to the *text*'s
+            // top-trailing corner (per mockup message.html) instead of
+            // the full segment slot's right edge — otherwise the badge
+            // floats out into empty track space.
+            HStack(spacing: 6) {
                 Text(option.description)
                     .font(.abLabelMd)
                     .fontWeight(option == selected ? .semibold : .medium)
                     .foregroundStyle(option == selected ? .abOnSurface : Color.abOnSurfaceDisabled)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 8)
-                    .background(
-                        option == selected
-                            ? AnyShapeStyle(Color.abSurfaceCard)
-                            : AnyShapeStyle(Color.clear)
-                    )
-                    .clipShape(Capsule())
-                    .shadow(
-                        color: option == selected ? .black.opacity(0.05) : .clear,
-                        radius: 1, x: 0, y: 1
-                    )
 
-                // Badge
                 if let count = badgeCounts[option], count > 0 {
                     Text("\(count)")
                         .font(.system(size: 10, weight: .bold))
                         .foregroundStyle(.white)
-                        .frame(width: 20, height: 20)
+                        .frame(minWidth: 18, minHeight: 18)
+                        .padding(.horizontal, 4)
                         .background(Color.abStatusUnread)
-                        .clipShape(Circle())
-                        .offset(x: 4, y: -4)
+                        .clipShape(Capsule())
                 }
             }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 8)
+            .background(
+                option == selected
+                    ? AnyShapeStyle(Color.abSurfaceCard)
+                    : AnyShapeStyle(Color.clear)
+            )
+            .clipShape(Capsule())
+            .shadow(
+                color: option == selected ? .black.opacity(0.05) : .clear,
+                radius: 1, x: 0, y: 1
+            )
         }
         .buttonStyle(.plain)
     }
