@@ -72,14 +72,14 @@ treatments and not in-house component names. The standard vocabulary:
 
 | Group       | Standard terms                                                                |
 | ----------- | ----------------------------------------------------------------------------- |
-| Heading     | section title (level: major / section / label)                                |
+| Heading     | section title (level: major / section / label) · page hero (headline + subtitle) |
 | Selection   | single-select card grid · multi-select card grid · single-select chip row · radio list · segmented control |
 | Text        | single-line text input · multi-line text area · search input                  |
 | Picker      | city/state picker · date picker · dropdown                                    |
 | List        | vertical list · horizontal carousel · category-grouped list                   |
 | Toggle      | toggle · tab bar                                                              |
 | Block       | hero block · dark hero panel · informational card · banner · tip card · quote block |
-| Action      | primary button · text link · floating action button · sticky footer overlay   |
+| Action      | primary button · text link · floating action button · sticky footer overlay · back bar |
 | Card        | content card · row card · compact card · hero card                            |
 | Tag         | tag chip · category chip · status badge                                       |
 
@@ -88,6 +88,17 @@ component (3-level hierarchy: `.major` for editorial headings,
 `.section` for form-section headings, `.label` for tightest fieldset
 labels). Layout bullets must specify which level to lock visual
 hierarchy across pages.
+
+`page hero (headline + subtitle)` resolves to the `ABPageHero`
+component — a content-flow hero with `abHeadlineLg` headline and
+optional `abBodySm` muted subtitle. Pair with `back bar` (overlay
+above) when the page wants editorial breathing room rather than the
+compact `ABHeader.pageTitle` (back + title in one row).
+
+`back bar` resolves to the `ABBackBar` component — a slim (≈56pt)
+frosted overlay holding only the back chevron. Use as a `ZStack`-top
+overlay above a `ScrollView` whose first content element is a
+`page hero`.
 
 Add a row when the existing vocabulary cannot describe a real region.
 Don't introduce ad-hoc terms inline.
@@ -201,10 +212,12 @@ personalization and still reach Home with a default profile.
 
 ### Layout
 
-Vertical-scroll form with a fixed sticky footer overlay.
+Vertical-scroll form with a back-bar overlay on top and a sticky
+footer overlay at the bottom; the page hero lives in the content
+flow, not in the back bar.
 
-1. **Header bar** — page title (the page-title also serves as the hero headline; no second headline below)
-2. **Hero intro** — supporting paragraph below the header
+1. **Back bar overlay** — back bar (frosted)
+2. **Page hero** — page hero (headline + subtitle)
 3. **Language section** — section title (level: section) + single-select card grid (6 options, 2 cols; each card: flag + language name) (§1.A1)
 4. **Status section** — section title (level: section) + single-select icon-card grid (4 options, 2 cols; each card: icon + label) (§1.A2)
 5. **Location section** — section title (level: section) + city/state picker (§1.A3)
