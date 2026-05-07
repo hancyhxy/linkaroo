@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Linkaroo / AussieBridge logo — master file.
+
+  Two overlapping circles (Mastercard-style "linked rings"), conveying
+  the connection between newcomers and locals. The bright sky-cyan
+  circle sits on the LEFT and is intentionally smaller — light first,
+  weight second — and is layered ON TOP of the deep blue at the overlap.
+
+  Colors (logo-only brand pair, NOT bound to a design-system token —
+  the system's abAccentSky is too pale and marked LEGACY; abPrimaryBright
+  is too navy. These two values are calibrated to feel like a single
+  azure-cyan family — see chat 2026-05-07):
+
+    Deep blue   #0C2C5C   azure-navy (no teal cast — pairs cleanly with cyan)
+    Bright blue #22D3EE   sky-cyan, "fluorescent" but not neon
+    Background  #F7FAFB   abSurface (Apple App Icons must be opaque)
+
+  Geometry (1024x1024 canvas):
+    Bright (left)  cx=392, cy=512, r=180   ← smaller, lighter visual weight
+    Deep  (right)  cx=632, cy=512, r=240
+    Centers spacing 240 — overlap reads as one "linked" form
+    Bright drawn second so it covers the overlap region opaquely.
+    Safe-area margin ≥ 152px every side (Apple recommends ≥ 100pt).
+
+  Edit this file to adjust brand; re-run scripts/render-icon.sh to
+  regenerate the rasterized AppIcon.
+-->
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 1024 1024"
+     width="1024" height="1024">
+  <!-- Opaque background (Apple rejects transparent App Icons). -->
+  <rect width="1024" height="1024" fill="#F7FAFB"/>
+
+  <!-- Deep azure-navy circle — right side, larger, drawn first. -->
+  <circle cx="632" cy="512" r="240" fill="#0C2C5C"/>
+
+  <!-- Bright sky-cyan circle — left side, smaller, drawn second so it
+       sits opaquely on top of the deep blue at the overlap. -->
+  <circle cx="392" cy="512" r="180" fill="#22D3EE"/>
+</svg>
