@@ -68,19 +68,15 @@ Where the matching algorithm becomes *legible*. Each volunteer is paired with ex
   </tr>
 </table>
 
-## §7 · Message List
-Inbox-shaped re-entry surface. `All / Unread` segment with a numeric badge on Unread; each row carries online-state on the avatar. Tapping returns to §8 Chat with the same `ABSharedContext` still mounted.
+## §7–§8 · Messages
+Inbox-shaped re-entry surface paired with the conversation it opens into. The list (left) is an `All / Unread` segment with a numeric badge on Unread; each row carries online-state on the avatar. The chat (right) makes two design moves that separate it from a generic messenger: (a) originating `ABQAPost` mounted at the top as a shared-context card, persistent across re-entries; (b) action pill row between the context card and the input area for one-tap profile-tag sync. Tapping a row returns to the same chat with `ABSharedContext` still mounted.
 
-<p align="center">
-  <img src="screenshots/07-message-list.png" alt="Message List" width="50%" />
-</p>
-
-## §8 · Chat
-Conversation surface. Two design moves separate it from a generic messenger: (a) originating `ABQAPost` mounted at the top as a shared-context card, persistent across re-entries; (b) action pill row between the context card and the input area for one-tap profile-tag sync.
-
-<p align="center">
-  <img src="screenshots/08-chat.png" alt="Chat" width="50%" />
-</p>
+<table>
+  <tr>
+    <td valign="top" width="50%"><img src="screenshots/07-message-list.png" alt="Message List" /></td>
+    <td valign="top" width="50%"><img src="screenshots/08-chat.png" alt="Chat" /></td>
+  </tr>
+</table>
 
 ## §9 · Profile
 Read-back end of Mechanism 1. After §1 writes an `ABUser` into AppState, downstream surfaces consume it silently — Profile is the one place where the captured identity becomes visible. "Edit profile" re-enters §1 with values prefilled (single-source identity capture).
