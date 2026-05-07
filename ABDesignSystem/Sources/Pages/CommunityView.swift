@@ -56,6 +56,7 @@ public struct CommunityView: View {
                                 name: req.requester.displayName,
                                 subtitle: req.subtitle,
                                 avatarURL: req.requester.avatarURL,
+                                avatar: req.requester.avatarContent,
                                 tags: req.tags.map { (text: $0.text, style: tagStyle(for: $0.type)) },
                                 quote: req.questionText,
                                 achievementText: req.achievement?.text,

@@ -6,6 +6,7 @@ public struct ABHelpCardData {
     public let name: String
     public let subtitle: String
     public let avatarURL: URL?
+    public var avatar: ABAvatarContent? = nil          // overrides avatarURL when set
     public var tags: [(text: String, style: ABTagStyle)] = []
     public var quote: String = ""
     public var achievementText: String? = nil
@@ -27,7 +28,7 @@ public struct ABHelpCard: View {
         VStack(alignment: .leading, spacing: ABSpacing.s3) {
             // Header
             HStack(spacing: ABSpacing.s3) {
-                ABAvatar(content: .image(data.avatarURL), size: ABAvatarSize.md)
+                ABAvatar(content: data.avatar ?? .image(data.avatarURL), size: ABAvatarSize.md)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(data.name)
                         .font(.abTitleSm)

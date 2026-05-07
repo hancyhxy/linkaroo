@@ -19,22 +19,30 @@ public struct ABHeader: View {
     public var onMenu: (() -> Void)? = nil
 
     public var body: some View {
-        HStack(spacing: ABSpacing.s3) {
-            switch variant {
-            case .brand:
-                brandContent
+        // Background extends behind the status bar so iOS clock / battery glyphs
+        // sit on the header surface instead of the page content underneath.
+        // Content layer stays inside the safe area at headerHeight.
+        ZStack(alignment: .bottom) {
+            headerBackground
+                .ignoresSafeArea(edges: .top)
 
-            case .pageTitle(let title, let showBack):
-                pageTitleContent(title: title, showBack: showBack)
+            HStack(spacing: ABSpacing.s3) {
+                switch variant {
+                case .brand:
+                    brandContent
 
-            case .chat(let name, let avatarURL, let isOnline):
-                chatContent(name: name, avatarURL: avatarURL, isOnline: isOnline)
+                case .pageTitle(let title, let showBack):
+                    pageTitleContent(title: title, showBack: showBack)
+
+                case .chat(let name, let avatarURL, let isOnline):
+                    chatContent(name: name, avatarURL: avatarURL, isOnline: isOnline)
+                }
             }
+            .frame(height: ABLayout.headerHeight)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal, ABSpacing.s5)
         }
         .frame(height: ABLayout.headerHeight)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.horizontal, ABSpacing.s5)
-        .background(headerBackground)
         .modifier(ABHeaderShadow(variant: variant))
     }
 
