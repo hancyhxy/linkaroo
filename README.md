@@ -8,7 +8,15 @@
 
 A platform for newly-arrived migrants in Sydney, combining **community Q&A** (categorized, credibility-tagged) with **1-on-1 volunteer matching**. The personal variation explored in this repo is **Context-First** — the app treats user identity, location, and urgency as a *filter* rather than a *feature*, so the same content surfaces differently depending on who is reading.
 
-📱 **[See all 9 screens →](SCREENSHOTS.md)**
+<p align="center">
+  <img src="screenshots/flow.png" alt="Linkaroo — 9 pages at a glance" width="100%" />
+</p>
+
+<p align="center">
+  <img src="screenshots/demo.gif" alt="Linkaroo iOS demo" width="100%" />
+</p>
+
+📱 **[See every screen state →](SCREENSHOTS.md)**
 
 ## Status
 
