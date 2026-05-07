@@ -28,7 +28,7 @@ import SwiftUI
 //   [GAP-13] Spec §8 Layout-1 says "header bar (chat variant)". §0.4
 //     vocabulary doesn't list `chat variant` — only `back bar`,
 //     `header bar` are in there. Resolved by reading ABHeader.swift's
-//     enum: `.chat(name, avatarURL, isOnline)` is a real variant.
+//     enum: `.chat(name, avatar, isOnline)` is a real variant.
 //     spec needs to add "chat variant" to its vocabulary, or use the
 //     §0.4 standard term explicitly.
 //
@@ -74,7 +74,7 @@ struct ChatPrototypeV4View: View {
                 // Layout 1 — Header bar (chat variant)
                 ABHeader(variant: .chat(
                     name: conversation.participant.displayName,
-                    avatarURL: conversation.participant.avatarURL,
+                    avatar: conversation.participant.avatarContent,
                     isOnline: conversation.participant.isOnline
                 ),
                 onBack: {

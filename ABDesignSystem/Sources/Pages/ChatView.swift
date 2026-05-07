@@ -43,7 +43,7 @@ public struct ChatView: View {
                 ABHeader(
                     variant: .chat(
                         name: conversation.participant.displayName,
-                        avatarURL: conversation.participant.avatarURL,
+                        avatar: conversation.participant.avatarContent,
                         isOnline: conversation.participant.isOnline
                     ),
                     onBack: {
@@ -118,7 +118,7 @@ public struct ChatView: View {
                     timestamp: message.timeString,
                     alignment: message.direction == .incoming ? .incoming : .outgoing,
                     avatarContent: message.direction == .incoming
-                        ? .initials(conversation.participant.initials)
+                        ? conversation.participant.avatarContent
                         : nil
                 )
             }

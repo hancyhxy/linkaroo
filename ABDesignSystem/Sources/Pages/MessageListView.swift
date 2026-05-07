@@ -56,9 +56,7 @@ public struct MessageListView: View {
                                     name: convo.participant.displayName,
                                     preview: convo.lastMessage,
                                     timeAgo: convo.timeAgoString,
-                                    avatarContent: convo.participant.avatarURL == nil
-                                        ? .initials(convo.participant.initials)
-                                        : .image(convo.participant.avatarURL),
+                                    avatarContent: convo.participant.avatarContent,
                                     isOnline: convo.participant.isOnline,
                                     isUnread: convo.isUnread
                                 ),

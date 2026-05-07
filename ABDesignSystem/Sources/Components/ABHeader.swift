@@ -7,8 +7,11 @@ public enum ABHeaderVariant {
     case brand
     /// Page title with optional back button
     case pageTitle(title: String, showBack: Bool = true)
-    /// Chat header with avatar, name, and online status
-    case chat(name: String, avatarURL: URL? = nil, isOnline: Bool = false)
+    /// Chat header with avatar, name, and online status.
+    /// `avatar` flows through ABAvatar's full fallback chain
+    /// (asset → URL → initials), so callers should pass
+    /// `user.avatarContent` rather than a raw URL.
+    case chat(name: String, avatar: ABAvatarContent, isOnline: Bool = false)
 }
 
 // MARK: - ABHeader
@@ -34,8 +37,8 @@ public struct ABHeader: View {
                 case .pageTitle(let title, let showBack):
                     pageTitleContent(title: title, showBack: showBack)
 
-                case .chat(let name, let avatarURL, let isOnline):
-                    chatContent(name: name, avatarURL: avatarURL, isOnline: isOnline)
+                case .chat(let name, let avatar, let isOnline):
+                    chatContent(name: name, avatar: avatar, isOnline: isOnline)
                 }
             }
             .frame(height: ABLayout.headerHeight)
@@ -70,13 +73,13 @@ public struct ABHeader: View {
 
     // MARK: - Chat Content
 
-    private func chatContent(name: String, avatarURL: URL?, isOnline: Bool) -> some View {
+    private func chatContent(name: String, avatar: ABAvatarContent, isOnline: Bool) -> some View {
         HStack(spacing: 0) {
             HStack(spacing: 10) {
                 backButton
 
                 ABAvatar(
-                    content: .image(avatarURL),
+                    content: avatar,
                     size: 36,
                     showOnline: isOnline
                 )
@@ -166,7 +169,7 @@ private struct ABHeaderShadow: ViewModifier {
         ABHeader(variant: .pageTitle(title: "Community"))
         ABHeader(variant: .pageTitle(title: "Volunteer", showBack: true), onBack: {})
         ABHeader(
-            variant: .chat(name: "Sarah L.", isOnline: true),
+            variant: .chat(name: "Sarah L.", avatar: .initials("SL"), isOnline: true),
             onBack: {},
             onMenu: {}
         )
