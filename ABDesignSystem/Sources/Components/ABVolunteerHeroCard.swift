@@ -6,11 +6,34 @@ public struct ABVolunteerHeroData {
     public let name: String
     public let role: String
     public let imageURL: URL?
+    public var avatar: ABAvatarContent? = nil           // overrides imageURL when set
     public var matchPercent: Int = 0
     public var rating: Double = 0
     public var helpedCount: Int = 0
     public var skills: [(text: String, style: ABTagStyle)] = []
     public var bio: String = ""
+
+    public init(
+        name: String,
+        role: String,
+        imageURL: URL? = nil,
+        avatar: ABAvatarContent? = nil,
+        matchPercent: Int = 0,
+        rating: Double = 0,
+        helpedCount: Int = 0,
+        skills: [(text: String, style: ABTagStyle)] = [],
+        bio: String = ""
+    ) {
+        self.name = name
+        self.role = role
+        self.imageURL = imageURL
+        self.avatar = avatar
+        self.matchPercent = matchPercent
+        self.rating = rating
+        self.helpedCount = helpedCount
+        self.skills = skills
+        self.bio = bio
+    }
 }
 
 // MARK: - ABVolunteerHeroCard
@@ -39,17 +62,58 @@ public struct ABVolunteerHeroCard: View {
     }
 
     // MARK: - Image Section
+    //
+    // Two layers:
+    //   1. Background — same photo, blown up + heavily blurred + tinted, fills the
+    //      whole 208pt banner. Avoids hard edges when the source photo is square
+    //      and the banner is landscape.
+    //   2. Foreground — the photo at native aspect ratio, fitted (not filled) into
+    //      a centered square frame so the face is never cropped.
+    //
+    // When no photo is available we fall back to a neutral container with a
+    // person icon, identical to the legacy behavior.
 
     @ViewBuilder
     private var imageSection: some View {
-        if let url = data.imageURL {
-            AsyncImage(url: url) { image in
-                image.resizable().aspectRatio(contentMode: .fill)
-            } placeholder: {
-                Color.abSurfaceContainer
+        if let avatar = data.avatar {
+            ZStack {
+                // Blurred background layer — same image, scaled to fill, blurred.
+                avatarImage(for: avatar)
+                    .aspectRatio(contentMode: .fill)
+                    .frame(maxWidth: .infinity, maxHeight: 208)
+                    .clipped()
+                    .blur(radius: 24)
+                    .overlay(Color.black.opacity(0.18))
+
+                // Foreground square — fits face fully, centered, rounded corners.
+                avatarImage(for: avatar)
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 176, height: 176)
+                    .clipShape(RoundedRectangle(cornerRadius: ABRadius.xl))
+                    .shadow(color: Color.black.opacity(0.22), radius: 16, x: 0, y: 6)
             }
-            .frame(maxWidth: .infinity, maxHeight: 208)
-            .clipped()
+        } else if let url = data.imageURL {
+            // Legacy URL path — same blur-bg + centered-square treatment.
+            ZStack {
+                AsyncImage(url: url) { image in
+                    image.resizable().aspectRatio(contentMode: .fill)
+                } placeholder: {
+                    Color.abSurfaceContainer
+                }
+                .frame(maxWidth: .infinity, maxHeight: 208)
+                .clipped()
+                .blur(radius: 24)
+                .overlay(Color.black.opacity(0.18))
+
+                AsyncImage(url: url) { image in
+                    image.resizable().aspectRatio(contentMode: .fit)
+                } placeholder: {
+                    Color.abSurfaceContainer
+                }
+                .frame(width: 176, height: 176)
+                .clipShape(RoundedRectangle(cornerRadius: ABRadius.xl))
+                .shadow(color: Color.black.opacity(0.22), radius: 16, x: 0, y: 6)
+            }
         } else {
             Color.abSurfaceContainer
                 .overlay(
@@ -57,6 +121,34 @@ public struct ABVolunteerHeroCard: View {
                         .font(.system(size: 64))
                         .foregroundStyle(Color.abOnSurfaceDisabled)
                 )
+        }
+    }
+
+    /// Resolve an ABAvatarContent into a SwiftUI Image (resizable but not yet
+    /// constrained to an aspect ratio — caller decides .fit vs .fill).
+    @ViewBuilder
+    private func avatarImage(for content: ABAvatarContent) -> some View {
+        switch content {
+        case .asset(let name):
+            if let img = ABAvatar.loadBundleImage(named: name) {
+                img.resizable()
+            } else {
+                Color.abSurfaceContainer
+            }
+        case .image(let url):
+            if let url {
+                AsyncImage(url: url) { image in
+                    image.resizable()
+                } placeholder: {
+                    Color.abSurfaceContainer
+                }
+            } else {
+                Color.abSurfaceContainer
+            }
+        case .initials:
+            // Hero card with initials only — degrade to neutral background;
+            // the initials/letter avatar is too small for hero scale.
+            LinearGradient.abAvatarFallback
         }
     }
 

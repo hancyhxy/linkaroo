@@ -444,9 +444,17 @@ Top Answer surfaced as a quote block, but its load-bearing role is
 to escalate the reader from passive reading into a 1-on-1 match. The
 "Match a volunteer" CTA at the bottom forks the user into §6, and the
 originating ABQAPost rides forward as `ABSharedContext` when the user
-eventually lands in §8 Chat — see §11.3. The page is intentionally
-linear (no comments thread in v1): the choice is *trust the answer
-and act* vs *escalate to a human*, not *scroll deeper*.
+eventually lands in §8 Chat — see §11.3.
+
+Below the Top Answer the page surfaces a *flat, non-threaded* answers
+list — not as a discussion thread but as **funnel reinforcement**. By
+design the answers contradict each other (outdated post), promote
+products (TikTok-sourced post), or quietly converge (verified post),
+so reading further amplifies — not resolves — uncertainty for the two
+non-verified states. The terminal action remains *Match a volunteer*:
+the choice is still *trust the answer and act* vs *escalate to a
+human*, with the answers list now serving as evidence for the second
+option.
 
 ### Feature
 
@@ -474,7 +482,8 @@ on this surface (§11.1 — detail / chat / modal hides the tab bar).
 4. **Body paragraph** — paragraph rendering `post.fullContent` (falls back to `post.preview` when empty)
 5. **Top Answer block** *(when `post.topAnswer != nil`)* — quote block (header text "Top Answer · Verified" when `topAnswer.isVerified`, else "Top Answer")
 6. **Stats row** — caption row (vote count · comment count)
-7. **Match CTA section** — informational card (title + body + primary button "Match a volunteer" (§5.A2))
+7. **Answers list** — section title (level: section) "Answers (n)" followed by a flat (non-threaded) list of comment cells (avatar + author/time-ago + optional OP/Verified chip + body + decorative vote chevron). Cells are unwrapped (no card); separated by vertical spacing. Mock data sourced via `ABMockData.comments(for: post.id)`. Section count uses `post.commentCount`, not `comments.count` — the rendered list is paginated by design and the count reflects the full thread. Empty state: "Be the first to answer." (italic, disabled tone, centered).
+8. **Match CTA section** — informational card (title + body + primary button "Match a volunteer" (§5.A2))
 
 ---
 

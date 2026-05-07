@@ -78,7 +78,8 @@ public struct ABUser: Identifiable, Codable {
     public let id: UUID
     public var displayName: String
     public var username: String                          // e.g., "u/sarah_m"
-    public var avatarURL: URL?                           // nil → 用 initials 渲染
+    public var avatarURL: URL?                           // 远程/外部 URL（优先级最低）
+    public var avatarAssetName: String?                  // 本地 SwiftPM bundle 资源名；优先于 avatarURL
     public var preferredLanguage: ABLanguage
     public var currentStatus: ABUserStatus
     public var location: ABLocation?
@@ -93,6 +94,7 @@ public struct ABUser: Identifiable, Codable {
         displayName: String,
         username: String,
         avatarURL: URL? = nil,
+        avatarAssetName: String? = nil,
         preferredLanguage: ABLanguage = .english,
         currentStatus: ABUserStatus = .immigrantStudent,
         location: ABLocation? = nil,
@@ -106,6 +108,7 @@ public struct ABUser: Identifiable, Codable {
         self.displayName = displayName
         self.username = username
         self.avatarURL = avatarURL
+        self.avatarAssetName = avatarAssetName
         self.preferredLanguage = preferredLanguage
         self.currentStatus = currentStatus
         self.location = location
@@ -124,6 +127,18 @@ public struct ABUser: Identifiable, Codable {
             .compactMap { $0.first.map(String.init) }
             .joined()
             .uppercased()
+    }
+
+    /// Resolve to the appropriate ABAvatarContent. Precedence: assetName > URL > initials.
+    /// Lets every avatar render site use one call: `ABAvatar(content: user.avatarContent, size: …)`.
+    public var avatarContent: ABAvatarContent {
+        if let name = avatarAssetName {
+            return .asset(name: name)
+        }
+        if avatarURL != nil {
+            return .image(avatarURL)
+        }
+        return .initials(initials)
     }
 }
 
@@ -360,6 +375,49 @@ public struct ABTopAnswer: Codable {
         self.authorUsername = authorUsername
         self.excerpt = excerpt
         self.isVerified = isVerified
+    }
+}
+
+/// 单条扁平评论。v1 不做嵌套 — see docs/spec.md §5 funnel-reinforcement rationale.
+public struct ABQAComment: Identifiable, Codable {
+    public let id: UUID
+    public let postID: UUID                              // FK → ABQAPost.id
+    public var author: ABUser
+    public var content: String
+    public var voteCount: Int
+    public var createdAt: Date
+    public var isOPReply: Bool                           // author == 父帖作者
+    public var isVerified: Bool                          // 资深志愿者 / 行业专家
+
+    public init(
+        id: UUID = UUID(),
+        postID: UUID,
+        author: ABUser,
+        content: String,
+        voteCount: Int = 0,
+        createdAt: Date = Date(),
+        isOPReply: Bool = false,
+        isVerified: Bool = false
+    ) {
+        self.id = id
+        self.postID = postID
+        self.author = author
+        self.content = content
+        self.voteCount = voteCount
+        self.createdAt = createdAt
+        self.isOPReply = isOPReply
+        self.isVerified = isVerified
+    }
+
+    public var timeAgoString: String {
+        let interval = Date().timeIntervalSince(createdAt)
+        let hours = Int(interval / 3600)
+        if hours < 1 { return "Just now" }
+        if hours < 24 { return "\(hours)h ago" }
+        let days = hours / 24
+        if days < 7 { return "\(days)d ago" }
+        let weeks = days / 7
+        return "\(weeks)w ago"
     }
 }
 

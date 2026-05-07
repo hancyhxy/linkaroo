@@ -10,6 +10,9 @@ Package.resolved
 !AussieBridgeApp/AussieBridge.xcodeproj
 xcuserdata/
 
+# SwiftPM build artifacts that occasionally leak into the working tree
+ABDesignSystem/resource_bundle_accessor.*
+
 # Xcode user-specific
 *.xcuserstate
 *.xcuserdatad/
@@ -37,3 +40,7 @@ node_modules/
 # Superseded v1 docs kept locally for personal reference; not part of
 # the public product narrative. README does not reference them.
 archive/
+
+# Original avatar source photos — not committed to repo. The 5 actually
+# used by the app are bundled under ABDesignSystem/Sources/Resources/Avatars/.
+docs/user_pic/

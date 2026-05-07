@@ -5,9 +5,26 @@ import SwiftUI
 public struct ABVolunteerMatchData {
     public let name: String
     public let imageURL: URL?
+    public var avatar: ABAvatarContent? = nil           // overrides imageURL when set
     public var matchPercent: Int = 0
     public var skills: [(text: String, style: ABTagStyle)] = []
     public var bio: String = ""
+
+    public init(
+        name: String,
+        imageURL: URL? = nil,
+        avatar: ABAvatarContent? = nil,
+        matchPercent: Int = 0,
+        skills: [(text: String, style: ABTagStyle)] = [],
+        bio: String = ""
+    ) {
+        self.name = name
+        self.imageURL = imageURL
+        self.avatar = avatar
+        self.matchPercent = matchPercent
+        self.skills = skills
+        self.bio = bio
+    }
 }
 
 // MARK: - ABVolunteerMatchCard
@@ -20,9 +37,8 @@ public struct ABVolunteerMatchCard: View {
 
     public var body: some View {
         HStack(alignment: .top, spacing: ABSpacing.s3) {
-            // Thumbnail
-            ABAvatar(content: .image(data.imageURL), size: 56)
-                .clipShape(RoundedRectangle(cornerRadius: ABRadius.lg))
+            // Thumbnail — circle, matching every other avatar in the app.
+            ABAvatar(content: data.avatar ?? .image(data.imageURL), size: 56)
 
             // Content
             VStack(alignment: .leading, spacing: ABSpacing.s2) {

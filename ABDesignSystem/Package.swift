@@ -17,7 +17,10 @@ let package = Package(
     targets: [
         .target(
             name: "ABDesignSystem",
-            path: "Sources"
+            path: "Sources",
+            resources: [
+                .process("Resources")
+            ]
         ),
     ]
 )

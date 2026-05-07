@@ -52,16 +52,8 @@ public struct ProfileView: View {
     // MARK: Identity hero (centered avatar + name + username)
     private func identityHero(for user: ABUser) -> some View {
         VStack(spacing: ABSpacing.s4) {
-            ZStack {
-                Circle()
-                    .fill(LinearGradient.abPrimaryGradientEditorial)
-
-                Text(user.initials)
-                    .font(.system(size: 36, weight: .bold))
-                    .foregroundStyle(.white)
-            }
-            .frame(width: 96, height: 96)
-            .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
+            ABAvatar(content: user.avatarContent, size: 96)
+                .shadow(color: Color.black.opacity(0.06), radius: 6, x: 0, y: 2)
 
             VStack(spacing: 2) {
                 Text(user.displayName)

@@ -1,10 +1,17 @@
 import SwiftUI
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 // MARK: - Avatar Content Type
 
 public enum ABAvatarContent {
     /// Remote or local image
     case image(URL?)
+    /// Asset catalog / SwiftPM bundle resource by name (looked up in .module)
+    case asset(name: String)
     /// Fallback initials with gradient background
     case initials(String)
 }
@@ -53,6 +60,17 @@ public struct ABAvatar: View {
                 fallbackView
             }
 
+        case .asset(let name):
+            // SwiftPM `.process(...)` ships raw image files at the bundle root
+            // (not inside an .xcassets), so Image(_:bundle:) cannot find them
+            // by name. We have to load the file URL ourselves and feed the
+            // raw bytes into a platform image (UIImage / NSImage).
+            if let img = ABAvatar.loadBundleImage(named: name) {
+                img.resizable().aspectRatio(contentMode: .fill)
+            } else {
+                fallbackView
+            }
+
         case .initials(let text):
             ZStack {
                 LinearGradient.abAvatarFallback
@@ -76,6 +94,31 @@ public struct ABAvatar: View {
     }
 
     // MARK: - Helpers
+
+    /// Load an image stored as a raw resource file (jpg/png) at the root of
+    /// `Bundle.module`. Returns nil if the resource is missing or undecodable.
+    /// Cross-platform: UIKit on iOS, AppKit on macOS.
+    static func loadBundleImage(named name: String) -> Image? {
+        let candidates = [
+            Bundle.module.url(forResource: name, withExtension: "jpg"),
+            Bundle.module.url(forResource: name, withExtension: "jpeg"),
+            Bundle.module.url(forResource: name, withExtension: "png"),
+            Bundle.module.url(forResource: name, withExtension: nil)
+        ].compactMap { $0 }
+
+        guard let url = candidates.first,
+              let data = try? Data(contentsOf: url) else { return nil }
+
+        #if canImport(UIKit)
+        guard let ui = UIImage(data: data) else { return nil }
+        return Image(uiImage: ui)
+        #elseif canImport(AppKit)
+        guard let ns = NSImage(data: data) else { return nil }
+        return Image(nsImage: ns)
+        #else
+        return nil
+        #endif
+    }
 
     private var initialsFontSize: CGFloat {
         switch size {

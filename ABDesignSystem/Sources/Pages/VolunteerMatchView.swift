@@ -83,6 +83,7 @@ public struct VolunteerMatchView: View {
                     name: result.volunteer.user.displayName,
                     role: result.volunteer.role,
                     imageURL: result.volunteer.user.avatarURL,
+                    avatar: result.volunteer.user.avatarContent,
                     matchPercent: result.matchPercentage,
                     rating: result.volunteer.rating,
                     helpedCount: result.volunteer.peopleHelped,
@@ -144,6 +145,7 @@ public struct VolunteerMatchView: View {
                         data: ABVolunteerMatchData(
                             name: result.volunteer.user.displayName,
                             imageURL: result.volunteer.user.avatarURL,
+                            avatar: result.volunteer.user.avatarContent,
                             matchPercent: result.matchPercentage,
                             skills: result.volunteer.skills.map {
                                 (text: $0.text, style: skillStyle(for: $0.category))
