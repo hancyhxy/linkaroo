@@ -44,3 +44,8 @@ archive/
 # Original avatar source photos — not committed to repo. The 5 actually
 # used by the app are bundled under ABDesignSystem/Sources/Resources/Avatars/.
 docs/user_pic/
+
+# Local-only screen catalogue. Kept on disk because the python-docx pipeline
+# at uts-coursework/.../checkpoint3/submission/build_docx.py reads it for
+# slot-locked image filenames; not intended for the public README.
+SCREENSHOTS.md
