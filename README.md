@@ -14,6 +14,8 @@ A platform purpose-built for newcomers to **Australia** — combining **communit
   <img src="screenshots/demo.gif" alt="AussieBridge iOS demo" width="100%" />
 </p>
 
+📱 **[See every screen state →](SCREENSHOTS.md)**
+
 ## Status
 
 iOS prototype with **9 spec-driven core pages**, built as a SwiftUI design system (single Swift Package) plus a runnable App Target that assembles the pages into a 4-tab application. Every page lives behind `#Preview` in Xcode Canvas (open `ABDesignSystem/Package.swift`) and behind a tab in the runnable app (open `AussieBridgeApp/AussieBridge.xcodeproj`).
