@@ -4,8 +4,6 @@
 
 # AussieBridge
 
-> The app, repository, and Swift namespace are all **AussieBridge**. The team also presents the product publicly under the brand name **Linkaroo**.
-
 A platform purpose-built for newcomers to **Australia** — combining **community Q&A** (categorized, credibility-tagged) with **1-on-1 volunteer matching** to help people navigate visa, housing, healthcare, banking, and the dozen other services that hit them in their first six months. The personal variation explored in this repo is **Context-First** — the app treats user identity, location, and urgency as a *filter* rather than a *feature*, so the same content surfaces differently depending on who is reading. *(Current field research is grounded in Sydney; the product is built to extend across Australian cities.)*
 
 <p align="center">
