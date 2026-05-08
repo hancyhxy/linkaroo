@@ -1,9 +1,9 @@
-# Linkaroo — Screens
+# AussieBridge — Screens
 
-> Visual catalogue of the 9 spec-driven core pages in the iOS prototype, in their `§1 → §9` order from `docs/spec.md`. Pages with a meaningful second state (a later step, a mid-scroll view) carry an inline pair so the rhythm of the page is visible at a glance.
+> Visual catalogue of the 9 spec-driven core pages in the iOS prototype, in their `§1 → §9` order from `docs/spec.md`. Pages with a meaningful second state (a later step, a mid-scroll view) carry an inline pair so the rhythm of the page is visible at a glance. *(Brand name: Linkaroo.)*
 
 <p align="center">
-  <img src="screenshots/00-banner.jpg" alt="Linkaroo Banner" width="100%" />
+  <img src="screenshots/00-banner.jpg" alt="AussieBridge Banner" width="100%" />
 </p>
 
 ---

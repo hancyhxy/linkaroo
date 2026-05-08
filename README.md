@@ -1,19 +1,19 @@
 <p align="center">
-  <img src="screenshots/00-banner.jpg" alt="Linkaroo Banner" width="100%" />
+  <img src="screenshots/00-banner.jpg" alt="AussieBridge Banner" width="100%" />
 </p>
 
-# Linkaroo
+# AussieBridge
 
-> Repository / Swift namespace still uses the historical name **AussieBridge**; the team product is now **Linkaroo**.
+> The app, repository, and Swift namespace are all **AussieBridge**. The team also presents the product publicly under the brand name **Linkaroo**.
 
 A platform for newly-arrived migrants in Sydney, combining **community Q&A** (categorized, credibility-tagged) with **1-on-1 volunteer matching**. The personal variation explored in this repo is **Context-First** — the app treats user identity, location, and urgency as a *filter* rather than a *feature*, so the same content surfaces differently depending on who is reading.
 
 <p align="center">
-  <img src="screenshots/flow.png" alt="Linkaroo — 9 pages at a glance" width="100%" />
+  <img src="screenshots/flow.png" alt="AussieBridge — 9 pages at a glance" width="100%" />
 </p>
 
 <p align="center">
-  <img src="screenshots/demo.gif" alt="Linkaroo iOS demo" width="100%" />
+  <img src="screenshots/demo.gif" alt="AussieBridge iOS demo" width="100%" />
 </p>
 
 📱 **[See every screen state →](SCREENSHOTS.md)**
