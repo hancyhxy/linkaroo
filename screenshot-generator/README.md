@@ -1,6 +1,6 @@
 # AussieBridge Banner Generator
 
-Tiny Next.js app that renders the README banner (`screenshots/00-banner.jpg`) as a styled DOM and lets the browser export it as a PNG via `html-to-image`. Forked from the iSpent screenshot generator and trimmed to just the banner slide.
+Tiny Next.js app that renders the README banner (`screenshots/00-banner.png`) as a styled DOM and lets the browser export it as a PNG via `html-to-image`. Forked from the iSpent screenshot generator and trimmed to just the banner slide.
 
 ## Run locally
 
@@ -12,10 +12,8 @@ bun run dev
 Open http://localhost:3000, click **Export 00-banner.png**, then move the downloaded file to the repo root:
 
 ```sh
-mv ~/Downloads/00-banner.png ../screenshots/00-banner.jpg
+mv ~/Downloads/00-banner.png ../screenshots/00-banner.png
 ```
-
-(README links to `screenshots/00-banner.jpg`, so keep the `.jpg` extension even though the export is a PNG — browsers render either format from either extension.)
 
 ## What lives where
 

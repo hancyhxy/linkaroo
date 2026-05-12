@@ -15,7 +15,13 @@ A platform purpose-built for newcomers to **Australia** — combining **communit
 </p>
 
 <p align="center">
-  <img src="screenshots/demo.gif" alt="AussieBridge iOS demo" width="100%" />
+  <a href="https://www.youtube.com/watch?v=gqIBQ_VVEUI">
+    <img src="https://img.youtube.com/vi/gqIBQ_VVEUI/maxresdefault.jpg" alt="AussieBridge iOS demo — watch on YouTube" width="100%" />
+  </a>
+</p>
+
+<p align="center">
+  ▶ <a href="https://www.youtube.com/watch?v=gqIBQ_VVEUI"><b>Watch the iOS demo on YouTube</b></a>
 </p>
 
 📱 **[See every screen state →](SCREENSHOTS.md)**

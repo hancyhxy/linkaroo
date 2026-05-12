@@ -78,28 +78,3 @@ Read-back end of Mechanism 1. After §1 writes an `ABUser` into AppState, downst
 <p align="center">
   <img src="screenshots/09-profile.png" alt="Profile" width="50%" />
 </p>
-
----
-
-## Image inventory
-
-All images live under `screenshots/` with slot-locked filenames so the python-docx pipeline (`uts-coursework/.../checkpoint3/submission/build_docx.py`) can map them by name without manual indexing. **Drop a PNG/JPG into the path; do not rename.**
-
-| Slot | Filename | Status |
-|------|----------|--------|
-| Banner (Overview row) | `screenshots/00-banner.jpg` | placeholder |
-| §1 Onboarding | `screenshots/01-onboarding.png` | filled |
-| §1b Onboarding step 2 | `screenshots/01b-onboarding-step2.png` | filled |
-| §2 Home | `screenshots/02-home.png` | filled |
-| §2b Home scrolled | `screenshots/02b-home-scrolled.png` | filled |
-| §3 Community | `screenshots/03-community.png` | filled |
-| §3b Community scrolled | `screenshots/03b-community-scrolled.png` | filled |
-| §4 Q&A List | `screenshots/04-qa-list.png` | filled |
-| §4b Q&A List scrolled | `screenshots/04b-qa-list-scrolled.png` | filled |
-| §5 Q&A Detail | `screenshots/05-qa-detail.png` | filled |
-| §5b Q&A Detail scrolled | `screenshots/05b-qa-detail-scrolled.png` | filled |
-| §6 Volunteer Match | `screenshots/06-volunteer-match.png` | filled |
-| §6b Volunteer Match scrolled | `screenshots/06b-volunteer-match-scrolled.png` | filled |
-| §7 Message List | `screenshots/07-message-list.png` | filled |
-| §8 Chat | `screenshots/08-chat.png` | filled |
-| §9 Profile | `screenshots/09-profile.png` | filled |
