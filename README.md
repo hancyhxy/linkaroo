@@ -7,6 +7,10 @@
 A platform purpose-built for newcomers to **Australia** — combining **community Q&A** (categorized, credibility-tagged) with **1-on-1 volunteer matching** to help people navigate visa, housing, healthcare, banking, and the dozen other services that hit them in their first six months. The personal variation explored in this repo is **Context-First** — the app treats user identity, location, and urgency as a *filter* rather than a *feature*, so the same content surfaces differently depending on who is reading. *(Current field research is grounded in Sydney; the product is built to extend across Australian cities.)*
 
 <p align="center">
+  <img src="screenshots/cover.png" alt="AussieBridge — four hero moments" width="100%" />
+</p>
+
+<p align="center">
   <img src="screenshots/flow_aussiebridge.png" alt="AussieBridge — 9 pages at a glance" width="100%" />
 </p>
 
