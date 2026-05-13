@@ -2,7 +2,7 @@ import SwiftUI
 import ABDesignSystem
 
 @main
-struct AussieBridgeApp: App {
+struct LinkarooApp: App {
     @State private var appState = AppState()
 
     var body: some Scene {

@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - Header Variant
 
 public enum ABHeaderVariant {
-    /// Brand logo header — "AussieBridge" in Liberation Serif italic
+    /// Brand logo header — "Linkaroo" in Liberation Serif italic
     case brand
     /// Page title with optional back button
     case pageTitle(title: String, showBack: Bool = true)
@@ -52,7 +52,7 @@ public struct ABHeader: View {
     // MARK: - Brand Content
 
     private var brandContent: some View {
-        Text("AussieBridge")
+        Text("Linkaroo")
             .font(.abBrand)
             .foregroundStyle(Color.abPrimary)
     }

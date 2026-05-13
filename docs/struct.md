@@ -1,6 +1,6 @@
 # Data Model
 
-This document defines the data model for AussieBridge. It follows the team's shared baseline of 8 core entities, plus individual extensions for the **Context-First** variation.
+This document defines the data model for Linkaroo. It follows the team's shared baseline of 8 core entities, plus individual extensions for the **Context-First** variation.
 
 The 22 entities below are organised into **five layers**, each layer corresponding to one of the Context-First mechanisms (plus a small cross-cutting layer for entities that don't belong to any single mechanism). This grouping is the visible argument that the data model was designed *around* the variation thesis, not retro-fitted to it.
 

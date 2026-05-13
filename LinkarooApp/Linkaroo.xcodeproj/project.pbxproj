@@ -13,7 +13,7 @@
 		74C49D9F9E3D4D1AEE836996 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F76567B0E87A6076985D12D9 /* Assets.xcassets */; };
 		773667BFECB5C0EE8B8D47DF /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83426AE800D0F6925ED3D135 /* RootView.swift */; };
 		91A8E3AFC5624398F08FE226 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = DE1BA15368ECBCB2286B9DBC /* AppState.swift */; };
-		A883DF3AA0D7A4FCAA69AF6E /* AussieBridgeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E7852976C3ED4096D0F44C /* AussieBridgeApp.swift */; };
+		A883DF3AA0D7A4FCAA69AF6E /* LinkarooApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3E7852976C3ED4096D0F44C /* LinkarooApp.swift */; };
 		AA2A641C508E9C933746B123 /* CommunityTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BBAD239AB28F7717601036C /* CommunityTab.swift */; };
 		EB51D23A5513BA346CA13678 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C212EB985D44B5EBDE8C731 /* MainTabView.swift */; };
 		EDC1E46A7843C48A3D02FA78 /* ProfileTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = 01F6B2ACBDCB7DB7C5398450 /* ProfileTab.swift */; };
@@ -24,14 +24,14 @@
 /* Begin PBXFileReference section */
 		01F6B2ACBDCB7DB7C5398450 /* ProfileTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTab.swift; sourceTree = "<group>"; };
 		48542436ED1F286550431A34 /* MessagesTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesTab.swift; sourceTree = "<group>"; };
-		6FF10FC4AD15DD8024BF33D3 /* AussieBridge.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = AussieBridge.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6FF10FC4AD15DD8024BF33D3 /* Linkaroo.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Linkaroo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7C212EB985D44B5EBDE8C731 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		813A82CC470A32B24177E3A6 /* Route.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Route.swift; sourceTree = "<group>"; };
 		83426AE800D0F6925ED3D135 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		967E3F6B63CC787C7D768797 /* OnboardingFlowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingFlowView.swift; sourceTree = "<group>"; };
 		9BBAD239AB28F7717601036C /* CommunityTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityTab.swift; sourceTree = "<group>"; };
 		9C6FE37D4A88F4D6F9057C86 /* ABDesignSystem */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ABDesignSystem; path = ../ABDesignSystem; sourceTree = SOURCE_ROOT; };
-		D3E7852976C3ED4096D0F44C /* AussieBridgeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AussieBridgeApp.swift; sourceTree = "<group>"; };
+		D3E7852976C3ED4096D0F44C /* LinkarooApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkarooApp.swift; sourceTree = "<group>"; };
 		DE1BA15368ECBCB2286B9DBC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		F6375B973D253E7A70B79F79 /* HomeTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTab.swift; sourceTree = "<group>"; };
 		F76567B0E87A6076985D12D9 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -52,7 +52,7 @@
 		28C5697425F3F34BB8BA5BEB = {
 			isa = PBXGroup;
 			children = (
-				97D44C48A0F2B5376091DCED /* AussieBridgeApp */,
+				97D44C48A0F2B5376091DCED /* LinkarooApp */,
 				7BBA114E4B6E612117E1C257 /* Packages */,
 				F1A41CA7BC5370BAF0A181EC /* Routing */,
 				502A5C120403BACBFD0BDFC5 /* Tabs */,
@@ -82,21 +82,21 @@
 		93147CED996082E9DDB5208E /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6FF10FC4AD15DD8024BF33D3 /* AussieBridge.app */,
+				6FF10FC4AD15DD8024BF33D3 /* Linkaroo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		97D44C48A0F2B5376091DCED /* AussieBridgeApp */ = {
+		97D44C48A0F2B5376091DCED /* LinkarooApp */ = {
 			isa = PBXGroup;
 			children = (
 				DE1BA15368ECBCB2286B9DBC /* AppState.swift */,
 				F76567B0E87A6076985D12D9 /* Assets.xcassets */,
-				D3E7852976C3ED4096D0F44C /* AussieBridgeApp.swift */,
+				D3E7852976C3ED4096D0F44C /* LinkarooApp.swift */,
 				F1A41CA7BC5370BAF0A181EC /* Routing */,
 				502A5C120403BACBFD0BDFC5 /* Tabs */,
 			);
-			name = AussieBridgeApp;
+			name = LinkarooApp;
 			path = .;
 			sourceTree = "<group>";
 		};
@@ -114,9 +114,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		59C8FD51655B0B9A3DACA318 /* AussieBridge */ = {
+		59C8FD51655B0B9A3DACA318 /* Linkaroo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B2F534F80A8BC595521E66C6 /* Build configuration list for PBXNativeTarget "AussieBridge" */;
+			buildConfigurationList = B2F534F80A8BC595521E66C6 /* Build configuration list for PBXNativeTarget "Linkaroo" */;
 			buildPhases = (
 				6E01305F1940C59FCAFAE34F /* Sources */,
 				461E72F5953C57DCDA9CD81C /* Resources */,
@@ -126,12 +126,12 @@
 			);
 			dependencies = (
 			);
-			name = AussieBridge;
+			name = Linkaroo;
 			packageProductDependencies = (
 				625E8D5213EF41CB60879452 /* ABDesignSystem */,
 			);
-			productName = AussieBridge;
-			productReference = 6FF10FC4AD15DD8024BF33D3 /* AussieBridge.app */;
+			productName = Linkaroo;
+			productReference = 6FF10FC4AD15DD8024BF33D3 /* Linkaroo.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -149,7 +149,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 78C925645DD71F1257127187 /* Build configuration list for PBXProject "AussieBridge" */;
+			buildConfigurationList = 78C925645DD71F1257127187 /* Build configuration list for PBXProject "Linkaroo" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -166,7 +166,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				59C8FD51655B0B9A3DACA318 /* AussieBridge */,
+				59C8FD51655B0B9A3DACA318 /* Linkaroo */,
 			);
 		};
 /* End PBXProject section */
@@ -188,7 +188,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				91A8E3AFC5624398F08FE226 /* AppState.swift in Sources */,
-				A883DF3AA0D7A4FCAA69AF6E /* AussieBridgeApp.swift in Sources */,
+				A883DF3AA0D7A4FCAA69AF6E /* LinkarooApp.swift in Sources */,
 				AA2A641C508E9C933746B123 /* CommunityTab.swift in Sources */,
 				0760A72173EBE545FA11632E /* HomeTab.swift in Sources */,
 				EB51D23A5513BA346CA13678 /* MainTabView.swift in Sources */,
@@ -351,7 +351,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.xinyihan.aussiebridge;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinyihan.linkaroo;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -368,7 +368,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.xinyihan.aussiebridge;
+				PRODUCT_BUNDLE_IDENTIFIER = com.xinyihan.linkaroo;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -377,7 +377,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		78C925645DD71F1257127187 /* Build configuration list for PBXProject "AussieBridge" */ = {
+		78C925645DD71F1257127187 /* Build configuration list for PBXProject "Linkaroo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				602B7C8C4124C9F0AFCB6BB5 /* Debug */,
@@ -386,7 +386,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
-		B2F534F80A8BC595521E66C6 /* Build configuration list for PBXNativeTarget "AussieBridge" */ = {
+		B2F534F80A8BC595521E66C6 /* Build configuration list for PBXNativeTarget "Linkaroo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				E1E064A0700556658339AE33 /* Debug */,

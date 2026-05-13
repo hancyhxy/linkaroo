@@ -1,10 +1,10 @@
 import Foundation
 
 // ============================================================================
-// MARK: - AussieBridge Core Data Models
+// MARK: - Linkaroo Core Data Models
 // ============================================================================
 //
-// 本文件定义了 AussieBridge App 的所有核心数据结构。
+// 本文件定义了 Linkaroo App 的所有核心数据结构。
 // 每个 struct 均遵循 Identifiable（用于 SwiftUI ForEach）
 // 和 Codable（用于 JSON 序列化 / API 通信）。
 //

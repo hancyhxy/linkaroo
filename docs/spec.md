@@ -1,4 +1,4 @@
-# AussieBridge — Feature Specification
+# Linkaroo — Feature Specification
 
 > Page-by-page feature definitions for the iOS prototype. Each page
 > spells out what the page is for, what parameters it consumes, what

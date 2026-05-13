@@ -1,22 +1,22 @@
 <p align="center">
-  <img src="screenshots/00-banner.png" alt="AussieBridge Banner" width="100%" />
+  <img src="screenshots/00-banner.png" alt="Linkaroo Banner" width="100%" />
 </p>
 
-# AussieBridge
+# Linkaroo
 
 A platform purpose-built for newcomers to **Australia** — combining **community Q&A** (categorized, credibility-tagged) with **1-on-1 volunteer matching** to help people navigate visa, housing, healthcare, banking, and the dozen other services that hit them in their first six months. The personal variation explored in this repo is **Context-First** — the app treats user identity, location, and urgency as a *filter* rather than a *feature*, so the same content surfaces differently depending on who is reading. *(Current field research is grounded in Sydney; the product is built to extend across Australian cities.)*
 
 <p align="center">
-  <img src="screenshots/cover.png" alt="AussieBridge — four hero moments" width="100%" />
+  <img src="screenshots/cover.png" alt="Linkaroo — four hero moments" width="100%" />
 </p>
 
 <p align="center">
-  <img src="screenshots/flow_aussiebridge.png" alt="AussieBridge — 9 pages at a glance" width="100%" />
+  <img src="screenshots/flow_linkaroo.png" alt="Linkaroo — 9 pages at a glance" width="100%" />
 </p>
 
 <p align="center">
   <a href="https://www.youtube.com/watch?v=gqIBQ_VVEUI">
-    <img src="https://img.youtube.com/vi/gqIBQ_VVEUI/maxresdefault.jpg" alt="AussieBridge iOS demo — watch on YouTube" width="100%" />
+    <img src="https://img.youtube.com/vi/gqIBQ_VVEUI/maxresdefault.jpg" alt="Linkaroo iOS demo — watch on YouTube" width="100%" />
   </a>
 </p>
 
@@ -28,7 +28,7 @@ A platform purpose-built for newcomers to **Australia** — combining **communit
 
 ## Status
 
-iOS prototype with **9 spec-driven core pages**, built as a SwiftUI design system (single Swift Package) plus a runnable App Target that assembles the pages into a 4-tab application. Every page lives behind `#Preview` in Xcode Canvas (open `ABDesignSystem/Package.swift`) and behind a tab in the runnable app (open `AussieBridgeApp/AussieBridge.xcodeproj`).
+iOS prototype with **9 spec-driven core pages**, built as a SwiftUI design system (single Swift Package) plus a runnable App Target that assembles the pages into a 4-tab application. Every page lives behind `#Preview` in Xcode Canvas (open `ABDesignSystem/Package.swift`) and behind a tab in the runnable app (open `LinkarooApp/Linkaroo.xcodeproj`).
 
 ## Repository layout
 
@@ -74,11 +74,11 @@ docs/
     ├── message.html · chat.html · profile.html
 ```
 
-`AussieBridgeApp/` (App Target — wires the 9 pages into a runnable app):
+`LinkarooApp/` (App Target — wires the 9 pages into a runnable app):
 
 ```
-AussieBridgeApp/
-├── AussieBridgeApp.swift   ← @main entry; injects AppState into the SwiftUI environment
+LinkarooApp/
+├── LinkarooApp.swift   ← @main entry; injects AppState into the SwiftUI environment
 ├── AppState.swift          ← @Observable single source of truth (current ABUser, navigation paths)
 ├── Routing/                ← Route enum + RootView + MainTabView + OnboardingFlowView
 ├── Tabs/                   ← 4 Tab wrappers (Home / Community / Messages / Profile), each a NavigationStack
@@ -123,17 +123,17 @@ swift build
 
 ### B. Full iOS App in the simulator (functional view)
 
-The App Target is generated declaratively from `AussieBridgeApp/project.yml` via [XcodeGen](https://github.com/yonaskolb/XcodeGen). The committed `.xcodeproj` will work as-is, but if you want to regenerate it locally:
+The App Target is generated declaratively from `LinkarooApp/project.yml` via [XcodeGen](https://github.com/yonaskolb/XcodeGen). The committed `.xcodeproj` will work as-is, but if you want to regenerate it locally:
 
 ```sh
 brew install xcodegen           # if not already installed
-cd AussieBridgeApp
+cd LinkarooApp
 xcodegen generate
 ```
 
 Then:
 
-1. Open `AussieBridgeApp/AussieBridge.xcodeproj` in Xcode.
+1. Open `LinkarooApp/Linkaroo.xcodeproj` in Xcode.
 2. Select an **iPhone 16 Pro** simulator from the run-destination menu.
 3. Press ▶ (or `⌘R`) to build and run.
 
@@ -163,9 +163,9 @@ This repo is built with a **spec-driven** workflow in 4 stages. AI (Claude Code)
 | | (c) Per-page functional spec — 4-block template (Overview / Parameters / Actions / Layout) at wireframe precision, written in conversation with Claude. | `docs/spec.md` (`§1`–`§9`) |
 | | (d) Initial component library — 30 reusable `AB*` views derived from the visual grammar so spec.md regions resolve to real Swift types, not free-form decisions. | `ABDesignSystem/Sources/Components/` |
 | **3. Rendering Test → Final** *(use code to reverse-validate the spec; close gaps, then graduate)* | Each page is re-implemented from `spec.md` *without reading the existing `Pages/` source*. Gaps surface as "had to self-pick a token / copy / behaviour" notes; spec.md and the component library are amended; the prototype iterates until it converges. Once converged, it graduates to `Pages/*View.swift`. | `ABDesignSystem/Sources/Prototypes/` (evolution record) → `ABDesignSystem/Sources/Pages/` (final 9 views) |
-| **4. App Integration → Runtime** *(stages 1–3 produce 9 independently previewable pages; stage 4 wires them into a single runnable iOS app — adding the app shell, the shared state that lets pages talk to each other, and the routing that connects them)* | (a) **App shell** — an iOS app target generated declaratively by XcodeGen, depending on `ABDesignSystem` as a local Swift Package. | `AussieBridgeApp/project.yml` + `AussieBridge.xcodeproj` |
-| | (b) **Shared state** — an `@Observable` AppState is the app's single "memory": the captured ABUser and each tab's navigation history live here, and all 9 pages read/write the same instance through the SwiftUI environment. | `AussieBridgeApp/AppState.swift` |
-| | (c) **Routing & tabs** — a typed `Route` enum lists every "from-here-to-there" as a case; 4 Tab wrappers (Home / Community / Messages / Profile) each own a NavigationStack. The §5 → §6 → §8 cross-tab handoff and the §1 ↔ §9 Edit profile loop both flow through this layer. | `AussieBridgeApp/Routing/Route.swift` + `AussieBridgeApp/Tabs/*Tab.swift` |
+| **4. App Integration → Runtime** *(stages 1–3 produce 9 independently previewable pages; stage 4 wires them into a single runnable iOS app — adding the app shell, the shared state that lets pages talk to each other, and the routing that connects them)* | (a) **App shell** — an iOS app target generated declaratively by XcodeGen, depending on `ABDesignSystem` as a local Swift Package. | `LinkarooApp/project.yml` + `Linkaroo.xcodeproj` |
+| | (b) **Shared state** — an `@Observable` AppState is the app's single "memory": the captured ABUser and each tab's navigation history live here, and all 9 pages read/write the same instance through the SwiftUI environment. | `LinkarooApp/AppState.swift` |
+| | (c) **Routing & tabs** — a typed `Route` enum lists every "from-here-to-there" as a case; 4 Tab wrappers (Home / Community / Messages / Profile) each own a NavigationStack. The §5 → §6 → §8 cross-tab handoff and the §1 ↔ §9 Edit profile loop both flow through this layer. | `LinkarooApp/Routing/Route.swift` + `LinkarooApp/Tabs/*Tab.swift` |
 
 ```mermaid
 flowchart TD
@@ -194,7 +194,7 @@ flowchart TD
 
     subgraph S4 ["Stage 4 — App Integration → Runtime"]
         direction TB
-        D1["AussieBridgeApp/<br/>app shell<br/><i>project.yml + .xcodeproj</i>"]
+        D1["LinkarooApp/<br/>app shell<br/><i>project.yml + .xcodeproj</i>"]
         D2["AppState.swift<br/>shared state<br/><i>@Observable</i>"]
         D3["Routing/ + Tabs/<br/>routing &amp; tabs<br/><i>4-tab NavigationStack</i>"]
         D1 --> D2 --> D3

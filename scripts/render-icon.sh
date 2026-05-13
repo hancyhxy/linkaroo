@@ -12,7 +12,7 @@ set -euo pipefail
 
 repo_root="$(cd "$(dirname "$0")/.." && pwd)"
 src="$repo_root/docs/branding/logo.svg"
-appicon_set="$repo_root/AussieBridgeApp/Assets.xcassets/AppIcon.appiconset"
+appicon_set="$repo_root/LinkarooApp/Assets.xcassets/AppIcon.appiconset"
 out="$appicon_set/icon-1024.png"
 
 if [ ! -f "$src" ]; then
@@ -35,4 +35,4 @@ rsvg-convert \
     "$src"
 
 echo "✓ Rendered: $out"
-echo "  Now open AussieBridgeApp/AussieBridge.xcodeproj and verify the AppIcon shows in Assets.xcassets."
+echo "  Now open LinkarooApp/Linkaroo.xcodeproj and verify the AppIcon shows in Assets.xcassets."

@@ -1,4 +1,4 @@
-# AussieBridge Banner Generator
+# Linkaroo Banner Generator
 
 Tiny Next.js app that renders the README banner (`screenshots/00-banner.png`) as a styled DOM and lets the browser export it as a PNG via `html-to-image`. Forked from the iSpent screenshot generator and trimmed to just the banner slide.
 
@@ -21,7 +21,7 @@ mv ~/Downloads/00-banner.png ../screenshots/00-banner.png
 |------|------|
 | `app/page.tsx` | The `BannerSlide` component (canvas size, layout, colors, headline, subtitle, tag list) and the export-to-PNG button. |
 | `app/layout.tsx` | Loads Inter + DM Serif Display fonts and sets the page title. |
-| `public/logo.svg` | AussieBridge logo. **Symlink-style copy**: keep in sync with `docs/branding/logo.svg`. |
+| `public/logo.svg` | Linkaroo logo. **Symlink-style copy**: keep in sync with `docs/branding/logo.svg`. |
 | `public/mockup.png` | Generic iPhone-frame asset, reused from iSpent. The `Phone` component composes a screenshot inside this frame. |
 | `public/screenshots/02-home.png` | Home-page screenshot used inside the phone frame. **Copy from `screenshots/02-home.png`** — keep manually in sync if home page is re-screenshotted. |
 

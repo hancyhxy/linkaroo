@@ -1,7 +1,7 @@
 # Context-First — Product Mechanism Summary
 
 ## North star
-AussieBridge does not add features for migrants — it filters what's already there based on *who* is reading. The same Q&A thread reads differently to a Sydney student who landed last week vs. a five-year resident with a working visa, because each carries a different *context* (identity, urgency, language, location).
+Linkaroo does not add features for migrants — it filters what's already there based on *who* is reading. The same Q&A thread reads differently to a Sydney student who landed last week vs. a five-year resident with a working visa, because each carries a different *context* (identity, urgency, language, location).
 
 This document captures the five places that filter shows up in the iOS prototype.
 

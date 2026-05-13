@@ -28,7 +28,7 @@ extension Font {
     public static let abCaption = Font.custom("Inter-Regular", size: 10, relativeTo: .caption2)
     public static let abMicro = Font.custom("Inter-Bold", size: 9, relativeTo: .caption2)
 
-    // Liberation Serif italic — brand wordmark ("AussieBridge" header)
+    // Liberation Serif italic — brand wordmark ("Linkaroo" header)
     public static let abBrand = Font.custom("LiberationSerif-Italic", size: 22, relativeTo: .title3)
 }
 

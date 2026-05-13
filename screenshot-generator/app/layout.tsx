@@ -14,8 +14,8 @@ const dmSerif = DM_Serif_Display({
 });
 
 export const metadata: Metadata = {
-  title: "AussieBridge Banner Generator",
-  description: "Generates 00-banner.png for the AussieBridge README",
+  title: "Linkaroo Banner Generator",
+  description: "Generates 00-banner.png for the Linkaroo README",
 };
 
 export default function RootLayout({

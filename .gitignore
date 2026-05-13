@@ -7,7 +7,7 @@
 Packages/
 Package.resolved
 *.xcodeproj
-!AussieBridgeApp/AussieBridge.xcodeproj
+!LinkarooApp/Linkaroo.xcodeproj
 xcuserdata/
 
 # SwiftPM build artifacts that occasionally leak into the working tree

@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "59C8FD51655B0B9A3DACA318"
-               BuildableName = "AussieBridge.app"
-               BlueprintName = "AussieBridge"
-               ReferencedContainer = "container:AussieBridge.xcodeproj">
+               BuildableName = "Linkaroo.app"
+               BlueprintName = "Linkaroo"
+               ReferencedContainer = "container:Linkaroo.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -45,9 +45,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "59C8FD51655B0B9A3DACA318"
-            BuildableName = "AussieBridge.app"
-            BlueprintName = "AussieBridge"
-            ReferencedContainer = "container:AussieBridge.xcodeproj">
+            BuildableName = "Linkaroo.app"
+            BlueprintName = "Linkaroo"
+            ReferencedContainer = "container:Linkaroo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -62,9 +62,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "59C8FD51655B0B9A3DACA318"
-            BuildableName = "AussieBridge.app"
-            BlueprintName = "AussieBridge"
-            ReferencedContainer = "container:AussieBridge.xcodeproj">
+            BuildableName = "Linkaroo.app"
+            BlueprintName = "Linkaroo"
+            ReferencedContainer = "container:Linkaroo.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
