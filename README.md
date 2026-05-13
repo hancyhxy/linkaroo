@@ -11,7 +11,7 @@ A platform purpose-built for newcomers to **Australia** — combining **communit
 </p>
 
 <p align="center">
-  <img src="screenshots/flow_linkaroo.png" alt="Linkaroo — 9 pages at a glance" width="100%" />
+  <img src="screenshots/flow.png" alt="Linkaroo — 9 pages at a glance" width="100%" />
 </p>
 
 <p align="center">
