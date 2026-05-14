@@ -15,13 +15,13 @@ A platform purpose-built for newcomers to **Australia** — combining **communit
 </p>
 
 <p align="center">
-  <a href="https://www.youtube.com/watch?v=gqIBQ_VVEUI">
-    <img src="https://img.youtube.com/vi/gqIBQ_VVEUI/maxresdefault.jpg" alt="Linkaroo iOS demo — watch on YouTube" width="100%" />
+  <a href="https://youtu.be/idXhiHZGZGA">
+    <img src="https://img.youtube.com/vi/idXhiHZGZGA/maxresdefault.jpg" alt="Linkaroo iOS demo — watch on YouTube" width="100%" />
   </a>
 </p>
 
 <p align="center">
-  ▶ <a href="https://www.youtube.com/watch?v=gqIBQ_VVEUI"><b>Watch the iOS demo on YouTube</b></a>
+  ▶ <a href="https://youtu.be/idXhiHZGZGA"><b>Watch the iOS demo on YouTube</b></a>
 </p>
 
 📱 **[See every screen state →](SCREENSHOTS.md)**
